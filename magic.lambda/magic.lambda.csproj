@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="logical\" />
+    <Folder Include="loops\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="magic.node" Version="1.0.0" />
+    <PackageReference Include="magic.node.extensions" Version="1.0.0" />
+    <PackageReference Include="magic.signals.contracts" Version="1.0.1" />
+  </ItemGroup>
+</Project>

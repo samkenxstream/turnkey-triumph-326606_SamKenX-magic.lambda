@@ -1,2 +1,6 @@
-# magic.lambda
-A Turing complete microscopic DSL built on top of Magic Signals
+
+# Magic Lambda
+
+[![Build status](https://travis-ci.org/polterguy/magic.lambda.svg?master)](https://travis-ci.org/polterguy/magic.lambda)
+
+To be provided ...
