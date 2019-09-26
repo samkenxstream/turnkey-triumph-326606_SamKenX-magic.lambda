@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{0080EF1F-A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "magic.lambda", "magic.lambda\magic.lambda.csproj", "{693FA624-3441-430F-8B4F-8A35F890734D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "magic.lambda.tests", "magic.lambda.tests\magic.lambda.tests.csproj", "{69030A8D-E6EB-4409-A062-F20D893EE277}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{693FA624-3441-430F-8B4F-8A35F890734D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{693FA624-3441-430F-8B4F-8A35F890734D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{693FA624-3441-430F-8B4F-8A35F890734D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69030A8D-E6EB-4409-A062-F20D893EE277}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69030A8D-E6EB-4409-A062-F20D893EE277}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69030A8D-E6EB-4409-A062-F20D893EE277}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69030A8D-E6EB-4409-A062-F20D893EE277}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
