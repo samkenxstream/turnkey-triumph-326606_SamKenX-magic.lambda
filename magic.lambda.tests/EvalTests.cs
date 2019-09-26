@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace magic.tests.lambda
+namespace magic.lambda.tests
 {
     public class EvalTests
     {

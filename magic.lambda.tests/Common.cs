@@ -13,7 +13,7 @@ using magic.signals.contracts;
 using magic.node.extensions.hyperlambda;
 using magic.signals.services;
 
-namespace magic.tests.lambda
+namespace magic.lambda.tests
 {
     public static class Common
     {
