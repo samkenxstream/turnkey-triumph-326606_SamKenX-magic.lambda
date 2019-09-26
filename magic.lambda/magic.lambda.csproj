@@ -7,6 +7,7 @@
     <Description>A microscopic DSL build upon magic.node and magic.signals</Description>
     <Copyright>Thomas Hansen, thomas@gaiasoul.com</Copyright>
     <PackageProjectUrl>https://github.com/polterguy/magic.lambda</PackageProjectUrl>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
