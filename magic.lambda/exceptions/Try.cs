@@ -9,9 +9,18 @@ using magic.signals.contracts;
 
 namespace magic.lambda.exceptions
 {
+    /// <summary>
+    /// [try] slot for evaluating a piece of lambda, and optionally either [.catch] or add [.finally] evaluations
+    /// guaranteed to be evaluated even if some exception occurs.
+    /// </summary>
     [Slot(Name = "try")]
     public class Try : ISlot
     {
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
             try

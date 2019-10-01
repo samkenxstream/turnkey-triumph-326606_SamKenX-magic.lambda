@@ -6,12 +6,22 @@
 using System;
 using magic.node;
 using magic.signals.contracts;
+using magic.lambda.comparison.utilities;
 
 namespace magic.lambda.comparison
 {
+    // TODO: Consider adding [=] "synonym" for this slot, and its related slots.
+    /// <summary>
+    /// [eq] slot allowing you to compare two values for equality.
+    /// </summary>
     [Slot(Name = "eq")]
     public class Eq : ISlot
     {
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
             Common.Compare(signaler, input, (lhs, rhs) =>

@@ -11,9 +11,17 @@ using magic.signals.contracts;
 
 namespace magic.lambda.branching
 {
+    /// <summary>
+    /// [switch] slot allowing you to do branching in your code.
+    /// </summary>
     [Slot(Name = "switch")]
     public class Switch : ISlot
     {
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
             if (!input.Children.Any(x => x.Name == "case"))

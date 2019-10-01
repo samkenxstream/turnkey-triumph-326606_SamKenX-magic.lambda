@@ -9,9 +9,17 @@ using magic.signals.contracts;
 
 namespace magic.lambda.branching
 {
+    /// <summary>
+    /// [default] slot for [switch] slots.
+    /// </summary>
     [Slot(Name = "default")]
     public class Default : ISlot
     {
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
             if (input.Parent?.Name != "switch")

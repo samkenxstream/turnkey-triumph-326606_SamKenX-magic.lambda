@@ -11,9 +11,17 @@ using magic.signals.contracts;
 
 namespace magic.lambda.branching
 {
+    /// <summary>
+    /// [else] slot for matching with an [if] and/or [else-if] slot. Must come after either or the previously mentioned slots.
+    /// </summary>
     [Slot(Name = "else")]
     public class Else : ISlot
     {
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
             var previous = input.Previous;

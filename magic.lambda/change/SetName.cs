@@ -11,9 +11,18 @@ using magic.signals.contracts;
 
 namespace magic.lambda.change
 {
+    // TODO: Consider renaming to only "name" ...?
+    /// <summary>
+    /// [set-name] slot allowing you to change the names of nodes in your lambda graph object.
+    /// </summary>
     [Slot(Name = "set-name")]
     public class SetName : ISlot
     {
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
             if (input.Children.Count() > 1)

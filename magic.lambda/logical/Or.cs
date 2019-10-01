@@ -11,9 +11,18 @@ using magic.signals.contracts;
 
 namespace magic.lambda.logical
 {
+    /// <summary>
+    /// [or] slot allowing you to group multiple comparisons (for instance), where at least one of these must evaluate
+    /// to true, for the [or] slot as a whole to evaluate to true.
+    /// </summary>
     [Slot(Name = "or")]
     public class Or : ISlot
     {
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
             if (input.Children.Count() < 2)

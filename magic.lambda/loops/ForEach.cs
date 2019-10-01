@@ -10,9 +10,17 @@ using magic.signals.contracts;
 
 namespace magic.lambda.loops
 {
+    /// <summary>
+    /// [for-each] slot allowing you to iterate through a list of node, resulting from the evaluation of an expression.
+    /// </summary>
     [Slot(Name = "for-each")]
     public class ForEach : ISlot
     {
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
             // Making sure we can reset back to original nodes after every single iteration.

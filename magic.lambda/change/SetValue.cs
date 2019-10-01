@@ -11,10 +11,20 @@ using magic.signals.contracts;
 
 namespace magic.lambda.change
 {
+    /// <summary>
+    /// [set-value] and [set-x] slots allowing you to change the values of nodes in your lambda graph object.
+    /// If you use [set-x] any expresions in your source will not be evaluated, allowing you to set the values
+    /// of nodes to become expressions.
+    /// </summary>
     [Slot(Name = "set-value")]
     [Slot(Name = "set-x")]
     public class SetValue : ISlot
     {
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
             if (input.Children.Count() > 1)

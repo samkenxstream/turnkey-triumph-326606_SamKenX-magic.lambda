@@ -10,9 +10,17 @@ using magic.signals.contracts;
 
 namespace magic.lambda.change
 {
+    /// <summary>
+    /// [add] slot allowing you to append nodes into some destination node.
+    /// </summary>
     [Slot(Name = "add")]
     public class Add : ISlot
     {
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
             signaler.Signal("eval", input);

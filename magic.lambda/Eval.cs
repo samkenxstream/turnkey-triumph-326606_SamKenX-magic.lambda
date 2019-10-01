@@ -12,11 +12,17 @@ using magic.signals.contracts;
 
 namespace magic.lambda
 {
+    /// <summary>
+    /// [eval] slot, allowing you to dynamically evaluate a piece of lambda.
+    /// </summary>
     [Slot(Name = "eval")]
     public class Eval : ISlot
     {
-        Node _root;
-
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
             // Sanity checking invocation. Notice non [eval] keywords might have expressions and children.
@@ -54,17 +60,10 @@ namespace magic.lambda
 
         bool Terminate(Node idx)
         {
-            if (_root == null)
-            {
-                _root = idx.Parent;
-                while (_root.Parent != null)
-                    _root = _root.Parent;
-            }
+            while (idx.Parent != null)
+                idx = idx.Parent;
 
-            if (_root.Value != null)
-                return true;
-
-            return false;
+            return idx.Value != null;
         }
 
         #endregion

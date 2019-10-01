@@ -14,9 +14,17 @@ using magic.node.extensions.hyperlambda;
 
 namespace magic.lambda.change
 {
+    /// <summary>
+    /// [convert] slot allowing you to convert values of nodes from one type to some other type.
+    /// </summary>
     [Slot(Name = "convert")]
     public class Convert : ISlot
     {
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
             if (input.Children.Count() != 1 || !input.Children.Any(x => x.Name == "type"))

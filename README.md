@@ -56,7 +56,7 @@ allowing you to easily extend the programming language yourself, by creating you
 * __[eval]__
 * __[vocabulary]__
 
-The above are all implemented as ISlots, accessible to you through raising a signal, using the `ISignal` provider from Magic Signals.
+The above are all implemented as `ISlots`, accessible to you through raising a signal, using the `ISignal` provider from Magic Signals.
 
 ## License
 

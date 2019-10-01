@@ -11,9 +11,17 @@ using magic.signals.contracts;
 
 namespace magic.lambda.source
 {
+    /// <summary>
+    /// [get-value] slot that will return the value of the node found by evaluating an expression.
+    /// </summary>
     [Slot(Name = "get-value")]
     public class GetValue : ISlot
     {
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
             var src = input.Evaluate();

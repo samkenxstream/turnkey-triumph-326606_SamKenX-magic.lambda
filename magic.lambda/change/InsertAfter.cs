@@ -10,9 +10,18 @@ using magic.signals.contracts;
 
 namespace magic.lambda.change
 {
+    /// <summary>
+    /// [insert-after] slot allowing you to insert a range of nodes after some other node
+    /// in your lambda graph object.
+    /// </summary>
     [Slot(Name = "insert-after")]
     public class InsertAfter : ISlot
     {
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
             signaler.Signal("eval", input);

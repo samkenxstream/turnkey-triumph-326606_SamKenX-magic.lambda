@@ -12,9 +12,19 @@ using magic.signals.contracts;
 
 namespace magic.lambda.change
 {
+    // TODO: Replace with simply [apply] slot.
+    /// <summary>
+    /// [apply-file] slot allowing you to use a Hyperlambda file as a template for braiding together
+    /// with variables of your own choosing.
+    /// </summary>
     [Slot(Name = "apply-file")]
     public class ApplyFile : ISlot
     {
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
             // Loading [template] and transforming into a lambda object.

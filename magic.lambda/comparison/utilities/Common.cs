@@ -9,14 +9,17 @@ using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
 
-namespace magic.lambda.comparison
+namespace magic.lambda.comparison.utilities
 {
-    public static class Common
+    /*
+     * Helper class containing commonalities for comparison slots.
+     */
+    internal static class Common
     {
-        public static void Compare(ISignaler signaler, Node input, Func<object, object, bool> functor)
+        internal static void Compare(ISignaler signaler, Node input, Func<object, object, bool> functor)
         {
             if (input.Children.Count() != 2)
-                throw new ApplicationException("Comparison operations requires exactly two operands");
+                throw new ApplicationException($"Comparison operation [{input.Name}] requires exactly two operands");
 
             signaler.Signal("eval", input);
 

@@ -11,9 +11,18 @@ using magic.signals.contracts;
 
 namespace magic.lambda.source
 {
+    // TODO: Consider renaming.
+    /// <summary>
+    /// [get-count] slot that will return the count of nodes found for an expression.
+    /// </summary>
     [Slot(Name = "get-count")]
     public class GetCount : ISlot
     {
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
             if (input.Value == null)

@@ -11,9 +11,17 @@ using magic.signals.contracts;
 
 namespace magic.lambda.branching
 {
+    /// <summary>
+    /// [else-if] slot for branching logic. Must come after either another [else-if] or an [if] slot.
+    /// </summary>
     [Slot(Name = "else-if")]
     public class ElseIf : ISlot
     {
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
             if (input.Children.Count() != 2)

@@ -6,12 +6,22 @@
 using System;
 using magic.node;
 using magic.signals.contracts;
+using magic.lambda.comparison.utilities;
 
 namespace magic.lambda.comparison
 {
+    // TODO: Consider renaming and providing "alias".
+    /// <summary>
+    /// [lte] slot returning true if its first child's value is "less than or equal" to its second child's value.
+    /// </summary>
     [Slot(Name = "lte")]
     public class Lte : ISlot
     {
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
             Common.Compare(signaler, input, (lhs, rhs) =>
