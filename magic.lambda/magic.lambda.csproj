@@ -3,21 +3,25 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>magic.lambda</PackageId>
     <Authors>Thomas Hansen</Authors>
-    <Description>A microscopic DSL build upon magic.node and magic.signals</Description>
+    <Company>Thomas Hansen</Company>
     <Copyright>Thomas Hansen, thomas@gaiasoul.com</Copyright>
+    <Description>A microscopic and super dynamic script language and DSL for .Net based upon Hyperlambda syntax, and Super Signals.</Description>
     <PackageProjectUrl>https://github.com/polterguy/magic.lambda</PackageProjectUrl>
-    <Version>1.0.1</Version>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/polterguy/magic.lambda/master/LICENSE</PackageLicenseUrl>
+    <PackageIconUrl>https://polterguy.github.io/favicon.ico</PackageIconUrl>
+    <PackOnBuild>true</PackOnBuild>
+    <PackageVersion>1.1.0</PackageVersion>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/polterguy/magic.lambda.git</RepositoryUrl>
+    <PackageTags>DSL, script language, scripting, hyperlambda</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin/Release/netstandard2.0/magic.lambda.xml</DocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="logical\" />
-    <Folder Include="loops\" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="magic.node" Version="1.0.0" />
