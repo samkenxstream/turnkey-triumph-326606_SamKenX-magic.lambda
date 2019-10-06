@@ -43,6 +43,9 @@ namespace magic.lambda
 
         #region [ -- Private helper methods -- ]
 
+        /*
+         * Executes the given scope.
+         */
         void Execute(ISignaler signaler, IEnumerable<Node> nodes)
         {
             foreach (var idx in nodes)
@@ -53,17 +56,20 @@ namespace magic.lambda
                 signaler.Signal(idx.Name, idx);
 
                 // Checking if execution for some reasons was terminated.
-                if (Terminate(idx))
+                if (Terminate(signaler))
                     return;
             }
         }
 
-        bool Terminate(Node idx)
+        /*
+         * Returns true if we should stop further execution.
+         */
+        bool Terminate(ISignaler signaler)
         {
-            while (idx.Parent != null)
-                idx = idx.Parent;
-
-            return idx.Value != null;
+            var terminateNode = signaler.Peek<Node>("slots.result");
+            if (terminateNode != null && (terminateNode.Value != null || terminateNode.Children.Any()))
+                return true;
+            return false;
         }
 
         #endregion
