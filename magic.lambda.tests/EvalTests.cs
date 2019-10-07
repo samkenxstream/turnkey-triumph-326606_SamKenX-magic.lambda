@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace magic.lambda.tests
@@ -22,6 +23,30 @@ namespace magic.lambda.tests
         public void InvokeNonExistingSignal_Throws()
         {
             Assert.Throws<ApplicationException>(() => Common.Evaluate(@"foo_XXX"));
+        }
+
+        [Fact]
+        public async Task InvokeEvalAsync()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.src
+wait.eval
+   set-value:x:@.src
+      :OK
+");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public async Task InvokeEvalAsync_Throws()
+        {
+            await Assert.ThrowsAsync<ApplicationException>(async () => await Common.EvaluateAsync(@"
+.src
+eval
+   wait.eval
+      set-value:x:@.src
+         :OK
+"));
         }
     }
 }

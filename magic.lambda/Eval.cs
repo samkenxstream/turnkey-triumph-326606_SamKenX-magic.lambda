@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using magic.node;
 using magic.node.extensions;
@@ -16,7 +17,7 @@ namespace magic.lambda
     /// [eval] slot, allowing you to dynamically evaluate a piece of lambda.
     /// </summary>
     [Slot(Name = "eval")]
-    public class Eval : ISlot
+    public class Eval : ISlot, ISlotAsync
     {
         /// <summary>
         /// Implementation of signal
@@ -25,23 +26,40 @@ namespace magic.lambda
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
+            Execute(signaler, GetNodes(signaler, input));
+        }
+
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
+        /// <returns>An awaiatble task.</returns>
+        public Task SignalAsync(ISignaler signaler, Node input)
+        {
+            return ExecuteAsync(signaler, GetNodes(signaler, input));
+        }
+
+        #region [ -- Private helper methods -- ]
+
+        /*
+         * Helper to retrieve execution nodes for slot.
+         */
+        IEnumerable<Node> GetNodes(ISignaler signaler, Node input)
+        {
             // Sanity checking invocation. Notice non [eval] keywords might have expressions and children.
             if (input.Name == "eval" && input.Value != null && input.Children.Any())
                 throw new ApplicationException("[eval] cannot handle both expression values and children at the same time");
 
             // Children have precedence, in case invocation is from a non [eval] keyword.
             if (input.Children.Any())
-            {
-                Execute(signaler, input.Children);
-            }
-            else if (input.Name == "eval" && input.Value != null)
-            {
-                var nodes = input.Evaluate();
-                Execute(signaler, nodes.SelectMany(x => x.Children));
-            }
-        }
+                return input.Children;
+            if (input.Name == "eval" && input.Value != null)
+                return input.Evaluate().SelectMany(x => x.Children);
 
-        #region [ -- Private helper methods -- ]
+            // Nothing to evaluate here.
+            return new Node[] { };
+        }
 
         /*
          * Executes the given scope.
@@ -57,7 +75,37 @@ namespace magic.lambda
                 if (idx.Name == "" || idx.Name.FirstOrDefault() == '.')
                     continue;
 
+                // Making sure we have no async invocations in our lambda.
+                if (idx.Name.StartsWith("wait.", StringComparison.InvariantCulture))
+                    throw new ApplicationException($"You shouldn't raise an async signal in a synchronous context.");
+
+                // Invoking signal.
                 signaler.Signal(idx.Name, idx);
+
+                // Checking if execution for some reasons was terminated.
+                if (terminate != null && (terminate.Value != null || terminate.Children.Any()))
+                    return;
+            }
+        }
+
+        /*
+         * Executes the given scope.
+         */
+        async Task ExecuteAsync(ISignaler signaler, IEnumerable<Node> nodes)
+        {
+            // Storing termination node, to check if we should terminate early for some reasons.
+            var terminate = signaler.Peek<Node>("slots.result");
+
+            // Evaluating "scope".
+            foreach (var idx in nodes)
+            {
+                if (idx.Name == "" || idx.Name.FirstOrDefault() == '.')
+                    continue;
+
+                if (idx.Name.StartsWith("wait.", StringComparison.InvariantCulture))
+                    await signaler.SignalAsync(idx.Name.Substring(5), idx);
+                else
+                    signaler.Signal(idx.Name, idx);
 
                 // Checking if execution for some reasons was terminated.
                 if (terminate != null && (terminate.Value != null || terminate.Children.Any()))

@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,6 +33,15 @@ namespace magic.lambda.tests
             var lambda = new Parser(hl).Lambda();
             var signaler = services.GetService(typeof(ISignaler)) as ISignaler;
             signaler.Signal("eval", lambda);
+            return lambda;
+        }
+
+        static async public Task<Node> EvaluateAsync(string hl)
+        {
+            var services = Initialize();
+            var lambda = new Parser(hl).Lambda();
+            var signaler = services.GetService(typeof(ISignaler)) as ISignaler;
+            await signaler.SignalAsync("eval", lambda);
             return lambda;
         }
 
