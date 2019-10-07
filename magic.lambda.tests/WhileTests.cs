@@ -3,6 +3,7 @@
  * Licensed as Affero GPL unless an explicitly proprietary license has been obtained.
  */
 
+using System;
 using System.Linq;
 using Xunit;
 
@@ -51,6 +52,42 @@ slots.create:foo
          slots.return-value:hello world
 slots.signal:foo");
             Assert.Equal("hello world", lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void While_04_InfiniteLoop()
+        {
+            Assert.Throws<ApplicationException>(() => Common.Evaluate(@"
+while
+   .:bool:true
+   .lambda"));
+        }
+
+        [Fact]
+        public void While_05_InfiniteLoopStops()
+        {
+            var lambda = Common.Evaluate(@"
+.no:int:1
+while
+   lt
+      get-value:x:@.no
+      .:int:5000
+   .lambda
+      math.increment:x:@.no");
+            Assert.Equal(5000, lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void While_05_InfiniteLoopStopsTooLate()
+        {
+            Assert.Throws<ApplicationException>(() => Common.Evaluate(@"
+.no:int:0
+while
+   lt
+      get-value:x:@.no
+      .:int:5000
+   .lambda
+      math.increment:x:@.no"));
         }
     }
 }

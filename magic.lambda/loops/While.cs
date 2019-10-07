@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
@@ -17,6 +18,13 @@ namespace magic.lambda.loops
     [Slot(Name = "while")]
     public class While : ISlot
     {
+        readonly int _maxIterations;
+
+        public While(IConfiguration configuration)
+        {
+            _maxIterations = int.Parse(configuration?["magic:lambda:while:max-iterations"] ?? "5000");
+        }
+
         /// <summary>
         /// Implementation of signal
         /// </summary>
@@ -30,9 +38,16 @@ namespace magic.lambda.loops
             // Storing termination node, to check if we should terminate early for some reasons.
             var terminate = signaler.Peek<Node>("slots.result");
 
+            // Making sure we don't enter an infinite loop.
+            int iterations = 0;
+
             // Evaluating lambda while condition is true.
             while (true)
             {
+                // Checking if we've passed our maximum number of iterations.
+                if (iterations++ == _maxIterations)
+                    throw new ApplicationException($"Your [while] loop exceeded the maximum number of iterations, which are {_maxIterations}. Refactor your Hyperlambda, or increase your configuration setting.");
+
                 // Making sure we can reset back to original nodes after every single iteration.
                 var old = input.Children.Select(x => x.Clone()).ToList();
 
