@@ -35,9 +35,22 @@ while
 while
    .:bool:false
    .lambda
-      set-value:x:@.srs
+      set-value:x:@.src
          .:FAILURE");
             Assert.NotEqual("FAILURE", lambda.Children.First().Name);
+        }
+
+        [Fact]
+        public void While_03_Terminate()
+        {
+            var lambda = Common.Evaluate(@"
+slots.create:foo
+   while
+      .:bool:true
+      .lambda
+         slots.return-value:hello world
+slots.signal:foo");
+            Assert.Equal("hello world", lambda.Children.Skip(1).First().Value);
         }
     }
 }

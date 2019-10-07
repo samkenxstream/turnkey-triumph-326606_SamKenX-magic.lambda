@@ -27,7 +27,11 @@ namespace magic.lambda.loops
             if (input.Children.Count() != 2)
                 throw new ApplicationException("Keyword [while] requires exactly two child nodes");
 
-            while(true)
+            // Storing termination node, to check if we should terminate early for some reasons.
+            var terminate = signaler.Peek<Node>("slots.result");
+
+            // Evaluating lambda while condition is true.
+            while (true)
             {
                 // Making sure we can reset back to original nodes after every single iteration.
                 var old = input.Children.Select(x => x.Clone()).ToList();
@@ -52,6 +56,10 @@ namespace magic.lambda.loops
 
                 // Notice, cloning in case we've got another iteration, to avoid changing original nodes' values.
                 input.AddRange(old.Select(x => x.Clone()));
+
+                // Checking if execution for some reasons was terminated.
+                if (terminate != null && (terminate.Value != null || terminate.Children.Any()))
+                    return;
             }
         }
     }

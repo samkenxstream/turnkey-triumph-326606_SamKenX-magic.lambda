@@ -26,6 +26,9 @@ namespace magic.lambda.loops
             // Making sure we can reset back to original nodes after every single iteration.
             var old = input.Children.Select(x => x.Clone()).ToList();
 
+            // Storing termination node, to check if we should terminate early for some reasons.
+            var terminate = signaler.Peek<Node>("slots.result");
+
             foreach (var idx in input.Evaluate())
             {
                 // Inserting "data pointer".
@@ -39,6 +42,10 @@ namespace magic.lambda.loops
 
                 // Notice, cloning in case we've got another iteration, to avoid changing original nodes' values.
                 input.AddRange(old.Select(x => x.Clone()));
+
+                // Checking if execution for some reasons was terminated.
+                if (terminate != null && (terminate.Value != null || terminate.Children.Any()))
+                    return;
             }
         }
     }
