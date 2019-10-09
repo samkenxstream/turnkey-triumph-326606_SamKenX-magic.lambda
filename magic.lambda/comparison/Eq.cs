@@ -16,6 +16,7 @@ namespace magic.lambda.comparison
     /// [eq] slot allowing you to compare two values for equality.
     /// </summary>
     [Slot(Name = "eq")]
+    [Slot(Name = "wait.eq")]
     public class Eq : ISlot, ISlotAsync
     {
         /// <summary>

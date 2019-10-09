@@ -16,6 +16,7 @@ namespace magic.lambda.change
     /// in your lambda graph object.
     /// </summary>
     [Slot(Name = "insert-after")]
+    [Slot(Name = "wait.insert-after")]
     public class InsertAfter : ISlot, ISlotAsync
     {
         /// <summary>

@@ -17,8 +17,10 @@ namespace magic.lambda.change
     /// If you use [set-x] any expresions in your source will not be evaluated, allowing you to set the values
     /// of nodes to become expressions.
     /// </summary>
-    [Slot(Name = "set-value")]
     [Slot(Name = "set-x")]
+    [Slot(Name = "set-value")]
+    [Slot(Name = "wait.set-x")]
+    [Slot(Name = "wait.set-value")]
     public class SetValue : ISlot, ISlotAsync
     {
         /// <summary>

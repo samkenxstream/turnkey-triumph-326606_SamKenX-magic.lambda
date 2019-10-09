@@ -16,6 +16,7 @@ namespace magic.lambda.branching
     /// [switch] slot allowing you to do branching in your code.
     /// </summary>
     [Slot(Name = "switch")]
+    [Slot(Name = "wait.switch")]
     public class Switch : ISlot, ISlotAsync
     {
         /// <summary>

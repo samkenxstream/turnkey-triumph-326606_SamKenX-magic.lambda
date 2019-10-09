@@ -17,6 +17,7 @@ namespace magic.lambda.loops
     /// [while] slot that will evaluate its lambda object as long as its condition is true.
     /// </summary>
     [Slot(Name = "while")]
+    [Slot(Name = "wait.while")]
     public class While : ISlot, ISlotAsync
     {
         readonly int _maxIterations;

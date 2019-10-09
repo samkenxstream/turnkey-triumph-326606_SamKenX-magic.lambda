@@ -17,6 +17,7 @@ namespace magic.lambda.change
     /// [set-name] slot allowing you to change the names of nodes in your lambda graph object.
     /// </summary>
     [Slot(Name = "set-name")]
+    [Slot(Name = "wait.set-name")]
     public class SetName : ISlot, ISlotAsync
     {
         /// <summary>

@@ -15,6 +15,7 @@ namespace magic.lambda.comparison
     /// [mt] slot returning true if its first child's value is "more than" its second child's value.
     /// </summary>
     [Slot(Name = "mt")]
+    [Slot(Name = "wait.mt")]
     public class Mt : ISlot, ISlotAsync
     {
         /// <summary>

@@ -15,6 +15,7 @@ namespace magic.lambda.exceptions
     /// guaranteed to be evaluated even if some exception occurs.
     /// </summary>
     [Slot(Name = "try")]
+    [Slot(Name = "wait.try")]
     public class Try : ISlot, ISlotAsync
     {
         /// <summary>

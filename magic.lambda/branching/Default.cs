@@ -14,6 +14,7 @@ namespace magic.lambda.branching
     /// [default] slot for [switch] slots.
     /// </summary>
     [Slot(Name = "default")]
+    [Slot(Name = "wait.default")]
     public class Default : ISlot, ISlotAsync
     {
         /// <summary>

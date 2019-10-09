@@ -17,6 +17,7 @@ namespace magic.lambda
     /// [eval] slot, allowing you to dynamically evaluate a piece of lambda.
     /// </summary>
     [Slot(Name = "eval")]
+    [Slot(Name = "wait.eval")]
     public class Eval : ISlot, ISlotAsync
     {
         /// <summary>
@@ -48,13 +49,13 @@ namespace magic.lambda
         IEnumerable<Node> GetNodes(ISignaler signaler, Node input)
         {
             // Sanity checking invocation. Notice non [eval] keywords might have expressions and children.
-            if (input.Name == "eval" && input.Value != null && input.Children.Any())
+            if ((input.Name == "eval" || input.Name == "wait.eval" || input.Name == "*eval") && input.Value != null && input.Children.Any())
                 throw new ApplicationException("[eval] cannot handle both expression values and children at the same time");
 
             // Children have precedence, in case invocation is from a non [eval] keyword.
             if (input.Children.Any())
                 return input.Children;
-            if (input.Name == "eval" && input.Value != null)
+            if ((input.Name == "eval" || input.Name == "wait.eval" || input.Name == "*eval") && input.Value != null)
                 return input.Evaluate().SelectMany(x => x.Children);
 
             // Nothing to evaluate here.
@@ -103,7 +104,9 @@ namespace magic.lambda
                     continue;
 
                 if (idx.Name.StartsWith("wait.", StringComparison.InvariantCulture))
-                    await signaler.SignalAsync(idx.Name.Substring(5), idx);
+                    await signaler.SignalAsync(idx.Name, idx);
+                else if (idx.Name.StartsWith("*", StringComparison.InvariantCulture))
+                    await signaler.SignalAsync(idx.Name.Substring(1), idx);
                 else
                     signaler.Signal(idx.Name, idx);
 

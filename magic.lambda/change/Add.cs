@@ -15,6 +15,7 @@ namespace magic.lambda.change
     /// [add] slot allowing you to append nodes into some destination node.
     /// </summary>
     [Slot(Name = "add")]
+    [Slot(Name = "wait.add")]
     public class Add : ISlot, ISlotAsync
     {
         /// <summary>

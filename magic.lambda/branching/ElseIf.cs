@@ -16,6 +16,7 @@ namespace magic.lambda.branching
     /// [else-if] slot for branching logic. Must come after either another [else-if] or an [if] slot.
     /// </summary>
     [Slot(Name = "else-if")]
+    [Slot(Name = "wait.else-if")]
     public class ElseIf : ISlot, ISlotAsync
     {
         /// <summary>

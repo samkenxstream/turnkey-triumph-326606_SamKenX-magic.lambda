@@ -17,6 +17,7 @@ namespace magic.lambda.logical
     /// to true, for the [or] slot as a whole to evaluate to true.
     /// </summary>
     [Slot(Name = "or")]
+    [Slot(Name = "wait.or")]
     public class Or : ISlot, ISlotAsync
     {
         /// <summary>

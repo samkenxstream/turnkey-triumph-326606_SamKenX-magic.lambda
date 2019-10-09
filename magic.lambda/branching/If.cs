@@ -16,6 +16,7 @@ namespace magic.lambda.branching
     /// [if] slot, allowing you to do branching in your code.
     /// </summary>
     [Slot(Name = "if")]
+    [Slot(Name = "wait.if")]
     public class If : ISlot, ISlotAsync
     {
         /// <summary>

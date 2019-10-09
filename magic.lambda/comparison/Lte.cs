@@ -16,6 +16,7 @@ namespace magic.lambda.comparison
     /// [lte] slot returning true if its first child's value is "less than or equal" to its second child's value.
     /// </summary>
     [Slot(Name = "lte")]
+    [Slot(Name = "wait.lte")]
     public class Lte : ISlot, ISlotAsync
     {
         /// <summary>

@@ -15,6 +15,7 @@ namespace magic.lambda.loops
     /// [for-each] slot allowing you to iterate through a list of node, resulting from the evaluation of an expression.
     /// </summary>
     [Slot(Name = "for-each")]
+    [Slot(Name = "wait.for-each")]
     public class ForEach : ISlot, ISlotAsync
     {
         /// <summary>

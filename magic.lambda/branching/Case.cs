@@ -14,6 +14,7 @@ namespace magic.lambda.branching
     /// [case] slot for [switch] slots.
     /// </summary>
     [Slot(Name = "case")]
+    [Slot(Name = "wait.case")]
     public class Case : ISlot, ISlotAsync
     {
         /// <summary>

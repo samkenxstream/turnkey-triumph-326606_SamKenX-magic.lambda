@@ -17,6 +17,7 @@ namespace magic.lambda.logical
     /// to true, for the [and] slot as a whole to evaluate to true.
     /// </summary>
     [Slot(Name = "and")]
+    [Slot(Name = "wait.and")]
     public class And : ISlot, ISlotAsync
     {
         /// <summary>

@@ -16,6 +16,7 @@ namespace magic.lambda.branching
     /// [else] slot for matching with an [if] and/or [else-if] slot. Must come after either or the previously mentioned slots.
     /// </summary>
     [Slot(Name = "else")]
+    [Slot(Name = "wait.else")]
     public class Else : ISlot, ISlotAsync
     {
         /// <summary>

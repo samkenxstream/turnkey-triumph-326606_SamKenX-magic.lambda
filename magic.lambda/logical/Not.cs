@@ -16,6 +16,7 @@ namespace magic.lambda.logical
     /// [not] slot, negating the value of its first children's value.
     /// </summary>
     [Slot(Name = "not")]
+    [Slot(Name = "wait.not")]
     public class Not : ISlot, ISlotAsync
     {
         /// <summary>
