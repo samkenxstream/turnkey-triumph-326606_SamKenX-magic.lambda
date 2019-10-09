@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
@@ -15,7 +16,7 @@ namespace magic.lambda.branching
     /// [else] slot for matching with an [if] and/or [else-if] slot. Must come after either or the previously mentioned slots.
     /// </summary>
     [Slot(Name = "else")]
-    public class Else : ISlot
+    public class Else : ISlot, ISlotAsync
     {
         /// <summary>
         /// Implementation of signal
@@ -23,6 +24,29 @@ namespace magic.lambda.branching
         /// <param name="signaler">Signaler used to signal</param>
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
+        {
+            if (ShouldEvaluate(input))
+                signaler.Signal("eval", input);
+        }
+
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
+        /// <returns>An awaitable task.</returns>
+        public async Task SignalAsync(ISignaler signaler, Node input)
+        {
+            if (ShouldEvaluate(input))
+                await signaler.SignalAsync("eval", input);
+        }
+
+        #region [ -- Private helper methods -- ]
+
+        /*
+         * Helper method for the above, to check if we should evaluate [else] at all.
+         */
+        bool ShouldEvaluate(Node input)
         {
             var previous = input.Previous;
             if (previous == null || (previous.Name != "if" && previous.Name != "else-if"))
@@ -38,8 +62,10 @@ namespace magic.lambda.branching
                 }
                 previous = previous.Previous;
             }
-            if (evaluate)
-                signaler.Signal("eval", input);
+
+            return evaluate;
         }
+
+        #endregion
     }
 }

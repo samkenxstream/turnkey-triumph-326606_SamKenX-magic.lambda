@@ -30,7 +30,7 @@ namespace magic.lambda.change
             // Loading [template] and transforming into a lambda object.
             var templateFilename = input.GetEx<string>();
             var template = new Node("", templateFilename);
-            signaler.Signal("load-file", template);
+            signaler.Signal("io.file.load", template);
             signaler.Signal("lambda", template);
 
             // Retrieving all other arguments, and applying them to the template.
@@ -45,6 +45,9 @@ namespace magic.lambda.change
 
         #region [ -- Private helper methods -- ]
 
+        /*
+         * Actual implementation that applies lambda object to file.
+         */
         void Apply(IEnumerable<Node> args, IEnumerable<Node> templateNodes)
         {
             foreach (var idx in templateNodes)

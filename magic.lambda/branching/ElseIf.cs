@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
@@ -15,7 +16,7 @@ namespace magic.lambda.branching
     /// [else-if] slot for branching logic. Must come after either another [else-if] or an [if] slot.
     /// </summary>
     [Slot(Name = "else-if")]
-    public class ElseIf : ISlot
+    public class ElseIf : ISlot, ISlotAsync
     {
         /// <summary>
         /// Implementation of signal
@@ -24,10 +25,49 @@ namespace magic.lambda.branching
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
+            // Checking to see if we should evaluate at all.
+            if (ShouldEvaluate(input, out Node lambda))
+            {
+                // Evaluating condition.
+                signaler.Signal("eval", input);
+
+                // Checking if evaluation of condition evaluated to true.
+                if (input.Children.First().GetEx<bool>())
+                    signaler.Signal("eval", lambda);
+            }
+        }
+
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
+        /// <returns>An awaitable task.</returns>
+        public async Task SignalAsync(ISignaler signaler, Node input)
+        {
+            // Checking to see if we should evaluate at all.
+            if (ShouldEvaluate(input, out Node lambda))
+            {
+                // Evaluating condition.
+                await signaler.SignalAsync("eval", input);
+
+                // Checking if evaluation of condition evaluated to true.
+                if (input.Children.First().GetEx<bool>())
+                    await signaler.SignalAsync("eval", lambda);
+            }
+        }
+
+        #region [ -- Private helper methods -- ]
+
+        /*
+         * Helper method for the above, to check if we should evaluate [else-if] at all.
+         */
+        bool ShouldEvaluate(Node input, out Node lambda)
+        {
             if (input.Children.Count() != 2)
                 throw new ApplicationException("Keyword [else-if] requires exactly two children nodes");
 
-            var lambda = input.Children.Skip(1).First();
+            lambda = input.Children.Skip(1).First();
             if (lambda.Name != ".lambda")
                 throw new ApplicationException("Keyword [else-if] requires its second child node to be [.lambda]");
 
@@ -45,14 +85,9 @@ namespace magic.lambda.branching
                 }
                 previous = previous.Previous;
             }
-
-            if (evaluate)
-            {
-                signaler.Signal("eval", input);
-
-                if (input.Children.First().GetEx<bool>())
-                    signaler.Signal("eval", lambda);
-            }
+            return evaluate;
         }
+
+        #endregion
     }
 }

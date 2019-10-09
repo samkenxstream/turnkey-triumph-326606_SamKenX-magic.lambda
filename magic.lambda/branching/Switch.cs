@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
@@ -15,7 +16,7 @@ namespace magic.lambda.branching
     /// [switch] slot allowing you to do branching in your code.
     /// </summary>
     [Slot(Name = "switch")]
-    public class Switch : ISlot
+    public class Switch : ISlot, ISlotAsync
     {
         /// <summary>
         /// Implementation of signal
@@ -23,6 +24,31 @@ namespace magic.lambda.branching
         /// <param name="signaler">Signaler used to signal</param>
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
+        {
+            var executionNode = GetExecutionNode(input);
+            if (executionNode != null)
+                signaler.Signal(executionNode.Name, executionNode);
+        }
+
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
+        /// <returns>An awaitable task.</returns>
+        public async Task SignalAsync(ISignaler signaler, Node input)
+        {
+            var executionNode = GetExecutionNode(input);
+            if (executionNode != null)
+                await signaler.SignalAsync(executionNode.Name, executionNode);
+        }
+
+        #region [ -- Private helper methods -- ]
+
+        /*
+         * Returns the node to execute, if any.
+         */
+        Node GetExecutionNode(Node input)
         {
             if (!input.Children.Any(x => x.Name == "case"))
                 throw new ApplicationException("[switch] must have one at least one [case] child");
@@ -45,15 +71,18 @@ namespace magic.lambda.branching
 
             if (executionNode != null)
             {
-                while(executionNode != null && !executionNode.Children.Any() && executionNode.Name != "default")
+                while (executionNode != null && !executionNode.Children.Any() && executionNode.Name != "default")
                 {
                     executionNode = executionNode.Next;
                 }
-                if (executionNode == null || !executionNode.Children.Any())
+                if (executionNode != null && !executionNode.Children.Any())
                     throw new ApplicationException("No lambda object found for [case]");
 
-                signaler.Signal(executionNode.Name, executionNode);
+                return executionNode;
             }
+            return null;
         }
+
+        #endregion
     }
 }

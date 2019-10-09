@@ -4,6 +4,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using magic.node;
 using magic.signals.contracts;
 
@@ -13,7 +14,7 @@ namespace magic.lambda.branching
     /// [case] slot for [switch] slots.
     /// </summary>
     [Slot(Name = "case")]
-    public class Case : ISlot
+    public class Case : ISlot, ISlotAsync
     {
         /// <summary>
         /// Implementation of signal
@@ -26,6 +27,20 @@ namespace magic.lambda.branching
                 throw new ApplicationException("[case] must be a child of [switch]");
 
             signaler.Signal("eval", input);
+        }
+
+        /// <summary>
+        /// Implementation of signal
+        /// </summary>
+        /// <param name="signaler">Signaler used to signal</param>
+        /// <param name="input">Parameters passed from signaler</param>
+        /// <returns>An awaitable task.</returns>
+        public async Task SignalAsync(ISignaler signaler, Node input)
+        {
+            if (input.Parent?.Name != "switch")
+                throw new ApplicationException("[case] must be a child of [switch]");
+
+            await signaler.SignalAsync("eval", input);
         }
     }
 }
