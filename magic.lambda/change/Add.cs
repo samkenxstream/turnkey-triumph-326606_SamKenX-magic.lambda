@@ -26,16 +26,7 @@ namespace magic.lambda.change
         public void Signal(ISignaler signaler, Node input)
         {
             signaler.Signal("eval", input);
-
-            // Looping through each destination.
-            foreach (var idxDest in input.Evaluate())
-            {
-                // Looping through each source node and adding its children to currently iterated destination.
-                foreach (var idxSource in input.Children.SelectMany(x => x.Children))
-                {
-                    idxDest.Add(idxSource.Clone()); // Cloning in case of multiple destinations.
-                }
-            }
+            AddResult(input);
         }
 
         /// <summary>
@@ -47,16 +38,23 @@ namespace magic.lambda.change
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
             await signaler.SignalAsync("eval", input);
+            AddResult(input);
+        }
 
+        #region [ -- Private helper methods -- ]
+
+        /*
+         * Adds result from source into destination nodes.
+         */
+        void AddResult(Node input)
+        {
             // Looping through each destination.
             foreach (var idxDest in input.Evaluate())
             {
-                // Looping through each source node and adding its children to currently iterated destination.
-                foreach (var idxSource in input.Children.SelectMany(x => x.Children))
-                {
-                    idxDest.Add(idxSource.Clone()); // Cloning in case of multiple destinations.
-                }
+                idxDest.AddRange(input.Children.SelectMany(x => x.Children).Select(x2 => x2.Clone()));
             }
         }
+
+        #endregion
     }
 }

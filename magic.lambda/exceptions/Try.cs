@@ -56,7 +56,7 @@ namespace magic.lambda.exceptions
             catch (Exception err)
             {
                 var foundCatch = await ExecuteCatchAsync(signaler, input, err);
-                ExecuteFinally(signaler, input);
+                await ExecuteFinallyAsync(signaler, input);
                 if (foundCatch)
                     return;
                 else

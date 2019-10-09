@@ -30,75 +30,68 @@ namespace magic.lambda.change
             if (input.Children.Count() != 1 || !input.Children.Any(x => x.Name == "type"))
                 throw new ApplicationException("[convert] can only handle one argument, which is [type]");
 
-            var type = input.Children.First().Get<string>();
-
             var value = input.GetEx<object>();
-            if (value == null)
-            {
-                input.Value = null;
-                return;
-            }
-
+            var type = input.Children.First().GetEx<string>();
             switch (type)
             {
                 case "int":
-                    input.Value = System.Convert.ToInt32(value, CultureInfo.InvariantCulture);
+                    input.Value = System.Convert.ToInt32(value ?? 0, CultureInfo.InvariantCulture);
                     break;
 
                 case "uint":
-                    input.Value = System.Convert.ToUInt32(value, CultureInfo.InvariantCulture);
+                    input.Value = System.Convert.ToUInt32(value ?? 0, CultureInfo.InvariantCulture);
                     break;
 
                 case "long":
-                    input.Value = System.Convert.ToInt64(value, CultureInfo.InvariantCulture);
+                    input.Value = System.Convert.ToInt64(value ?? 0, CultureInfo.InvariantCulture);
                     break;
 
                 case "ulong":
-                    input.Value = System.Convert.ToUInt64(value, CultureInfo.InvariantCulture);
+                    input.Value = System.Convert.ToUInt64(value ?? 0, CultureInfo.InvariantCulture);
                     break;
 
                 case "decimal":
-                    input.Value = System.Convert.ToDecimal(value, CultureInfo.InvariantCulture);
+                    input.Value = System.Convert.ToDecimal(value ?? 0, CultureInfo.InvariantCulture);
                     break;
 
                 case "double":
-                    input.Value = System.Convert.ToDouble(value, CultureInfo.InvariantCulture);
+                    input.Value = System.Convert.ToDouble(value ?? 0, CultureInfo.InvariantCulture);
                     break;
 
                 case "single":
-                    input.Value = System.Convert.ToSingle(value, CultureInfo.InvariantCulture);
+                    input.Value = System.Convert.ToSingle(value ?? 0, CultureInfo.InvariantCulture);
                     break;
 
                 case "bool":
-                    input.Value = value.Equals("true");
+                    input.Value = value?.Equals("true") ?? false;
                     break;
 
                 case "date":
-                    input.Value = DateTime.ParseExact(value.ToString(), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
+                    input.Value = DateTime.ParseExact(value?.ToString() ?? DateTime.MinValue.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
                     break;
 
                 case "guid":
-                    input.Value = new Guid(value.ToString());
+                    input.Value = new Guid(value?.ToString() ?? Guid.NewGuid().ToString());
                     break;
 
                 case "char":
-                    input.Value = System.Convert.ToChar(value, CultureInfo.InvariantCulture);
+                    input.Value = System.Convert.ToChar(value ?? 0, CultureInfo.InvariantCulture);
                     break;
 
                 case "byte":
-                    input.Value = System.Convert.ToByte(value, CultureInfo.InvariantCulture);
+                    input.Value = System.Convert.ToByte(value ?? 0, CultureInfo.InvariantCulture);
                     break;
 
                 case "x":
-                    input.Value = new Expression(value.ToString());
+                    input.Value = new Expression(value?.ToString() ?? "");
                     break;
 
                 case "string":
-                    input.Value = value.ToString();
+                    input.Value = value?.ToString() ?? "";
                     break;
 
                 case "node":
-                    input.Value = new Parser(value.ToString()).Lambda();
+                    input.Value = new Parser(value?.ToString() ?? "").Lambda();
                     break;
 
                 default:

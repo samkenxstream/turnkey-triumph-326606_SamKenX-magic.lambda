@@ -27,9 +27,9 @@ namespace magic.lambda.comparison.utilities
 
             signaler.Signal("eval", input);
 
-            var lhs = input.Children.First().GetEx<object>();
-            var rhs = input.Children.Skip(1).First().GetEx<object>();
-            input.Value = functor(lhs, rhs);
+            input.Value = functor(
+                input.Children.First().GetEx<object>(), 
+                input.Children.Skip(1).First().GetEx<object>());
         }
 
         internal async static Task CompareAsync(
@@ -42,9 +42,9 @@ namespace magic.lambda.comparison.utilities
 
             await signaler.SignalAsync("eval", input);
 
-            var lhs = input.Children.First().GetEx<object>();
-            var rhs = input.Children.Skip(1).First().GetEx<object>();
-            input.Value = functor(lhs, rhs);
+            input.Value = functor(
+                input.Children.First().GetEx<object>(),
+                input.Children.Skip(1).First().GetEx<object>());
         }
     }
 }

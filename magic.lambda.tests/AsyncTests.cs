@@ -34,5 +34,15 @@ wait.add:x:../*/.dest
             Assert.Equal("foo2", lambda.Children.First().Children.Skip(3).First().Name);
             Assert.Equal("bar2", lambda.Children.First().Children.Skip(3).First().Value);
         }
+
+        [Fact]
+        public async Task SetSyncInAsyncContext()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.dest
+set-value:x:-
+   .:OK");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
     }
 }

@@ -24,9 +24,7 @@ namespace magic.lambda.branching
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            if (input.Parent?.Name != "switch")
-                throw new ApplicationException("[case] must be a child of [switch]");
-
+            SanityCheckInvocation(input);
             signaler.Signal("eval", input);
         }
 
@@ -38,10 +36,18 @@ namespace magic.lambda.branching
         /// <returns>An awaitable task.</returns>
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
-            if (input.Parent?.Name != "switch")
-                throw new ApplicationException("[case] must be a child of [switch]");
-
+            SanityCheckInvocation(input);
             await signaler.SignalAsync("eval", input);
         }
+
+        #region [ -- Private helper methods -- ]
+
+        void SanityCheckInvocation(Node input)
+        {
+            if (input.Parent?.Name != "switch")
+                throw new ApplicationException("[case] must be a child of [switch]");
+        }
+
+        #endregion
     }
 }

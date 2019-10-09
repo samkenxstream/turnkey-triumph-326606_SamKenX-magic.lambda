@@ -6,6 +6,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
@@ -33,17 +34,9 @@ namespace magic.lambda.change
             if (input.Children.Count() > 1)
                 throw new ApplicationException("[set-value] can have maximum one child node");
 
-            var destinations = input.Evaluate().ToList();
-            if (destinations.Count == 0)
-                return;
-
             signaler.Signal("eval", input);
 
-            var source = input.Name.EndsWith("set-value", StringComparison.InvariantCulture) ? input.Children.FirstOrDefault()?.GetEx<object>() : input.Children.FirstOrDefault()?.Get<object>();
-            foreach (var idx in destinations)
-            {
-                idx.Value = source;
-            }
+            SetValueToSource(input, input.Evaluate().ToList());
         }
 
         /// <summary>
@@ -57,17 +50,21 @@ namespace magic.lambda.change
             if (input.Children.Count() > 1)
                 throw new ApplicationException("[set-value] can have maximum one child node");
 
-            var destinations = input.Evaluate().ToList();
-            if (destinations.Count == 0)
-                return;
-
             await signaler.SignalAsync("eval", input);
+            SetValueToSource(input, input.Evaluate().ToList());
+        }
 
+        #region [ -- Private helper methods -- ]
+
+        private static void SetValueToSource(Node input, IEnumerable<Node> destinations)
+        {
             var source = input.Name.EndsWith("set-value", StringComparison.InvariantCulture) ? input.Children.FirstOrDefault()?.GetEx<object>() : input.Children.FirstOrDefault()?.Get<object>();
             foreach (var idx in destinations)
             {
                 idx.Value = source;
             }
         }
+
+        #endregion
     }
 }

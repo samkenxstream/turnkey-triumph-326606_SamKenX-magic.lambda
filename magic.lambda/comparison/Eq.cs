@@ -26,18 +26,7 @@ namespace magic.lambda.comparison
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            Common.Compare(signaler, input, (lhs, rhs) =>
-            {
-                if (lhs == null && rhs == null)
-                    return true;
-                else if (lhs != null && rhs == null)
-                    return false;
-                else if (lhs == null && rhs != null)
-                    return false;
-                else if (lhs.GetType() != rhs.GetType())
-                    return false;
-                return ((IComparable)lhs).CompareTo(rhs) == 0;
-            });
+            Common.Compare(signaler, input, (lhs, rhs) => Compare(lhs, rhs));
         }
 
         /// <summary>
@@ -48,18 +37,24 @@ namespace magic.lambda.comparison
         /// <returns>An awaitable task.</returns>
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
-            await Common.CompareAsync(signaler, input, (lhs, rhs) =>
-            {
-                if (lhs == null && rhs == null)
-                    return true;
-                else if (lhs != null && rhs == null)
-                    return false;
-                else if (lhs == null && rhs != null)
-                    return false;
-                else if (lhs.GetType() != rhs.GetType())
-                    return false;
-                return ((IComparable)lhs).CompareTo(rhs) == 0;
-            });
+            await Common.CompareAsync(signaler, input, (lhs, rhs) => Compare(lhs, rhs));
         }
+
+        #region [ -- Private helper methods -- ]
+
+        bool Compare(object lhs, object rhs)
+        {
+            if (lhs == null && rhs == null)
+                return true;
+            else if (lhs != null && rhs == null)
+                return false;
+            else if (lhs == null && rhs != null)
+                return false;
+            else if (lhs.GetType() != rhs.GetType())
+                return false;
+            return ((IComparable)lhs).CompareTo(rhs) == 0;
+        }
+
+        #endregion
     }
 }

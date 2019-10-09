@@ -29,18 +29,9 @@ namespace magic.lambda.logical
         {
             if (input.Children.Count() < 2)
                 throw new ApplicationException("Operator [and] requires at least two children nodes");
-
             signaler.Signal("eval", input);
 
-            foreach (var idx in input.Children)
-            {
-                if (!idx.GetEx<bool>())
-                {
-                    input.Value = false;
-                    return;
-                }
-            }
-            input.Value = true;
+            input.Value = IsTrue(input);
         }
 
         /// <summary>
@@ -56,15 +47,21 @@ namespace magic.lambda.logical
 
             await signaler.SignalAsync("eval", input);
 
+            input.Value = IsTrue(input);
+        }
+
+        #region [ -- Private helper methods -- ]
+
+        bool IsTrue(Node input)
+        {
             foreach (var idx in input.Children)
             {
                 if (!idx.GetEx<bool>())
-                {
-                    input.Value = false;
-                    return;
-                }
+                    return false;
             }
-            input.Value = true;
+            return true;
         }
+
+        #endregion
     }
 }

@@ -49,22 +49,22 @@ namespace magic.lambda.branching
          */
         bool ShouldEvaluate(Node input)
         {
+            /*
+             * Traversing backwards in graph, finding our if we should evaluate
+             * or not, and sanity checking invocation at the same time.
+             */
             var previous = input.Previous;
             if (previous == null || (previous.Name != "if" && previous.Name != "else-if"))
                 throw new ApplicationException("[else] must have an [if] or [else-if] before it");
 
-            var evaluate = true;
             while (previous != null && (previous.Name == "if" || previous.Name == "else-if"))
             {
                 if (previous.Children.First().GetEx<bool>())
-                {
-                    evaluate = false;
-                    break;
-                }
+                    return false;
                 previous = previous.Previous;
             }
 
-            return evaluate;
+            return true;
         }
 
         #endregion

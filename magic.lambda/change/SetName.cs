@@ -31,12 +31,7 @@ namespace magic.lambda.change
                 throw new ApplicationException("[set-name] can have maximum one child node");
 
             signaler.Signal("eval", input);
-
-            var source = input.Children.FirstOrDefault()?.GetEx<string>() ?? "";
-            foreach (var idx in input.Evaluate())
-            {
-                idx.Name = source;
-            }
+            SetNameToSource(input);
         }
 
         /// <summary>
@@ -51,12 +46,20 @@ namespace magic.lambda.change
                 throw new ApplicationException("[set-name] can have maximum one child node");
 
             await signaler.SignalAsync("eval", input);
+            SetNameToSource(input);
+        }
 
+        #region [ -- Private helper methods -- ]
+
+        void SetNameToSource(Node input)
+        {
             var source = input.Children.FirstOrDefault()?.GetEx<string>() ?? "";
             foreach (var idx in input.Evaluate())
             {
                 idx.Name = source;
             }
         }
+
+        #endregion
     }
 }
