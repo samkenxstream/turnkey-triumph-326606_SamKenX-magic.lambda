@@ -12,12 +12,11 @@ using magic.signals.contracts;
 
 namespace magic.lambda.change
 {
-    // TODO: Replace with simply [apply] slot.
     /// <summary>
     /// [apply-file] slot allowing you to use a Hyperlambda file as a template for braiding together
     /// with variables of your own choosing.
     /// </summary>
-    [Slot(Name = "apply-file")]
+    [Slot(Name = "apply")]
     public class ApplyFile : ISlot
     {
         /// <summary>
@@ -27,26 +26,23 @@ namespace magic.lambda.change
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            // Loading [template] and transforming into a lambda object.
-            var templateFilename = input.GetEx<string>();
-            var template = new Node("", templateFilename);
-            signaler.Signal("io.file.load", template);
-            signaler.Signal("lambda", template);
-
-            // Retrieving all other arguments, and applying them to the template.
-            var args = input.Children.Where(x => x.Name != "template");
-            Apply(args, template.Children);
-
-            // Returning transformed template to caller.
-            input.Value = null;
+            var args = input.Children.ToList();
             input.Clear();
-            input.AddRange(template.Children.ToList());
+            foreach(var idxDest in input.Evaluate())
+            {
+                var destination = idxDest.Clone();
+                Apply(args, destination.Children);
+
+                // Returning transformed template to caller.
+                input.AddRange(destination.Children.ToList());
+            }
+            input.Value = null;
         }
 
         #region [ -- Private helper methods -- ]
 
         /*
-         * Actual implementation that applies lambda object to file.
+         * Actual implementation that applies lambda object to destination.
          */
         void Apply(IEnumerable<Node> args, IEnumerable<Node> templateNodes)
         {
