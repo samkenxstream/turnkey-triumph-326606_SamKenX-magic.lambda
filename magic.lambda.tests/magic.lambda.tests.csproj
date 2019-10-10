@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="magic.lambda.math" Version="1.1.5" />
-    <PackageReference Include="magic.lambda.slots" Version="1.1.6" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -16,6 +14,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="magic.signals" Version="1.1.8" />
   </ItemGroup>
 
   <ItemGroup>

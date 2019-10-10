@@ -42,39 +42,12 @@ while
         }
 
         [Fact]
-        public void While_03_Terminate()
-        {
-            var lambda = Common.Evaluate(@"
-slots.create:foo
-   while
-      .:bool:true
-      .lambda
-         slots.return-value:hello world
-slots.signal:foo");
-            Assert.Equal("hello world", lambda.Children.Skip(1).First().Value);
-        }
-
-        [Fact]
         public void While_04_InfiniteLoop()
         {
             Assert.Throws<ApplicationException>(() => Common.Evaluate(@"
 while
    .:bool:true
    .lambda"));
-        }
-
-        [Fact]
-        public void While_05_InfiniteLoopStops()
-        {
-            var lambda = Common.Evaluate(@"
-.no:int:1
-while
-   lt
-      get-value:x:@.no
-      .:int:5000
-   .lambda
-      math.increment:x:@.no");
-            Assert.Equal(5000, lambda.Children.First().Value);
         }
 
         [Fact]
