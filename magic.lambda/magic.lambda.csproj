@@ -7,12 +7,12 @@
     <Authors>Thomas Hansen</Authors>
     <Company>Thomas Hansen</Company>
     <Copyright>Thomas Hansen, thomas@gaiasoul.com</Copyright>
-    <Description>A microscopic and super dynamic script language and DSL for .Net based upon Hyperlambda syntax, and Super Signals.</Description>
+    <Description>A microscopic and super dynamic script language and DSL for .Net based upon Hyperlambda syntax, and Magic Signals.</Description>
     <PackageProjectUrl>https://github.com/polterguy/magic.lambda</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/polterguy/magic.lambda/master/LICENSE</PackageLicenseUrl>
     <PackageIconUrl>https://polterguy.github.io/favicon.ico</PackageIconUrl>
     <PackOnBuild>true</PackOnBuild>
-    <PackageVersion>1.2.2</PackageVersion>
+    <PackageVersion>2.0.0</PackageVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/polterguy/magic.lambda.git</RepositoryUrl>
@@ -24,8 +24,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="magic.node.extensions" Version="1.1.3" />
-    <PackageReference Include="magic.signals.contracts" Version="1.1.9" />
+    <PackageReference Include="magic.node.extensions" Version="2.0.0" />
+    <PackageReference Include="magic.signals.contracts" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.2.0" />
   </ItemGroup>
 </Project>
