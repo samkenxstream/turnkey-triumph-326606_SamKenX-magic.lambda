@@ -32,7 +32,7 @@ namespace magic.lambda.tests
 .src
 wait.eval
    set-value:x:@.src
-      :OK
+      .:OK
 ");
             Assert.Equal("OK", lambda.Children.First().Value);
         }

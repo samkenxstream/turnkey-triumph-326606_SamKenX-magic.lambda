@@ -18,8 +18,8 @@ namespace magic.lambda.comparison.utilities
     internal static class Common
     {
         internal static void Compare(
-            ISignaler signaler, 
-            Node input, 
+            ISignaler signaler,
+            Node input,
             Func<object, object, bool> functor)
         {
             if (input.Children.Count() != 2)
@@ -28,13 +28,13 @@ namespace magic.lambda.comparison.utilities
             signaler.Signal("eval", input);
 
             input.Value = functor(
-                input.Children.First().GetEx<object>(), 
+                input.Children.First().GetEx<object>(),
                 input.Children.Skip(1).First().GetEx<object>());
         }
 
         internal async static Task CompareAsync(
-            ISignaler signaler, 
-            Node input, 
+            ISignaler signaler,
+            Node input,
             Func<object, object, bool> functor)
         {
             if (input.Children.Count() != 2)

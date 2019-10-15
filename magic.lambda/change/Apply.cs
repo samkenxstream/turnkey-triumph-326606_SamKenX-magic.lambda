@@ -28,7 +28,7 @@ namespace magic.lambda.change
         {
             var args = input.Children.ToList();
             input.Clear();
-            foreach(var idxDest in input.Evaluate())
+            foreach (var idxDest in input.Evaluate())
             {
                 var destination = idxDest.Clone();
                 Apply(args, destination.Children);
