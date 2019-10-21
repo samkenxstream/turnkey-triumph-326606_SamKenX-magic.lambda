@@ -49,8 +49,12 @@ namespace magic.lambda.change
             // Looping through each destination.
             foreach (var idxDest in input.Evaluate().ToList()) // To avoid changing collection during enumeration
             {
-                // Looping through each source node and adding its children to currently iterated destination.
-                foreach (var idxSource in input.Children.SelectMany(x => x.Children))
+                /*
+                 * Looping through each source node and adding its children to currently iterated destination.
+                 * 
+                 * Notice, Reverse() to make sure ordering becomes what caller expects.
+                 */
+                foreach (var idxSource in input.Children.SelectMany(x => x.Children).Reverse())
                 {
                     idxDest.InsertAfter(idxSource.Clone()); // Cloning in case of multiple destinations.
                 }
