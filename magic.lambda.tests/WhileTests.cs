@@ -10,7 +10,7 @@ using Xunit;
 namespace magic.lambda.tests
 {
     public class WhileTests
-	{
+    {
         [Fact]
         public void While_01()
         {
