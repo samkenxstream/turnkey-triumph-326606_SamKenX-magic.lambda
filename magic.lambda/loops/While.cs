@@ -22,6 +22,10 @@ namespace magic.lambda.loops
     {
         readonly int _maxIterations;
 
+        /// <summary>
+        /// Creates an instance of your slot.
+        /// </summary>
+        /// <param name="configuration">Configuration for your application.</param>
         public While(IConfiguration configuration)
         {
             _maxIterations = int.Parse(configuration?["magic:lambda:while:max-iterations"] ?? "5000");
