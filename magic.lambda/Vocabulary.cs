@@ -6,6 +6,7 @@
 using System;
 using System.Linq;
 using magic.node;
+using magic.node.extensions;
 using magic.signals.contracts;
 
 namespace magic.lambda.slots
@@ -36,9 +37,20 @@ namespace magic.lambda.slots
         public void Signal(ISignaler signaler, Node input)
         {
             input.Clear();
-            input.AddRange(_signalProvider.Keys
-                .Where(x => !x.StartsWith(".", StringComparison.InvariantCulture))
-                .Select(x => new Node("", x)));
+            var filter = input.GetEx<string>();
+            input.Value = null;
+            if (filter == null)
+            {
+                input.AddRange(_signalProvider.Keys
+                    .Where(x => !x.StartsWith(".", StringComparison.InvariantCulture))
+                    .Select(x => new Node("", x)));
+            }
+            else
+            {
+                input.AddRange(_signalProvider.Keys
+                    .Where(x => !x.StartsWith(".", StringComparison.InvariantCulture) && x.StartsWith(filter, StringComparison.InvariantCulture))
+                    .Select(x => new Node("", x)));
+            }
         }
     }
 }
