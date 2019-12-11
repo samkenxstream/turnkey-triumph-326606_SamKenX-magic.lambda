@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using magic.node;
 using magic.node.extensions;
+using magic.node.expressions;
 using magic.signals.contracts;
 
 namespace magic.lambda.change
@@ -27,7 +28,7 @@ namespace magic.lambda.change
         {
             foreach (var idx in input.Evaluate())
             {
-                if (idx.Value != null)
+                if (idx.Value is Expression)
                 {
                     var exp = idx.Evaluate();
                     if (exp.Count() > 1)
