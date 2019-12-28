@@ -31,7 +31,7 @@ namespace magic.lambda.loops
             // Storing termination node, to check if we should terminate early for some reasons.
             var terminate = signaler.Peek<Node>("slots.result");
 
-            foreach (var idx in input.Evaluate())
+            foreach (var idx in input.Evaluate().ToList())
             {
                 // Inserting "data pointer".
                 input.Insert(0, new Node(".dp", idx));
