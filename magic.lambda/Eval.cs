@@ -59,7 +59,7 @@ namespace magic.lambda
                 return input.Evaluate().SelectMany(x => x.Children);
 
             // Nothing to evaluate here.
-            return new Node[] { };
+            return Array.Empty<Node>();
         }
 
         /*
