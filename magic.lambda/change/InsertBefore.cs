@@ -38,7 +38,7 @@ namespace magic.lambda.change
         /// <returns>An awaitable task.</returns>
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
-            await signaler.SignalAsync("eval", input);
+            await signaler.SignalAsync("wait.eval", input);
             Insert(input);
         }
 

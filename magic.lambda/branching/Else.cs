@@ -39,7 +39,7 @@ namespace magic.lambda.branching
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
             if (ShouldEvaluate(input))
-                await signaler.SignalAsync("eval", input);
+                await signaler.SignalAsync("wait.eval", input);
         }
 
         #region [ -- Private helper methods -- ]

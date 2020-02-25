@@ -46,13 +46,13 @@ namespace magic.lambda.branching
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
             // Evaluating condition.
-            await signaler.SignalAsync("eval", input);
+            await signaler.SignalAsync("wait.eval", input);
 
             // Checking if condition evaluated to true.
             if (input.Children.First().GetEx<bool>())
             {
                 // Retrieving and evaluating lambda node.
-                await signaler.SignalAsync("eval", GetLambdaNode(input));
+                await signaler.SignalAsync("wait.eval", GetLambdaNode(input));
             }
         }
 

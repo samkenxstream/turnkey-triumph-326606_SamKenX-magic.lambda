@@ -40,7 +40,7 @@ namespace magic.lambda.comparison.utilities
             if (input.Children.Count() != 2)
                 throw new ApplicationException($"Comparison operation [{input.Name}] requires exactly two operands");
 
-            await signaler.SignalAsync("eval", input);
+            await signaler.SignalAsync("wait.eval", input);
 
             input.Value = functor(
                 input.Children.First().GetEx<object>(),

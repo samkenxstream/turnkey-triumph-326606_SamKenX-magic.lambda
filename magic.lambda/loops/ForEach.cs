@@ -71,7 +71,7 @@ namespace magic.lambda.loops
                 input.Insert(0, new Node(".dp", idx));
 
                 // Evaluating "body" lambda of [for-each]
-                await signaler.SignalAsync("eval", input);
+                await signaler.SignalAsync("wait.eval", input);
 
                 // Resetting back to original nodes.
                 input.Clear();

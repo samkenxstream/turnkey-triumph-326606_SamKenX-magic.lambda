@@ -51,7 +51,7 @@ namespace magic.lambda.exceptions
         {
             try
             {
-                await signaler.SignalAsync("eval", input);
+                await signaler.SignalAsync("wait.eval", input);
             }
             catch (Exception err)
             {
@@ -108,7 +108,7 @@ namespace magic.lambda.exceptions
                 args.Add(new Node("message", err.Message));
                 args.Add(new Node("type", err.GetType().FullName));
                 next.Insert(0, args);
-                await signaler.SignalAsync("eval", next);
+                await signaler.SignalAsync("wait.eval", next);
                 return true;
             }
             return false;
@@ -120,9 +120,9 @@ namespace magic.lambda.exceptions
         async Task ExecuteFinallyAsync(ISignaler signaler, Node input)
         {
             if (input.Next?.Name == ".finally")
-                await signaler.SignalAsync("eval", input.Next);
+                await signaler.SignalAsync("wait.eval", input.Next);
             else if (input.Next?.Next?.Name == ".finally")
-                await signaler.SignalAsync("eval", input.Next.Next);
+                await signaler.SignalAsync("wait.eval", input.Next.Next);
         }
 
         #endregion

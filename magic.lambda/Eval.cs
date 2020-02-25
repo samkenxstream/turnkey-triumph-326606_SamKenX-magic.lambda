@@ -36,9 +36,9 @@ namespace magic.lambda
         /// <param name="signaler">Signaler used to signal</param>
         /// <param name="input">Parameters passed from signaler</param>
         /// <returns>An awaiatble task.</returns>
-        public Task SignalAsync(ISignaler signaler, Node input)
+        public async Task SignalAsync(ISignaler signaler, Node input)
         {
-            return ExecuteAsync(signaler, GetNodes(signaler, input));
+            await ExecuteAsync(signaler, GetNodes(signaler, input));
         }
 
         #region [ -- Private helper methods -- ]

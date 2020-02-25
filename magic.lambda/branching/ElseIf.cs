@@ -50,11 +50,11 @@ namespace magic.lambda.branching
             if (ShouldEvaluate(input, out Node lambda))
             {
                 // Evaluating condition.
-                await signaler.SignalAsync("eval", input);
+                await signaler.SignalAsync("wait.eval", input);
 
                 // Checking if evaluation of condition evaluated to true.
                 if (input.Children.First().GetEx<bool>())
-                    await signaler.SignalAsync("eval", lambda);
+                    await signaler.SignalAsync("wait.eval", lambda);
             }
         }
 

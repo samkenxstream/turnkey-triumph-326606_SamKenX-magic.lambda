@@ -45,7 +45,7 @@ namespace magic.lambda.logical
             if (input.Children.Count() != 1)
                 throw new ApplicationException("Operator [not] requires exactly one child");
 
-            await signaler.SignalAsync("eval", input);
+            await signaler.SignalAsync("wait.eval", input);
 
             input.Value = !input.Children.First().GetEx<bool>();
         }

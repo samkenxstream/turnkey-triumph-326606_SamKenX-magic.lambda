@@ -45,7 +45,7 @@ namespace magic.lambda.logical
             if (input.Children.Count() < 2)
                 throw new ApplicationException("Operator [and] requires at least two children nodes");
 
-            await signaler.SignalAsync("eval", input);
+            await signaler.SignalAsync("wait.eval", input);
 
             input.Value = IsTrue(input);
         }

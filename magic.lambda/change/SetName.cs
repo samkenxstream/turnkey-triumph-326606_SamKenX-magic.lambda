@@ -45,7 +45,7 @@ namespace magic.lambda.change
             if (input.Children.Count() > 1)
                 throw new ApplicationException("[set-name] can have maximum one child node");
 
-            await signaler.SignalAsync("eval", input);
+            await signaler.SignalAsync("wait.eval", input);
             SetNameToSource(input);
         }
 
