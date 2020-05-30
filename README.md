@@ -113,6 +113,34 @@ If this sounds complex to you, don't worry and just play around with existing sn
 component, which should have tons of documentation and example snippets for you, that you can play around
 with, to easily understand Hyperlambda by trying it out for yourself.
 
+## Lambda expressions
+
+To understand Hyperlambda, and how to efficiently create your own Hyperlambda, you'll have to understand
+_"lambda expressions"_. These are kind of like XPath expressions. However, instead of referencing XML
+nodes, lambda expressions are referencing lambda nodes. This allows you to retrieve node names, values,
+and their children collection - For either to manipulate these, or read their values and react accordingly.
+
+Notice, Hyperlambda does not separate between a _"variable"_ and a _"function invocation"_ - Hence, a node
+might serve as both at the same time. This allows you to dynamically modify your lambda structure, as you
+traverse it, and executes it - But this creates another problem for you, which is that you will need
+a mechanism to store data. This is accomplished by prefixing a node's name with a _".", at which point
+the Hyperlambda evaluator will ignore it, as it is traversing your tree, and _not_ attempt to signal
+that particular node as a signal.
+
+Combining _"data nodes"_ with expressions, allows you to use, modify and reference these as _"variables"_.
+Below is an example.
+
+```
+.src:foo
+.dest
+set-value:x:@.dest
+   get-value:x:@.src
+```
+
+What the above code basically translates into, is.
+
+> Set the value of the [.dest] node to the value of [.src]
+
 ## Slots
 
 * __[if]__
@@ -173,22 +201,17 @@ if
 **[else-if]** is the younger brother of **[if]**, and must be preceeded by its older brother, or other **[else-if]** nodes,
 and will only be evaluated if all of its previous conditional slots evaluates to false - At which point **[else-if]** is
 allowed to test its condition - And only if it evaluates to true, evaluate its lambda object. Semantically **[else-if]**
-is similar to **[if]**,in that it requires exactly two arguments with the same structure as **[if]**.
+is similar to **[if]**, in that it requires exactly two arguments with the same structure as **[if]**.
 
 ```
-.src:int:2
 .dest
 if
-   eq
-      get-value:x:@.src
-      .:int:1
+   .:bool:false
    .lambda
       set-value:x:@.dest
          .:yup!
 else-if
-   eq
-      get-value:x:@.src
-      .:int:2
+   .:bool:true
    .lambda
       set-value:x:@.dest
          .:yup2.0!
