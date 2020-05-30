@@ -130,6 +130,19 @@ to use carriage returns in your strings the same way you would do in for instanc
 
 Strings in Hyperlambda can be escaped with the exact same semantics as you would escape your C# strings.
 
+## Comments
+
+Hyperlambda accepts comments the exacts same way C# does, and you can use either multiline comments,
+or single line comments, like the following example illustrates.
+
+```
+/*
+ * Multiline comment.
+ */
+
+// Single line comment.
+```
+
 ## Lambda expressions
 
 To understand Hyperlambda, and how to efficiently create your own Hyperlambda, you'll have to understand
