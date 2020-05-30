@@ -57,14 +57,7 @@ namespace magic.lambda.branching
             if (previous == null || (previous.Name != "if" && previous.Name != "else-if"))
                 throw new ApplicationException("[else] must have an [if] or [else-if] before it");
 
-            while (previous != null && (previous.Name == "if" || previous.Name == "else-if"))
-            {
-                if (previous.Children.First().GetEx<bool>())
-                    return false;
-                previous = previous.Previous;
-            }
-
-            return true;
+            return ElseIf.PreviousIsFalse(previous);
         }
 
         #endregion

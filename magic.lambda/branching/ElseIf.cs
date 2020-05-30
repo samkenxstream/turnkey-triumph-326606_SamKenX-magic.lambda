@@ -76,17 +76,23 @@ namespace magic.lambda.branching
             if (previous == null || (previous.Name != "if" && previous.Name != "else-if"))
                 throw new ApplicationException("[else-if] must have an [if] or [else-if] before it");
 
-            var evaluate = true;
-            while (previous != null && (previous.Name == "if" || previous.Name == "else-if"))
+            return PreviousIsFalse(previous);
+        }
+
+        #endregion
+
+        #region [ -- Internal helper methods -- ]
+
+        static internal bool PreviousIsFalse(Node input)
+        {
+            while (input != null && (input.Name == "if" || input.Name == "else-if"))
             {
-                if (previous.Children.First().GetEx<bool>())
-                {
-                    evaluate = false;
-                    break;
-                }
-                previous = previous.Previous;
+                var current = input.Children.First();
+                if (current.Value != null && current.GetEx<bool>())
+                    return false;
+                input = input.Previous;
             }
-            return evaluate;
+            return true;
         }
 
         #endregion

@@ -67,4 +67,31 @@ else-if
             Assert.Equal("OK", lambda.Children.First().Value);
         }
     }
+
+        [Fact]
+        public void ElseIf_02()
+        {
+            var lambda = Common.Evaluate(@"
+.src:int:1
+.dest
+if
+   eq
+      get-value:x:@.src
+      .:int:1
+   .lambda
+      set-value:x:@.dest
+         .:OK
+else-if
+   eq
+      get-value:x:@.src
+      .:int:2
+   .lambda
+      set-value:x:@.dest
+         .:ERROR
+else
+   set-value:x:@.dest
+      .:ERROR");
+            Assert.Equal("OK", lambda.Children.Skip(1).First().Value);
+        }
+    }
 }
