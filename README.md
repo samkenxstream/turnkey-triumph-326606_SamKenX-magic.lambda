@@ -622,7 +622,7 @@ for-each:x:-/*
 ### [while]
 
 Semantically similar to **[if]**, but instead of evaluating its lambda object once, will iterate it for
-as long as the condition evaluates to true.
+as long as the condition evaluates to true. Requires _exactly_ two arguments, the same way **[if]** does.
 
 ```
 .no:int:0
