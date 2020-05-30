@@ -9,6 +9,38 @@ and **[if]**, by exposing Super Signal Slots for these keywords, making them eas
 Althought technically not entirely true, this project is what allows Hyperlambda to become _"Turing complete"_, and gives
 you what most would consider to be a fully fledged _"programming language"_.
 
+## Structure
+
+Since _everything_ is a slot in Hyperlambda, this allows you to evaluate its conditional operators and logical operators,
+the same way you would evaluate a function in a traditional programming language. This might at first seem a bit unintuitive
+if you come from a traditional programming language, but has lots of advantages, such as allowing the computer to look
+at the entirety of your function objects as hierarchical tree structures, parsing them as such, and imagining these as
+_"execution trees"_.
+
+For instance, in a normal programming language, the equal operator must have a left hand side (lhs), and a right hand
+side (rhs). In Hyperlambda this is not true, since the equal slot is the main invocation of a function, requiring two
+arguments, allowing you to think about it as a function. To compare this to the way a traditional programming might
+have implemented this, imagine the equal operator as a function, such as the following pseudo code illustrates.
+
+```javascript
+equal(arg1, arg1)
+```
+
+The actual Hyperlambda code that would be the equivalent of the above pseudo code, can be found below.
+
+```
+eq
+   .:arg1
+   .:arg2
+```
+
+As you learn Hyperlambda, it might be beneficial to use the _"Evaluator"_ component that you can find in its
+frontend Angular dashboard website. This component allows you to play with Hyperlambda in _"immediate mode"_,
+allowing you to experiment with it, execute it immediately from your browser, using a very rich code editor,
+providing syntax highlighting, autocomplete on slots, and allows you to save your snippets for later on your
+server. If you do this, then click the _"information button"_ in the component to learn the basic shortcuts,
+and access help in general.
+
 ## Slots
 
 * __[if]__
@@ -50,7 +82,10 @@ you what most would consider to be a fully fledged _"programming language"_.
 ### [if]
 
 This is the Hyperlambda equivalent of `if` from other programming languages. It allows you to test for some condition,
-and evaluate a lambda object, only if the condition evaluates to true. Below is an example.
+and evaluate a lambda object, only if the condition evaluates to true. **[if]** must be given exactly two arguments.
+The first argument can be anything, including a slot invocation - But its second argument must be its **[.lambda]**
+argument. The **[.lambda]** node will be evaluated as a lambda object, only if the first argument to **[if]** evaluates
+to boolean true. Below is an example.
 
 ```
 .dest
@@ -65,7 +100,8 @@ if
 
 **[else-if]** is the younger brother of **[if]**, and must be preceeded by its older brother, or other **[else-if]** nodes,
 and will only be evaluated if all of its previous conditional slots evaluates to false - At which point **[else-if]** is
-allowed to test its condition, and if it evaluates to true, evaluate its lambda object.
+allowed to test its condition - And only if it evaluates to true, evaluate its lambda object. Semantically **[else-if]**
+is similar to **[if]**,in that it requires exactly two arguments with the same structure as **[if]**.
 
 ```
 .src:int:2
@@ -88,10 +124,10 @@ else-if
 
 ### [else]
 
-**[else]** is the last of the _"conditional brother"_ that will only be evaluated as a last resort, only if none of its
-other parts evaluates to true. Notice, contrary to both **[if]** and **[else-if]**, **[else]** contains its lambda object
-directly as children nodes, and _not_ within a **[.lambda]** node. This is because **[else-if]** does not require any
-arguments like **[if]** and **[else-if]** does. An example can be found below.
+**[else]** is the last of the _"conditional siblings"_ that will only be evaluated as a last resort, only if none of its
+elder _"siblings"_ evaluates to true. Notice, contrary to both **[if]** and **[else-if]**, **[else]** contains its lambda object
+directly as children nodes, and _not_ within a **[.lambda]** node. This is because **[else]** does not require any
+conditional arguments like **[if]** and **[else-if]** does. An example can be found below.
 
 ```
 .src:int:3
@@ -118,20 +154,15 @@ else
 ### [eq]
 
 **[eq]** is the equality _"operator"_ in Magic, and it requires two arguments, both of which will be evaluated as potential
-signals - And the result of evaluating **[eq]** will only be true if the values of these two arguments are the same. Notice,
-the comparison operator will consider types, which implies that boolean true will _not_ be considered equal to the string
+signals - And the result of evaluating **[eq]** will only be true if the values of these two arguments are _exactly the same_.
+Notice, the comparison operator will consider types, which implies that boolean true will _not_ be considered equal to the string
 value of _"true"_, etc.
 
 ```
-.src:bool:true
-.dest
-if
-   eq
-      get-value:x:@.src
-      .:bool:true
-   .lambda
-      set-value:x:@.dest
-         .:yup!
+.src:int:5
+eq
+   get-value:x:@.src
+   .:int:5
 ```
 
 ### [exists]
@@ -228,8 +259,8 @@ if
 ### [or]
 
 **[or]** is similar to **[and]**, except it will evaluate to true if _any_ of its arguments evaluates to true, such
-as the following illustrates. Or will also evaluate its arguments, allowing you to use it as a part of richer comparison
-trees, the same way **[and]** allows you to. Below is a simple example of **[or]**.
+as the following illustrates. **[or]** will also evaluate its arguments, allowing you to use it as a part of richer comparison
+trees, the same way **[and]** allows you to. Below is a simple example.
 
 ```
 or
