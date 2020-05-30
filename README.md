@@ -141,43 +141,9 @@ What the above code basically translates into, is.
 
 > Set the value of the [.dest] node to the value of [.src]
 
-## Slots
+## Reference documentation
 
-* __[if]__
-* __[else]__
-* __[else-if]__
-* __[eq]__
-* __[exists]__
-* __[lt]__
-* __[lte]__
-* __[mt]__
-* __[mte]__
-* __[and]__
-* __[or]__
-* __[not]__
-* __[switch]__
-* __[case]__
-* __[default]__
-* __[add]__
-* __[apply]__
-* __[insert-after]__
-* __[insert-before]__
-* __[remove-node]__
-* __[set-name]__
-* __[set-value]__
-* __[unwrap]__
-* __[get-count]__
-* __[get-name]__
-* __[get-nodes]__
-* __[get-value]__
-* __[reference]__
-* __[convert]__
-* __[throw]__
-* __[try]__
-* __[for-each]__
-* __[while]__
-* __[eval]__
-* __[vocabulary]__
+Magic Lambda contains the following slots.
 
 ### [if]
 
