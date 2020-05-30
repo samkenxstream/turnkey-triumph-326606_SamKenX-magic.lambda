@@ -60,7 +60,8 @@ In the above Hyperlambda, there is one root node. Its name is _"name"_, its valu
 has one child node, with the name of _"child1"_. Its child node does _not_ however have a value, which results
 in its value being _"null"_. The reason why the Hyperlambda parser understands _"child1"_ as the child of 
 the _"name"_ node, is because it is prefixed by 3 spaces (SP) relatively to the _"name"_ node. This allows you
-to create graph objects (tree structures) with any depth you wish.
+to create graph objects (tree structures) with any depth you wish, by simply starting out with the number of
+spaces the node above has, add 3 additional spaces, and you can declare children nodes of the above node.
 
 
 If you think of these nodes as a sequence of function invocations, from the top to bottom, where all of the
