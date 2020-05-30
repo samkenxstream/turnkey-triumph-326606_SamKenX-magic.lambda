@@ -387,6 +387,10 @@ In the above, the expression evaluated in the switch, which is `@.val` will beco
 None of its children **[case]** nodes contains this as an option, hence the **[default]** node will be evaluated,
 and this results in setting the **[.result]** node's value to _"Success!"_.
 
+**[default]** _cannot_ have a value, and all your **[case]** nodes must have a _constant_ value, meaning not
+an expression. However, any types can be used as values for your **[case]** nodes. And your **[switch]** node
+must at the very least have minimum one **[case]** node. The **[default]** node is optional though.
+
 ### [add]
 ### [apply]
 ### [insert-after]
