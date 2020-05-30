@@ -48,7 +48,7 @@ namespace magic.lambda.change
          */
         void AddResult(Node input)
         {
-            // Looping through each destination.
+            // Iterating through each destination.
             foreach (var idxDest in input.Evaluate())
             {
                 idxDest.AddRange(input.Children.SelectMany(x => x.Children).Select(x2 => x2.Clone()));

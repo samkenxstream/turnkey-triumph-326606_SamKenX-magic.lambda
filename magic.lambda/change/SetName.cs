@@ -12,7 +12,6 @@ using magic.signals.contracts;
 
 namespace magic.lambda.change
 {
-    // TODO: Consider renaming to only "name" ...?
     /// <summary>
     /// [set-name] slot allowing you to change the names of nodes in your lambda graph object.
     /// </summary>

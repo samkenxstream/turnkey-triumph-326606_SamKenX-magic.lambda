@@ -112,7 +112,7 @@ If this sounds complex to you, don't worry and just play around with existing sn
 component, which should have tons of documentation and example snippets for you, that you can play around
 with, to easily understand Hyperlambda by trying it out for yourself.
 
-## Tokens
+### Tokens
 
 The separating of a node's name and its value, is done by using a ":" character. To the left is the node's
 name, and to the right is its value. The value of a node can also be a C# type of string, using double
@@ -120,7 +120,7 @@ quotes, and even single quotes or prefix your opening double quote with an "@" c
 to use carriage returns in your strings the same way you would do in for instance C#. Below is an example
 
 ```
-.str1:"   This is a string"
+.str1:"   This is a \r\n  string"
 .str2:' This is also a string '
 .str3:@"This
     is
@@ -140,9 +140,9 @@ and their children collection - For either to manipulate these, or read their va
 Notice, Hyperlambda does not separate between a _"variable"_ and a _"function invocation"_ - Hence, a node
 might serve as both at the same time. This allows you to dynamically modify your lambda structure, as you
 traverse it, and executes it - But this creates another problem for you, which is that you will need
-a mechanism to store data. This is accomplished by prefixing a node's name with a _".", at which point
+a mechanism to store data. This is accomplished by prefixing a node's name with a "." character, at which point
 the Hyperlambda evaluator will ignore it, as it is traversing your tree, and _not_ attempt to signal
-that particular node as a signal.
+that particular node as a slot.
 
 Combining _"data nodes"_ with expressions, allows you to use, modify and reference these as _"variables"_.
 Below is an example.
@@ -409,13 +409,115 @@ an expression. However, any types can be used as values for your **[case]** node
 must at the very least have minimum one **[case]** node. The **[default]** node is optional though.
 
 ### [add]
-### [apply]
-### [insert-after]
+
+This slot allws you to dynamically add nodes into a destination node. Its primary argument is the destination,
+and it assumes that each children is a collection of nodes it should append to the destination node's children
+collection. The reasons for this additional level of indirection, is because the **[add]** slot might have
+children that are by themselves slot invocations, which it will evaluate before it starts adding the children
+nodes of these arguments to its destination node's children collection. Below is an example.
+
+```
+.dest
+add:x:@.dest
+   .
+      foo1:howdy
+      foo2:world
+   .
+      bar1:hello
+      bar2:world
+```
+
+Notice how all the 4 nodes above (foo1, foo2, bar1, bar2) are appended into the **[.dest]** node's children
+collection. This allows you to evaluate slots and add the result of your slot invocation into the destination,
+such as the following illustrates.
+
+```
+.src
+   foo1:foo
+   foo2:bar
+.dest
+add:x:@.dest
+   get-nodes:x:@.src/*
+```
+
+**[add]** can also take an expression leading to multiple destinations as its main argument, allowing you to
+add a copy of your source nodes into multiple node collections at the same time, with one invocation.
+
 ### [insert-before]
-### [remove-node]
+
+This slot functions exactly the same as the **[add]** node, except it will insert the nodes _before_ the
+node(s) referenced in its main argument.
+
+```
+.foo
+   foo1
+   foo2
+insert-before:x:@.foo/*/foo1
+   .
+      inserted
+```
+
+### [insert-after]
+
+This slot functions exactly the same as the **[add]** node, except it will insert the nodes _after_ the
+node(s) referenced in its main argument.
+
+```
+.foo
+   foo1
+   foo2
+insert-after:x:@.foo/*/foo1
+   .
+      inserted
+```
+
+### [remove-nodes]
+
+This slot will remove all nodes its expression is pointing to.
+
+```
+.data
+   foo1
+   foo2
+   foo3
+remove-nodes:x:@.data/*/foo2
+```
+
 ### [set-name]
+
+Changes the name of a node referenced as its main expression to whatever its single source happens to be.
+
+```
+.foo
+   old-name
+set-name:x:@.foo/*
+   .:new-name
+```
+
 ### [set-value]
+
+Changes the value of a node referenced as its main expression to whatever its single source happens to be.
+
+```
+.foo
+set-value:x:@.foo
+   .:SUCCESS
+```
+
 ### [unwrap]
+
+This slot is useful if you want to invoke another slot, but before you do, you want to evaluate some expressions
+inside of some argument to your slot. Imagine the following.
+
+```
+.src:Hello World
+unwrap:x:+
+.dest:x:@.src
+```
+
+In the above example, before the **[.dest]** node is reached by the Hyperlambda instruction pointer, the value
+of the **[.dest]** node will have been _"unwrapped"_ (evaluated), and its value will be _"Hello World"_.
+
 ### [get-count]
 ### [get-name]
 ### [get-nodes]
@@ -428,6 +530,10 @@ must at the very least have minimum one **[case]** node. The **[default]** node 
 ### [while]
 ### [eval]
 ### [vocabulary]
+
+### [apply]
+
+TODO: Document - Experimental slot! **DO NOT USE THIS SLOT!**
 
 ## License
 

@@ -25,7 +25,7 @@ while
    .lambda
       add:x:../*/.dest
          get-nodes:x:../*/.src/0
-      remove-node:x:../*/.src/0");
+      remove-nodes:x:../*/.src/0");
             Assert.Equal(2, lambda.Children.Skip(1).First().Children.Count());
         }
 

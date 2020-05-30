@@ -10,12 +10,11 @@ using magic.signals.contracts;
 
 namespace magic.lambda.change
 {
-    // TODO: Consider renaming slot.
     /// <summary>
-    /// [remove-node] slot allowing you to remove nodes from your lambda graph object.
+    /// [remove-nodes] slot allowing you to remove nodes from your lambda graph object.
     /// </summary>
-    [Slot(Name = "remove-node")]
-    public class RemoveNode : ISlot
+    [Slot(Name = "remove-nodes")]
+    public class RemoveNodes : ISlot
     {
         /// <summary>
         /// Implementation of signal
@@ -26,7 +25,7 @@ namespace magic.lambda.change
         {
             foreach (var idx in input.Evaluate().ToList())
             {
-                idx.Parent.Remove(idx);
+                idx.UnTie();
             }
         }
     }

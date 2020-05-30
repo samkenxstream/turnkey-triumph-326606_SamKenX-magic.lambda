@@ -15,7 +15,7 @@ namespace magic.lambda.tests
         [Fact]
         public void SetWithNull()
         {
-            var lambda = Common.Evaluate(".foo1\n   foo2\nremove-node:x:../*/.foo1/*");
+            var lambda = Common.Evaluate(".foo1\n   foo2\nremove-nodes:x:../*/.foo1/*");
             Assert.Empty(lambda.Children.First().Children);
         }
 
