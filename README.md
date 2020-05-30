@@ -70,7 +70,7 @@ Hyperlambda into a graph object can easily be evaluated, due to its recursive na
 express idioms such as _"if"_, _"while"_, _"for-each"_, etc.
 
 Since each slot will be invoked with the node referencing the slot itself as the _"input"_ `Node`,
-this makes the Hyperlambda evaluator recursive in nature, and a slot to evaluate all of its children again,
+this makes the Hyperlambda evaluator recursive in nature, allowing a slot to evaluate all of its children,
 after executing its custom logic, etc.
 
 All nodes starting with a _"."_ will be ignored, and not attempted to raised from the Hyperlambda evaluator.
@@ -78,6 +78,36 @@ This has two benefits.
 
 1. You can create _"hidden"_ slots, that are only accessible from C#.
 2. You can use nodes starting with _"."_ as data nodes, separating function invocations from data.
+
+This trait of Hyperlambda makes it _"super functional"_ in nature. Below is an example of a Hyperlambda
+piece of code, that illustrates this, by adding a _"callback"_ lambda object to its POP3 fetch emails
+slot, which will be invoked once for each available email on your POP3 server.
+
+```
+/*
+ * Example of how to retrieve emails form a POP3 server.
+ */
+mail.pop3.fetch
+   server
+      host:pop.gmail.com
+      port:int:995
+      secure:bool:true
+      username:gmail-username@gmail.com
+      password:Gmail-Password
+   max:int:50
+   raw:bool:false
+   .lambda
+
+      /*
+       * Some lambda object invoked once for every email fetched.
+       * Given message as [.message] node structured as lambda.
+       */
+      lambda2hyper:x:..
+      log.info:x:-
+```
+
+The `ISlot` called **[mail.pop3.fetch]** will invoke the above **[.lambda]** object once for each email
+it finds on the POP3 server it connects to.
 
 ## Slots
 
