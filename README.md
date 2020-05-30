@@ -6,9 +6,8 @@
 Magic Lambda is a microscopic Turing complete programming language based upon [Magic Node](https://github.com/polterguy/magic.node)
 and [Magic Signals](https://github.com/polterguy/magic.signals). It provides the familiar _"keywords"_, such as **[for-each]**
 and **[if]**, by exposing Super Signal Slots for these keywords, making them easily available for you in your Hyperlambda code.
-
-This allows you to dynamically invoke C# methods, from Hyperlambda code, making your C# much more dynamic in nature, while
-allowing you to easily extend the programming language yourself, by creating your own slots for it.
+Althought technically not entirely true, this project is what allows Hyperlambda to become _"Turing complete"_, and gives
+you what most would consider to be a fully fledged _"programming language"_.
 
 ## Slots
 
@@ -48,30 +47,25 @@ allowing you to easily extend the programming language yourself, by creating you
 * __[eval]__
 * __[vocabulary]__
 
-The above are all implemented as `ISlots`, accessible to you through raising a signal, using the `ISignal` provider from Magic Signals.
-
-### if
+### [if]
 
 This is the Hyperlambda equivalent of `if` from other programming languages. It allows you to test for some condition,
 and evaluate a lambda object, only if the condition evaluates to true. Below is an example.
 
 ```
-.src:int:1
 .dest
 if
-   eq
-      get-value:x:@.src
-      .:int:1
+   .:bool:true
    .lambda
       set-value:x:@.dest
          .:yup!
 ```
 
-### else-if
+### [else-if]
 
-**[else-if]** is the younger brother of **[if]**, and must be preceeded by its older brother, and will only be evaluated
-if its previous **[if]** slot evaluates to false - At which point **[else-if]** is allowed to test its condition, and if
-it evaluates to true, evaluate its lambda object.
+**[else-if]** is the younger brother of **[if]**, and must be preceeded by its older brother, or other **[else-if]** nodes,
+and will only be evaluated if all of its previous conditional slots evaluates to false - At which point **[else-if]** is
+allowed to test its condition, and if it evaluates to true, evaluate its lambda object.
 
 ```
 .src:int:2
@@ -92,7 +86,7 @@ else-if
          .:yup2.0!
 ```
 
-### else
+### [else]
 
 **[else]** is the last of the _"conditional brother"_ that will only be evaluated as a last resort, only if none of its
 other parts evaluates to true. Notice, contrary to both **[if]** and **[else-if]**, **[else]** contains its lambda object
@@ -121,7 +115,7 @@ else
       .:nope
 ```
 
-### eq
+### [eq]
 
 **[eq]** is the equality _"operator"_ in Magic, and it requires two arguments, both of which will be evaluated as potential
 signals - And the result of evaluating **[eq]** will only be true if the values of these two arguments are the same. Notice,
@@ -140,7 +134,7 @@ if
          .:yup!
 ```
 
-### exists
+### [exists]
 
 **[exists]** will evaluate to true if its specified expression yields one or more results. If not, it will
 return false.
@@ -153,7 +147,7 @@ exists:x:@.src1/*
 exists:x:@.src2/*
 ```
 
-### lt
+### [lt]
 
 **[lt]** will do a comparison between its two arguments, and only return true if its first argument is _"less than"_
 its seconds argument. Consider the following.
@@ -165,7 +159,7 @@ lt
    .:int:5
 ```
 
-### lte
+### [lte]
 
 **[lte]** will do a comparison between its two arguments, and only return true if its first argument is _"less than or equal"_
 to its seconds argument. Consider the following.
@@ -177,7 +171,7 @@ lte
    .:int:4
 ```
 
-### mt
+### [mt]
 
 **[mt]** will do a comparison between its two arguments, and only return true if its first argument is _"more than"_
 its seconds argument. Consider the following.
@@ -189,7 +183,7 @@ mt
    .:int:5
 ```
 
-### mte
+### [mte]
 
 **[mte]** will do a comparison between its two arguments, and only return true if its first argument is _"more than or equal"_
 to its seconds argument. Consider the following.
@@ -201,7 +195,7 @@ mte
    .:int:5
 ```
 
-### and
+### [and]
 
 **[and]** requires two or more arguments, and will only evaluate to true, if all of its arguments evaluates to true. Consider
 the following.
@@ -231,7 +225,7 @@ if
          .:OK
 ```
 
-### or
+### [or]
 
 **[or]** is similar to **[and]**, except it will evaluate to true if _any_ of its arguments evaluates to true, such
 as the following illustrates. Or will also evaluate its arguments, allowing you to use it as a part of richer comparison
@@ -246,7 +240,7 @@ or
    .:bool:true
 ```
 
-### not
+### [not]
 
 **[not]** expects _exactly one argument_, and will negate its boolean value, whatever it is, such as the following illustrates.
 
@@ -260,32 +254,32 @@ not
 **[not]** will also evaluate its argument, allowing you to use it in richer comparison trees, the same you could do
 with both **[or]** and **[and]**.
 
-### switch
+### [switch[]
 
 **[switch]**
 
-### case
-### default
-### add
-### apply
-### insert-after
-### insert-before
-### remove-node
-### set-name
-### set-value
-### unwrap
-### get-count
-### get-name
-### get-nodes
-### get-value
-### reference
-### convert
-### throw
-### try
-### for-each
-### while
-### eval
-### vocabulary
+### [case]
+### [default]
+### [add]
+### [apply]
+### [insert-after]
+### [insert-before]
+### [remove-node]
+### [set-name]
+### [set-value]
+### [unwrap]
+### [get-count]
+### [get-name]
+### [get-nodes]
+### [get-value]
+### [reference]
+### [convert]
+### [throw]
+### [try]
+### [for-each]
+### [while]
+### [eval]
+### [vocabulary]
 
 ## License
 
