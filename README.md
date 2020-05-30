@@ -519,17 +519,151 @@ In the above example, before the **[.dest]** node is reached by the Hyperlambda 
 of the **[.dest]** node will have been _"unwrapped"_ (evaluated), and its value will be _"Hello World"_.
 
 ### [get-count]
+
+This slot returns the number of nodes its expression is pointing to.
+
+```
+.data
+   foo1
+   foo2
+get-count:x:@.data/*
+```
+
 ### [get-name]
+
+Returns the name of the node referenced in its expression.
+
+```
+.foo
+get-name:x:-
+```
+
 ### [get-nodes]
+
+Returns the nodes its expression is referencing.
+
+```
+.data
+   foo1
+   foo2
+get-nodes:x:-/*
+```
+
 ### [get-value]
+
+Returns the value of the node its expression is pointing to.
+
+```
+.data:Hello World
+get-value:x:-
+```
+
 ### [reference]
+
+This slot will evaluate its expression, and add the entire node the expression is pointing to, as a referenced node into
+its value. This allows you to pass a node _into_ a slot, and have that slot modify the node itself by reference,
+which might sometimes be useful to have slots modify some original graph object, or parts of a graph.
+
+```
+.foo
+reference:x:@.foo
+set-value:x:-/#
+   .:Yup!
+```
+
+You can think of this slot as the singular version og **[get-nodes]**, except instead of returning multiple
+nodes, it assumes its expression only points to a single node, and instead of returning a copy of the node,
+it returns the actual node by reference.
+
 ### [convert]
-### [throw]
+
+This slot converts the value of an expression from its original type, to whatever **[type]** declaration you
+supply as its argument.
+
+```
+.foo:57
+convert:x:-
+   type:int
+```
+
 ### [try]
+
+This slot allows you to create a try/catch/finally block of lambda, from where exceptions are caught,
+and optionally hadled in a **[.catch]** lambda, and/or a **[.finally]** lambda.
+
+```
+try
+   throw:Whatever
+.catch
+   log.info:ERROR HAPPENED!! 42, 42, 42!
+.finally
+   log.info:Yup, we are finally there!
+```
+
+### [throw]
+
+This slot simply throws an exception. See the **[try]** slot for an example.
+
 ### [for-each]
+
+Iterates through each node as a result of an expression, and evaluates its lambda object,
+passing in the currently iterated node as a **[.dp]** argument, containing the actual node
+iterated by reference.
+
+```
+.data
+   foo1
+   foo2
+for-each:x:-/*
+   set-value:x:@.dp/#
+      .:hello
+```
+
 ### [while]
+
+Semantically similar to **[if]**, but instead of evaluating its lambda object once, will iterate it for
+as long as the condition evaluates to true.
+
+```
+.no:int:0
+.res
+while
+   lt
+      get-value:x:@.no
+      .:int:5
+   .lambda
+      add:x:@.res
+         .
+            foo
+      math.increment:x:@.no
+```
+
 ### [eval]
+
+Evaluates each lambda object found by either inspecting its children collection, or evaluating the
+expression found in its value.
+
+```
+.res
+.lambda
+   set-value:x:@.res
+      .:OK
+eval:x:@.lambda
+```
+
 ### [vocabulary]
+
+Returns the name of every static slot in your system, optional passing in a string,or an expression leading to
+a string, which is a filtering condition where the slot must _start_ with the filter in its name, to be considered
+a part of the end result.
+
+```
+// Returns ALL slots in your system.
+vocabulary
+
+// Returns only slots starting with [io.file]
+vocabulary:io.file
+```
 
 ### [apply]
 
