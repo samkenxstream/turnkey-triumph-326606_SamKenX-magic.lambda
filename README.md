@@ -33,7 +33,7 @@ eq
    .:arg2
 ```
 
-As you learn Hyperlambda, it might be beneficial to use the _"Evaluator"_ component that you can find in its
+As you study Hyperlambda, it might be beneficial to use the _"Evaluator"_ component that you can find in its
 frontend Angular dashboard website. This component allows you to play with Hyperlambda in _"immediate mode"_,
 allowing you to experiment with it, execute it immediately from your browser, using a very rich code editor,
 providing syntax highlighting, autocomplete on slots, and allows you to save your snippets for later on your
@@ -62,7 +62,6 @@ in its value being _"null"_. The reason why the Hyperlambda parser understands _
 the _"name"_ node, is because it is prefixed by 3 spaces (SP) relatively to the _"name"_ node. This allows you
 to create graph objects (tree structures) with any depth you wish, by simply starting out with the number of
 spaces the node above has, add 3 additional spaces, and you can declare children nodes of the above node.
-
 
 If you think of these nodes as a sequence of function invocations, from the top to bottom, where all of the
 nodes are assumed to be referencing slots - You can imagine how the tree structure resulting from parsing
@@ -112,6 +111,24 @@ it finds on the POP3 server it connects to.
 If this sounds complex to you, don't worry and just play around with existing snippets in your _"Evaluator"_
 component, which should have tons of documentation and example snippets for you, that you can play around
 with, to easily understand Hyperlambda by trying it out for yourself.
+
+## Tokens
+
+The separating of a node's name and its value, is done by using a ":" character. To the left is the node's
+name, and to the right is its value. The value of a node can also be a C# type of string, using double
+quotes, and even single quotes or prefix your opening double quote with an "@" character, allowing you
+to use carriage returns in your strings the same way you would do in for instance C#. Below is an example
+
+```
+.str1:"   This is a string"
+.str2:' This is also a string '
+.str3:@"This
+    is
+  also a
+      string"
+```
+
+Strings in Hyperlambda can be escaped with the exact same semantics as you would escape your C# strings.
 
 ## Lambda expressions
 
