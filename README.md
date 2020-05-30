@@ -109,6 +109,10 @@ mail.pop3.fetch
 The `ISlot` called **[mail.pop3.fetch]** will invoke the above **[.lambda]** object once for each email
 it finds on the POP3 server it connects to.
 
+If this sounds complex to you, don't worry and just play around with existing snippets in your _"Evaluator"_
+component, which should have tons of documentation and example snippets for you, that you can play around
+with, to easily understand Hyperlambda by trying it out for yourself.
+
 ## Slots
 
 * __[if]__
