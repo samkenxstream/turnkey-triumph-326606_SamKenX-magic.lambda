@@ -226,19 +226,6 @@ eq
    .:int:5
 ```
 
-### [exists]
-
-**[exists]** will evaluate to true if its specified expression yields one or more results. If not, it will
-return false.
-
-```
-.src1
-   foo
-.src2
-exists:x:@.src1/*
-exists:x:@.src2/*
-```
-
 ### [lt]
 
 **[lt]** will do a comparison between its two arguments, and only return true if its first argument is _"less than"_
@@ -285,6 +272,19 @@ to its seconds argument. Consider the following.
 mte
    get-value:x:@.src1
    .:int:5
+```
+
+### [exists]
+
+**[exists]** will evaluate to true if its specified expression yields one or more results. If not, it will
+return false.
+
+```
+.src1
+   foo
+.src2
+exists:x:@.src1/*
+exists:x:@.src2/*
 ```
 
 ### [and]
