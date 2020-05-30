@@ -124,17 +124,146 @@ else
 ### eq
 
 **[eq]** is the equality _"operator"_ in Magic, and it requires two arguments, both of which will be evaluated as potential
-signals - And the result of evaluating **[eq]** will only be true if the values of these two arguments are equals.
+signals - And the result of evaluating **[eq]** will only be true if the values of these two arguments are the same. Notice,
+the comparison operator will consider types, which implies that boolean true will _not_ be considered equal to the string
+value of _"true"_, etc.
+
+```
+.src:bool:true
+.dest
+if
+   eq
+      get-value:x:@.src
+      .:bool:true
+   .lambda
+      set-value:x:@.dest
+         .:yup!
+```
 
 ### exists
+
+**[exists]** will evaluate to true if its specified expression yields one or more results. If not, it will
+return false.
+
+```
+.src1
+   foo
+.src2
+exists:x:@.src1/*
+exists:x:@.src2/*
+```
+
 ### lt
+
+**[lt]** will do a comparison between its two arguments, and only return true if its first argument is _"less than"_
+its seconds argument. Consider the following.
+
+```
+.src1:int:4
+lt
+   get-value:x:@.src1
+   .:int:5
+```
+
 ### lte
+
+**[lte]** will do a comparison between its two arguments, and only return true if its first argument is _"less than or equal"_
+to its seconds argument. Consider the following.
+
+```
+.src1:int:4
+lte
+   get-value:x:@.src1
+   .:int:4
+```
+
 ### mt
+
+**[mt]** will do a comparison between its two arguments, and only return true if its first argument is _"more than"_
+its seconds argument. Consider the following.
+
+```
+.src1:int:7
+mt
+   get-value:x:@.src1
+   .:int:5
+```
+
 ### mte
+
+**[mte]** will do a comparison between its two arguments, and only return true if its first argument is _"more than or equal"_
+to its seconds argument. Consider the following.
+
+```
+.src1:int:7
+mte
+   get-value:x:@.src1
+   .:int:5
+```
+
 ### and
+
+**[and]** requires two or more arguments, and will only evaluate to true, if all of its arguments evaluates to true. Consider
+the following.
+
+```
+and
+   .:bool:true
+   .:bool:false
+and
+   .:bool:true
+   .:bool:true
+```
+
+And will (of course) evaluate its arguments before checking if they evaluate to true, allowing you to use it as a part
+of richer comparison trees, such as the following illustrates.
+
+```
+.s1:bool:true
+.s2:bool:true
+.res
+if
+   and
+      get-value:x:@.s1
+      get-value:x:@.s2
+   .lambda
+      set-value:x:@.res
+         .:OK
+```
+
 ### or
+
+**[or]** is similar to **[and]**, except it will evaluate to true if _any_ of its arguments evaluates to true, such
+as the following illustrates. Or will also evaluate its arguments, allowing you to use it as a part of richer comparison
+trees, the same way **[and]** allows you to. Below is a simple example of **[or]**.
+
+```
+or
+   .:bool:false
+   .:bool:false
+or
+   .:bool:false
+   .:bool:true
+```
+
 ### not
+
+**[not]** expects _exactly one argument_, and will negate its boolean value, whatever it is, such as the following illustrates.
+
+```
+not
+   .:bool:true
+not
+   .:bool:false
+```
+
+**[not]** will also evaluate its argument, allowing you to use it in richer comparison trees, the same you could do
+with both **[or]** and **[and]**.
+
 ### switch
+
+**[switch]**
+
 ### case
 ### default
 ### add
