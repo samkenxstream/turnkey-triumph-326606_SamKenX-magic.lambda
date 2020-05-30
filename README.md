@@ -60,6 +60,17 @@ In the above Hyperlambda, there is one root node. Its name is _"name"_, its valu
 has one child node, with the name of _"child1"_. Its child node does _not_ however have a value, which results
 in its value being _"null"_.
 
+If you think of these nodes as a sequence of function invocations, from the top to bottom, where all of the
+nodes are assumed to be referencing slots - You can imagine how the tree structure resulting from parsing
+Hyperlambda into a graph object can easily be evaluated, due to its recursive nature, making it easy to
+express idioms such as _"if"_, _"while"_, _"for-each"_, etc ...
+
+All nodes starting with a _"."_ will be ignored, and not attempted to raised from the Hyperlambda evaluator.
+This has two benefits.
+
+1. You can create _"hidden"_ slots, that are only accessible from C#.
+2. You can use nodes starting with _"."_ as data nodes, separating function invocations from data.
+
 ## Slots
 
 * __[if]__
