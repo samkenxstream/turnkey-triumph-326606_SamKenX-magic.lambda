@@ -67,7 +67,11 @@ spaces the node above has, add 3 additional spaces, and you can declare children
 If you think of these nodes as a sequence of function invocations, from the top to bottom, where all of the
 nodes are assumed to be referencing slots - You can imagine how the tree structure resulting from parsing
 Hyperlambda into a graph object can easily be evaluated, due to its recursive nature, making it easy to
-express idioms such as _"if"_, _"while"_, _"for-each"_, etc ...
+express idioms such as _"if"_, _"while"_, _"for-each"_, etc.
+
+Since each slot will be invoked with the node referencing the slot itself as the _"input"_ `Node`,
+this makes the Hyperlambda evaluator recursive in nature, and a slot to evaluate all of its children again,
+after executing its custom logic, etc.
 
 All nodes starting with a _"."_ will be ignored, and not attempted to raised from the Hyperlambda evaluator.
 This has two benefits.
