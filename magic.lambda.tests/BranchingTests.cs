@@ -66,7 +66,6 @@ else-if
          .:OK");
             Assert.Equal("OK", lambda.Children.First().Value);
         }
-    }
 
         [Fact]
         public void ElseIf_02()
