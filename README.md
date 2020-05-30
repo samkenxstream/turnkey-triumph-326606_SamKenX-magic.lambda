@@ -12,17 +12,17 @@ making them easily available for you in your Hyperlambda code. Althought technic
 
 Since _everything_ is a slot in Hyperlambda, this allows you to evaluate its conditional operators and logical operators,
 the same way you would evaluate a function in a traditional programming language. This might at first seem a bit unintuitive
-if you come from a traditional programming language, but has lots of advantages, such as allowing the computer to look
+if you come from a traditional programming language, but has a lot of advantages, such as allowing the computer to look
 at the entirety of your function objects as hierarchical tree structures, parsing them as such, and imagining these as
 _"execution trees"_.
 
 For instance, in a normal programming language, the equal operator must have a left hand side (lhs), and a right hand
 side (rhs). In Hyperlambda this is not true, since the equal slot is the main invocation of a function, requiring two
-arguments, allowing you to think about it as a function. To compare this to the way a traditional programming might
+arguments, allowing you to think about it as a _function_. To compare this to the way a traditional programming might
 have implemented this, imagine the equal operator as a function, such as the following pseudo code illustrates.
 
-```javascript
-equal(arg1, arg1)
+```
+=(arg1, arg1)
 ```
 
 The actual Hyperlambda code that would be the equivalent of the above pseudo code, can be found below.
@@ -42,6 +42,23 @@ and access help in general. Below is a screenshot of the _"Evaluator"_ component
 you might expect.
 
 <img alt="Hyperlambda Evaluator" title="Hyperlambda Evaluator" src="https://servergardens.files.wordpress.com/2020/05/evaluator.png" />
+
+Logically the Hyperlambda evaluator will signal each nodes in your Hyperlambda code, sequentially, assuming
+all of your nodes are referencing a `ISlot` class, unless the node's name starts with a _"."_.
+
+## Hyperlambda structure
+
+Hyperlambda is the textual representation of a node structure, where each node has a name, an optional value,
+and a collection of children nodes. Imagine the following Hyperlambda.
+
+```
+name:value
+   child1
+```
+
+In the above Hyperlambda, there is one root node. Its name is _"name"_, its value is _"value"_, and this node
+has one child node, with the name of _"child1"_. Its child node does _not_ however have a value, which results
+in its value being _"null"_.
 
 ## Slots
 
