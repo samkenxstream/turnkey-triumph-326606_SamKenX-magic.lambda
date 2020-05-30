@@ -5,9 +5,8 @@
 
 Magic Lambda is a microscopic Turing complete programming language based upon [Magic Node](https://github.com/polterguy/magic.node)
 and [Magic Signals](https://github.com/polterguy/magic.signals). It provides the familiar _"keywords"_, such as **[for-each]**
-and **[if]**, by exposing Super Signal Slots for these keywords, making them easily available for you in your Hyperlambda code.
-Althought technically not entirely true, this project is what allows Hyperlambda to become _"Turing complete"_, and gives
-you what most would consider to be a fully fledged _"programming language"_.
+and **[if]**, by exposing [Super Signal Slots](https://dzone.com/articles/super-signals-in-aspnet-core) for these keywords,
+making them easily available for you in your Hyperlambda code. Althought technically not entirely true, this project is what allows Hyperlambda to become _"Turing complete"_, and gives you what most would consider to be a fully fledged _"programming language"_.
 
 ## Structure
 
@@ -39,7 +38,10 @@ frontend Angular dashboard website. This component allows you to play with Hyper
 allowing you to experiment with it, execute it immediately from your browser, using a very rich code editor,
 providing syntax highlighting, autocomplete on slots, and allows you to save your snippets for later on your
 server. If you do this, then click the _"information button"_ in the component to learn the basic shortcuts,
-and access help in general.
+and access help in general. Below is a screenshot of the _"Evaluator"_ component to give you an idea of what
+you might expect.
+
+<img alt="Hyperlambda Evaluator" title="Hyperlambda Evaluator" src="https://servergardens.files.wordpress.com/2020/05/evaluator.png" />
 
 ## Slots
 
