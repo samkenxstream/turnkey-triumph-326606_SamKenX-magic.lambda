@@ -175,7 +175,8 @@ What the above code basically translates into, is.
 
 ## Reference documentation
 
-Magic Lambda contains the following slots.
+Magic Lambda contains the following slots. Most of these slots also have async (wait.) overrides, which
+will be executed asynchronously using async tasks from .Net.
 
 ### [if]
 
