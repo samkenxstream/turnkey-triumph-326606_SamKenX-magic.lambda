@@ -112,8 +112,6 @@ If this sounds complex to you, don't worry and just play around with existing sn
 component, which should have tons of documentation and example snippets for you, that you can play around
 with, to easily understand Hyperlambda by trying it out for yourself.
 
-[Read more about Hyperlambda syntax here](https://github.com/polterguy/magic.node)
-
 ### Tokens
 
 The separating of a node's name and its value, is done by using a ":" character. To the left is the node's
@@ -172,6 +170,8 @@ set-value:x:@.dest
 What the above code basically translates into, is.
 
 > Set the value of the [.dest] node to the value of [.src]
+
+[Read more about Hyperlambda syntax and lambda expressions here](https://github.com/polterguy/magic.node)
 
 ## Reference documentation
 
