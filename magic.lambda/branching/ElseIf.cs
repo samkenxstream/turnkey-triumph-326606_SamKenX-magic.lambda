@@ -73,7 +73,9 @@ namespace magic.lambda.branching
                 throw new ApplicationException("Keyword [else-if] requires its second child node to be [.lambda]");
 
             var previous = input.Previous;
-            if (previous == null || (previous.Name != "if" && previous.Name != "else-if"))
+            if (previous == null ||
+                (previous.Name != "if" && previous.Name != "else-if" && 
+                previous.Name != "wait.if" && previous.Name != "wait.else-if"))
                 throw new ApplicationException("[else-if] must have an [if] or [else-if] before it");
 
             return PreviousIsFalse(previous);

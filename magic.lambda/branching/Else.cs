@@ -4,10 +4,8 @@
  */
 
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using magic.node;
-using magic.node.extensions;
 using magic.signals.contracts;
 
 namespace magic.lambda.branching
@@ -54,7 +52,9 @@ namespace magic.lambda.branching
              * or not, and sanity checking invocation at the same time.
              */
             var previous = input.Previous;
-            if (previous == null || (previous.Name != "if" && previous.Name != "else-if"))
+            if (previous == null ||
+                (previous.Name != "if" && previous.Name != "else-if" &&
+                previous.Name != "wait.if" && previous.Name != "wait.else-if"))
                 throw new ApplicationException("[else] must have an [if] or [else-if] before it");
 
             return ElseIf.PreviousIsFalse(previous);
