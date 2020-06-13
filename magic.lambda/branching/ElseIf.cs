@@ -87,7 +87,8 @@ namespace magic.lambda.branching
 
         static internal bool PreviousIsFalse(Node input)
         {
-            while (input != null && (input.Name == "if" || input.Name == "else-if"))
+            while (input != null && (input.Name == "if" || input.Name == "else-if" ||
+                input.Name == "wait.if" || input.Name == "wait.else-if"))
             {
                 var current = input.Children.First();
                 if (current.Value != null && current.GetEx<bool>())
