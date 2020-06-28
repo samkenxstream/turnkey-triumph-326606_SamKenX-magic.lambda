@@ -681,6 +681,21 @@ vocabulary
 vocabulary:io.file
 ```
 
+### [sepaphore]
+
+Creates a named semaphore, where only one thread will be allowed to evaluate the same semaphore at
+the same time.
+
+```
+semaphore:foo-bar
+   /*
+    * Only one thread will be allowed entrance into this piece of
+    * code at the same time, ensuring synchronised access, for cases
+    * where you cannot allow more than one thread to enter at the
+    * same time.
+    */
+```
+
 ### [apply]
 
 TODO: Document - Experimental slot! **DO NOT USE THIS SLOT!**
