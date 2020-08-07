@@ -684,7 +684,8 @@ vocabulary:io.file
 ### [semaphore]
 
 Creates a named semaphore, where only one thread will be allowed to evaluate the same semaphore at
-the same time.
+the same time. Notice, the semaphore to use is defined through its value, implying you can use the same
+semaphore multiple places, by using the same value of your **[semaphore]** invocation.
 
 ```
 semaphore:foo-bar
