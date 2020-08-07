@@ -681,7 +681,7 @@ vocabulary
 vocabulary:io.file
 ```
 
-### [sepaphore]
+### [semaphore]
 
 Creates a named semaphore, where only one thread will be allowed to evaluate the same semaphore at
 the same time.
