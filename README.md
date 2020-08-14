@@ -618,7 +618,11 @@ try
 
 ### [throw]
 
-This slot simply throws an exception. See the **[try]** slot for an example.
+This slot simply throws an exception, with the exception message taken from its value.
+See the **[try]** slot for an example. Notice, you can make the exception propagate to the client
+by adding the **[public]** parameter, and settings its value to boolean _"true"_. At which point
+the exception will be returned to the client, even in release builds. Otherwise, the exception
+will only be visible in debug builds, and never returned to the client.
 
 ### [for-each]
 
