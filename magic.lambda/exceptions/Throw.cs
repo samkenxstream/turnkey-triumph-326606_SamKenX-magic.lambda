@@ -4,13 +4,13 @@
  */
 
 using System;
+using System.Linq;
 using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
 
 namespace magic.lambda.exceptions
 {
-    // TODO: Implement custom exception for this.
     /// <summary>
     /// [throw] slot that throws an exception.
     /// </summary>
@@ -24,7 +24,8 @@ namespace magic.lambda.exceptions
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            throw new ApplicationException(input.GetEx<string>() ?? "[no-message]");
+            var isPublic = input.Children.FirstOrDefault(x => x.Name == "public")?.GetEx<bool>() ?? false;
+            throw new HyperlambdaException(input.GetEx<string>() ?? "[no-message]", isPublic);
         }
     }
 }
