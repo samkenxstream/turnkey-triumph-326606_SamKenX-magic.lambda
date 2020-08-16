@@ -67,7 +67,11 @@ namespace magic.lambda.change
                     break;
 
                 case "date":
-                    input.Value = DateTime.ParseExact(value?.ToString() ?? DateTime.MinValue.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture), "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
+                    input.Value = DateTime.ParseExact(
+                        value?.ToString() ?? DateTime.MinValue.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture),
+                        "yyyy-MM-ddTHH:mm:ss",
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.AssumeUniversal);
                     break;
 
                 case "guid":
