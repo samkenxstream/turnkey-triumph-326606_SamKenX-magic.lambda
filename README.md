@@ -701,6 +701,19 @@ semaphore:foo-bar
     */
 ```
 
+### [sleep]
+
+This slot will sleep the current thread for x number of milliseconds, where x is an integer value, expected
+to be passed in as its main value.
+
+```
+// Sleeps the main thread for 1 second, or 1000 milliseconds.
+sleep:1000
+```
+
+**Notice** - You should really use the _"wait."_ overload for this slot, since the synchronous version
+will lead to thread starvation, if used too frequently.
+
 ### [apply]
 
 TODO: Document - Experimental slot! **DO NOT USE THIS SLOT!**

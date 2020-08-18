@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
-using threading = System.Threading;
+using sys = System.Threading;
 using System.Collections.Concurrent;
 
-namespace magic.lambda
+namespace magic.lambda.threading
 {
     /// <summary>
     /// [semaphore] slot, allowing you to create a semaphore,
@@ -21,8 +21,8 @@ namespace magic.lambda
     [Slot(Name = "wait.semaphore")]
     public class Semaphore : ISlot, ISlotAsync
     {
-        static readonly ConcurrentDictionary<string, threading.SemaphoreSlim> _semaphores =
-            new ConcurrentDictionary<string, threading.SemaphoreSlim>();
+        static readonly ConcurrentDictionary<string, sys.SemaphoreSlim> _semaphores =
+            new ConcurrentDictionary<string, sys.SemaphoreSlim>();
 
         /// <summary>
         /// Implementation of signal
@@ -37,7 +37,7 @@ namespace magic.lambda
 
             var semaphore = _semaphores.GetOrAdd(key, (name) =>
             {
-                return new threading.SemaphoreSlim(1);
+                return new sys.SemaphoreSlim(1);
             });
             semaphore.Wait();
             try
@@ -64,7 +64,7 @@ namespace magic.lambda
 
             var semaphore = _semaphores.GetOrAdd(key, (name) =>
             {
-                return new threading.SemaphoreSlim(1);
+                return new sys.SemaphoreSlim(1);
             });
             await semaphore.WaitAsync();
             try
