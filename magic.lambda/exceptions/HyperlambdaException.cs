@@ -7,14 +7,26 @@ using System;
 
 namespace magic.lambda.exceptions
 {
+    /// <summary>
+    /// Exception type thrown from Hyperlambda using [throw].
+    /// </summary>
     public class HyperlambdaException : Exception
     {
+        /// <summary>
+        /// Constructs a new instance of a Hyperlambda exception.
+        /// </summary>
+        /// <param name="message">Exception error text.</param>
+        /// <param name="isPublic">Whether or not exception should propagate to client in release builds.</param>
         public HyperlambdaException(string message, bool isPublic)
             : base(message)
         {
             IsPublic = isPublic;
         }
 
+        /// <summary>
+        /// Whether ot not exception will propagate to client in release builds.
+        /// </summary>
+        /// <value>Returns true if exception is visible to the client.</value>
         public bool IsPublic { get; set; }
     }
 }
