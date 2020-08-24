@@ -5,20 +5,24 @@
 
 using System.Threading.Tasks;
 using magic.node;
-using magic.node.extensions;
 using magic.signals.contracts;
-using sys = System.Threading;
 
 namespace magic.lambda.threading
 {
     /// <summary>
-    /// [semaphore] slot, allowing you to create a semaphore,
-    /// only allowing one caller entry into some lambda object at the same time.
+    /// [fork] slot, allowing you to create and start a new thread.
     /// </summary>
-    [Slot(Name = "sleep")]
-    [Slot(Name = "wait.sleep")]
-    public class Sleep : ISlot, ISlotAsync
+    [Slot(Name = "fork")]
+    [Slot(Name = "wait.fork")]
+    public class Fork : ISlot, ISlotAsync
     {
+        readonly ThreadRunner _runner;
+
+        public Fork(ThreadRunner runner)
+        {
+            _runner = runner;
+        }
+
         /// <summary>
         /// Implementation of signal
         /// </summary>
@@ -26,7 +30,7 @@ namespace magic.lambda.threading
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            sys.Thread.Sleep(input.GetEx<int>());
+            _runner.Run(input.Clone());
         }
 
         /// <summary>
@@ -35,9 +39,10 @@ namespace magic.lambda.threading
         /// <param name="signaler">Signaler used to signal</param>
         /// <param name="input">Parameters passed from signaler</param>
         /// <returns>An awaiatble task.</returns>
-        public async Task SignalAsync(ISignaler signaler, Node input)
+        public Task SignalAsync(ISignaler signaler, Node input)
         {
-            await sys.Tasks.Task.Delay(input.GetEx<int>());
+            _runner.Run(input.Clone());
+            return Task.CompletedTask;
         }
     }
 }

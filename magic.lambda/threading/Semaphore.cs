@@ -76,10 +76,5 @@ namespace magic.lambda.threading
                 semaphore.Release();
             }
         }
-
-        #region [ -- Private helper methods -- ]
-
-
-        #endregion
     }
 }
