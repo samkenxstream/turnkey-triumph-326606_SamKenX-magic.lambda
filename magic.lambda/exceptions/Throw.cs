@@ -24,8 +24,15 @@ namespace magic.lambda.exceptions
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            var isPublic = input.Children.FirstOrDefault(x => x.Name == "public")?.GetEx<bool>() ?? false;
-            throw new HyperlambdaException(input.GetEx<string>() ?? "[no-message]", isPublic);
+            var isPublic = input.Children
+                .FirstOrDefault(x => x.Name == "public")?
+                .GetEx<bool>() ?? false;
+
+            var status = input.Children
+                .FirstOrDefault(x => x.Name == "status")?
+                .GetEx<int>() ?? 500;
+
+            throw new HyperlambdaException(input.GetEx<string>() ?? "[no-message]", isPublic, status);
         }
     }
 }

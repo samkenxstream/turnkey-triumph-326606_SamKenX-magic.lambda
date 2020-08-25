@@ -17,10 +17,11 @@ namespace magic.lambda.exceptions
         /// </summary>
         /// <param name="message">Exception error text.</param>
         /// <param name="isPublic">Whether or not exception should propagate to client in release builds.</param>
-        public HyperlambdaException(string message, bool isPublic)
+        public HyperlambdaException(string message, bool isPublic, int status)
             : base(message)
         {
             IsPublic = isPublic;
+            Status = status;
         }
 
         /// <summary>
@@ -28,5 +29,11 @@ namespace magic.lambda.exceptions
         /// </summary>
         /// <value>Returns true if exception is visible to the client.</value>
         public bool IsPublic { get; set; }
+
+        /// <summary>
+        /// Status code to return to client.
+        /// </summary>
+        /// <value>HTTP status code to return to client.</value>
+        public int Status { get; set; }
     }
 }
