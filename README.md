@@ -685,6 +685,12 @@ vocabulary
 vocabulary:io.file
 ```
 
+### [fork]
+
+Forks the given lambda into a new thread of execution, using a thread from the thread pool. This
+slot is useful for creating _"fire and forget"_ lambda objects, where you don't need to wait
+for the result of the execution before continuing executing the current scope.
+
 ### [semaphore]
 
 Creates a named semaphore, where only one thread will be allowed to evaluate the same semaphore at
