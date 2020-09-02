@@ -43,4 +43,5 @@ jobs:
           dotnet build --configuration Release --no-restore
           dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput="coverage.xml"
           dir
+          dir magic.lambda.tests
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
