@@ -38,10 +38,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"polterguy_magic.lambda" /o:"polterguy" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="TestResults/coverage.cobertura.xml"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"polterguy_magic.lambda" /o:"polterguy" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/TestResults/coverage.cobertura.xml"
           dotnet restore
           dotnet build --configuration Release --no-restore
-          dotnet test --no-restore --verbosity normal /p:CollectCoverage=true
-          dir
-          dir magic.lambda.tests/TestResults
+          dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
