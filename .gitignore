@@ -331,3 +331,4 @@ ASALocalRun/
 
 # Excluding all Mac folder files
 **/.DS_Store
+magic.lambda.tests/coverage.xml

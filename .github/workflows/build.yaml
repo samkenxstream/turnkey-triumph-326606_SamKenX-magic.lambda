@@ -19,7 +19,7 @@ jobs:
       run: |
         dotnet restore
         dotnet build --configuration Release --no-restore
-        dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput="coverage.xml"
+        dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=coverage.xml
     - uses: sonarsource/sonarcloud-github-action@master
       with:
         args: >
