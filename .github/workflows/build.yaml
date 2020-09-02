@@ -43,4 +43,7 @@ jobs:
           dotnet build --configuration Release --no-restore
           dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage"
           dir
+          dir magic.lambda.tests/
+          dir magic.lambda.tests/TestResults/
+          dir magic.lambda.tests/TestResults/*/
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
