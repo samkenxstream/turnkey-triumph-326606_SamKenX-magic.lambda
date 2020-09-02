@@ -21,8 +21,7 @@ jobs:
         dotnet restore
         dotnet build --configuration Release --no-restore
         dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput="coverage.xml"
-    - name: Scanning
-      uses: sonarsource/sonarcloud-github-action@master
+    - uses: sonarsource/sonarcloud-github-action@master
       with:
         args: >
           -Dsonar.organization=polterguy
