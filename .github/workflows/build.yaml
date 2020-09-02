@@ -6,7 +6,7 @@ on:
       - master
   pull_request:
       types: [opened, synchronize, reopened]
-name: Main Workflow
+name: Sonar Cloud Scan
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
@@ -15,8 +15,13 @@ jobs:
       with:
         # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
-    - name: SonarCloud Scan
+    - name: Scanning
       uses: sonarsource/sonarcloud-github-action@master
+        with:
+          args: >
+            -Dsonar.organization=gtmaster-github
+            -Dsonar.projectKey=SiGamePackOptimizer
+            -Dsonar.cs.opencover.reportsPaths="coverage.xml"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
