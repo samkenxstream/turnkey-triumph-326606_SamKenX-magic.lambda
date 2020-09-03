@@ -27,7 +27,7 @@ namespace magic.lambda.logical
         public void Signal(ISignaler signaler, Node input)
         {
             if (input.Children.Count() != 1)
-                throw new ApplicationException("Operator [not] requires exactly one child");
+                throw new ArgumentException("Operator [not] requires exactly one child");
 
             signaler.Signal("eval", input);
 
@@ -43,7 +43,7 @@ namespace magic.lambda.logical
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
             if (input.Children.Count() != 1)
-                throw new ApplicationException("Operator [not] requires exactly one child");
+                throw new ArgumentException("Operator [not] requires exactly one child");
 
             await signaler.SignalAsync("wait.eval", input);
 

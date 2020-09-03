@@ -45,7 +45,7 @@ namespace magic.lambda.branching
         void SanityCheckInvocation(Node input)
         {
             if (input.Parent?.Name != "switch")
-                throw new ApplicationException("[case] must be a child of [switch]");
+                throw new ArgumentException("[case] must be a child of [switch]");
         }
 
         #endregion

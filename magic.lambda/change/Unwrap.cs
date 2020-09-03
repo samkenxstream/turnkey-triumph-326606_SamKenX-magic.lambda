@@ -32,7 +32,7 @@ namespace magic.lambda.change
                 {
                     var exp = idx.Evaluate();
                     if (exp.Count() > 1)
-                        throw new ApplicationException("Multiple sources found for [unwrap]");
+                        throw new ArgumentException("Multiple sources found for [unwrap]");
 
                     idx.Value = exp.FirstOrDefault()?.Value;
                 }

@@ -52,16 +52,16 @@ namespace magic.lambda.branching
         Node GetExecutionNode(Node input)
         {
             if (!input.Children.Any(x => x.Name == "case"))
-                throw new ApplicationException("[switch] must have one at least one [case] child");
+                throw new ArgumentException("[switch] must have one at least one [case] child");
 
             if (input.Children.Any(x => x.Name != "case" && x.Name != "default"))
-                throw new ApplicationException("[switch] can only handle [case] and [default] children");
+                throw new ArgumentException("[switch] can only handle [case] and [default] children");
 
             if (input.Children.Any(x => x.Name == "case" && x.Value == null))
-                throw new ApplicationException("[case] with null value found");
+                throw new ArgumentException("[case] with null value found");
 
             if (input.Children.Any(x => x.Name == "default" && x.Value != null))
-                throw new ApplicationException("[default] with non-null value found");
+                throw new ArgumentException("[default] with non-null value found");
 
             var result = input.GetEx<object>();
 
@@ -77,7 +77,7 @@ namespace magic.lambda.branching
                     executionNode = executionNode.Next;
                 }
                 if (executionNode != null && !executionNode.Children.Any())
-                    throw new ApplicationException("No lambda object found for [case]");
+                    throw new ArgumentException("No lambda object found for [case]");
 
                 return executionNode;
             }

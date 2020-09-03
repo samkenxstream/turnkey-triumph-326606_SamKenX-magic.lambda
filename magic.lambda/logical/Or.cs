@@ -28,7 +28,7 @@ namespace magic.lambda.logical
         public void Signal(ISignaler signaler, Node input)
         {
             if (input.Children.Count() < 2)
-                throw new ApplicationException("Operator [or] requires at least two children nodes");
+                throw new ArgumentException("Operator [or] requires at least two children nodes");
 
             // Notice, to support short circuit evaluation, we cannot use same logic as we're using in [and].
             foreach (var idx in input.Children)
@@ -54,7 +54,7 @@ namespace magic.lambda.logical
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
             if (input.Children.Count() < 2)
-                throw new ApplicationException("Operator [or] requires at least two children nodes");
+                throw new ArgumentException("Operator [or] requires at least two children nodes");
 
             // Notice, to support short circuit evaluation, we cannot use same logic as we're using in [and].
             foreach (var idx in input.Children)

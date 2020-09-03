@@ -44,7 +44,7 @@ while
         [Fact]
         public void While_04_InfiniteLoop()
         {
-            Assert.Throws<ApplicationException>(() => Common.Evaluate(@"
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
 while
    .:bool:true
    .lambda"));
@@ -53,7 +53,7 @@ while
         [Fact]
         public void While_05_InfiniteLoopStopsTooLate()
         {
-            Assert.Throws<ApplicationException>(() => Common.Evaluate(@"
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
 .no:int:0
 while
    lt

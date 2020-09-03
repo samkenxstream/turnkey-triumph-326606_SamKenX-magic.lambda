@@ -23,7 +23,7 @@ namespace magic.lambda.comparison.utilities
             Func<object, object, bool> functor)
         {
             if (input.Children.Count() != 2)
-                throw new ApplicationException($"Comparison operation [{input.Name}] requires exactly two operands");
+                throw new ArgumentException($"Comparison operation [{input.Name}] requires exactly two operands");
 
             signaler.Signal("eval", input);
 
@@ -38,7 +38,7 @@ namespace magic.lambda.comparison.utilities
             Func<object, object, bool> functor)
         {
             if (input.Children.Count() != 2)
-                throw new ApplicationException($"Comparison operation [{input.Name}] requires exactly two operands");
+                throw new ArgumentException($"Comparison operation [{input.Name}] requires exactly two operands");
 
             await signaler.SignalAsync("wait.eval", input);
 

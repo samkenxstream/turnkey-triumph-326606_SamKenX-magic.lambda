@@ -27,7 +27,7 @@ namespace magic.lambda.change
         public void Signal(ISignaler signaler, Node input)
         {
             if (input.Children.Count() > 1)
-                throw new ApplicationException("[set-name] can have maximum one child node");
+                throw new ArgumentException("[set-name] can have maximum one child node");
 
             signaler.Signal("eval", input);
             SetNameToSource(input);
@@ -42,7 +42,7 @@ namespace magic.lambda.change
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
             if (input.Children.Count() > 1)
-                throw new ApplicationException("[set-name] can have maximum one child node");
+                throw new ArgumentException("[set-name] can have maximum one child node");
 
             await signaler.SignalAsync("wait.eval", input);
             SetNameToSource(input);

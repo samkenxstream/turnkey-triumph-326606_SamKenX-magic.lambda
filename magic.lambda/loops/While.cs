@@ -39,7 +39,7 @@ namespace magic.lambda.loops
         public void Signal(ISignaler signaler, Node input)
         {
             if (input.Children.Count() != 2)
-                throw new ApplicationException("Keyword [while] requires exactly two child nodes");
+                throw new ArgumentException("Keyword [while] requires exactly two child nodes");
 
             // Storing termination node, to check if we should terminate early for some reasons.
             var terminate = signaler.Peek<Node>("slots.result");
@@ -52,7 +52,7 @@ namespace magic.lambda.loops
             {
                 // Checking if we've passed our maximum number of iterations.
                 if (iterations++ == _maxIterations)
-                    throw new ApplicationException($"Your [while] loop exceeded the maximum number of iterations, which are {_maxIterations}. Refactor your Hyperlambda, or increase your configuration setting.");
+                    throw new ArgumentException($"Your [while] loop exceeded the maximum number of iterations, which are {_maxIterations}. Refactor your Hyperlambda, or increase your configuration setting.");
 
                 // Making sure we can reset back to original nodes after every single iteration.
                 var old = input.Children.Select(x => x.Clone()).ToList();
@@ -67,7 +67,7 @@ namespace magic.lambda.loops
                 // Retrieving [.lambda] node and doing basic sanity check.
                 var lambda = input.Children.Skip(1).First();
                 if (lambda.Name != ".lambda")
-                    throw new ApplicationException("Keyword [while] requires its second child to be [.lambda]");
+                    throw new ArgumentException("Keyword [while] requires its second child to be [.lambda]");
 
                 // Evaluating "body" lambda of [while].
                 signaler.Signal("eval", lambda);
@@ -93,7 +93,7 @@ namespace magic.lambda.loops
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
             if (input.Children.Count() != 2)
-                throw new ApplicationException("Keyword [while] requires exactly two child nodes");
+                throw new ArgumentException("Keyword [while] requires exactly two child nodes");
 
             // Storing termination node, to check if we should terminate early for some reasons.
             var terminate = signaler.Peek<Node>("slots.result");
@@ -106,7 +106,7 @@ namespace magic.lambda.loops
             {
                 // Checking if we've passed our maximum number of iterations.
                 if (iterations++ == _maxIterations)
-                    throw new ApplicationException($"Your [while] loop exceeded the maximum number of iterations, which are {_maxIterations}. Refactor your Hyperlambda, or increase your configuration setting.");
+                    throw new ArgumentException($"Your [while] loop exceeded the maximum number of iterations, which are {_maxIterations}. Refactor your Hyperlambda, or increase your configuration setting.");
 
                 // Making sure we can reset back to original nodes after every single iteration.
                 var old = input.Children.Select(x => x.Clone()).ToList();
@@ -121,7 +121,7 @@ namespace magic.lambda.loops
                 // Retrieving [.lambda] node and doing basic sanity check.
                 var lambda = input.Children.Skip(1).First();
                 if (lambda.Name != ".lambda")
-                    throw new ApplicationException("Keyword [while] requires its second child to be [.lambda]");
+                    throw new ArgumentException("Keyword [while] requires its second child to be [.lambda]");
 
                 // Evaluating "body" lambda of [while].
                 await signaler.SignalAsync("wait.eval", lambda);

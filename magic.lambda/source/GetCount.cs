@@ -26,7 +26,7 @@ namespace magic.lambda.source
         public void Signal(ISignaler signaler, Node input)
         {
             if (input.Value == null)
-                throw new ApplicationException("No expression source provided for [count]");
+                throw new ArgumentException("No expression source provided for [count]");
 
             var src = input.Evaluate();
             input.Value = src.Count();

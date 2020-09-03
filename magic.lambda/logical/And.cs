@@ -28,7 +28,7 @@ namespace magic.lambda.logical
         public void Signal(ISignaler signaler, Node input)
         {
             if (input.Children.Count() < 2)
-                throw new ApplicationException("Operator [and] requires at least two children nodes");
+                throw new ArgumentException("Operator [and] requires at least two children nodes");
             signaler.Signal("eval", input);
 
             input.Value = IsTrue(input);
@@ -43,7 +43,7 @@ namespace magic.lambda.logical
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
             if (input.Children.Count() < 2)
-                throw new ApplicationException("Operator [and] requires at least two children nodes");
+                throw new ArgumentException("Operator [and] requires at least two children nodes");
 
             await signaler.SignalAsync("wait.eval", input);
 

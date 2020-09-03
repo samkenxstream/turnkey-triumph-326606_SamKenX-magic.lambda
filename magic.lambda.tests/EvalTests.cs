@@ -22,7 +22,7 @@ namespace magic.lambda.tests
         [Fact]
         public void InvokeNonExistingSignal_Throws()
         {
-            Assert.Throws<ApplicationException>(() => Common.Evaluate(@"foo_XXX"));
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"foo_XXX"));
         }
 
         [Fact]
@@ -40,7 +40,7 @@ wait.eval
         [Fact]
         public async Task InvokeEvalAsync_Throws()
         {
-            await Assert.ThrowsAsync<ApplicationException>(async () => await Common.EvaluateAsync(@"
+            await Assert.ThrowsAsync<ArgumentException>(async () => await Common.EvaluateAsync(@"
 .src
 eval
    wait.eval

@@ -55,7 +55,7 @@ namespace magic.lambda.branching
             if (previous == null ||
                 (previous.Name != "if" && previous.Name != "else-if" &&
                 previous.Name != "wait.if" && previous.Name != "wait.else-if"))
-                throw new ApplicationException("[else] must have an [if] or [else-if] before it");
+                throw new ArgumentException("[else] must have an [if] or [else-if] before it");
 
             return ElseIf.PreviousIsFalse(previous);
         }
