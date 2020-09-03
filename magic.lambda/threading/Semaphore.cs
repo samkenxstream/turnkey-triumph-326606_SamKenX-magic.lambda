@@ -31,9 +31,7 @@ namespace magic.lambda.threading
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            var key = input.GetEx<string>();
-            if (string.IsNullOrEmpty(key))
-                throw new ArgumentException("A semaphore must have a value, used to uniquely name the object");
+            var key = GetKey(input);
 
             var semaphore = _semaphores.GetOrAdd(key, (name) =>
             {
@@ -58,9 +56,7 @@ namespace magic.lambda.threading
         /// <returns>An awaiatble task.</returns>
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
-            var key = input.GetEx<string>();
-            if (string.IsNullOrEmpty(key))
-                throw new ArgumentException("A semaphore must have a value, used to uniquely name the object");
+            var key = GetKey(input);
 
             var semaphore = _semaphores.GetOrAdd(key, (name) =>
             {
@@ -76,5 +72,15 @@ namespace magic.lambda.threading
                 semaphore.Release();
             }
         }
+
+        #region [ -- Private helepr methods -- ]
+
+        string GetKey(Node input)
+        {
+            return input.GetEx<string>() ??
+                throw new ArgumentException("A semaphore must have a value, used to uniquely name the object");
+        }
+
+        #endregion
     }
 }
