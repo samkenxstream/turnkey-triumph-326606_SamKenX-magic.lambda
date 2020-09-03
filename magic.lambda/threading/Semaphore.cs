@@ -33,7 +33,7 @@ namespace magic.lambda.threading
         {
             var key = input.GetEx<string>();
             if (string.IsNullOrEmpty(key))
-                throw new ArgumentNullException("A semaphore must have a value, used to uniquely name the object");
+                throw new ArgumentException("A semaphore must have a value, used to uniquely name the object");
 
             var semaphore = _semaphores.GetOrAdd(key, (name) =>
             {
@@ -60,7 +60,7 @@ namespace magic.lambda.threading
         {
             var key = input.GetEx<string>();
             if (string.IsNullOrEmpty(key))
-                throw new ArgumentNullException("A semaphore must have a value, used to uniquely name the object");
+                throw new ArgumentException("A semaphore must have a value, used to uniquely name the object");
 
             var semaphore = _semaphores.GetOrAdd(key, (name) =>
             {

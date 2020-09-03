@@ -16,7 +16,8 @@ namespace magic.lambda.exceptions
         /// Constructs a new instance of a Hyperlambda exception.
         /// </summary>
         /// <param name="message">Exception error text.</param>
-        /// <param name="isPublic">Whether or not exception should propagate to client in release builds.</param>
+        /// <param name="isPublic">Whether or not exception message should propagate to client in release builds.</param>
+        /// <param name="status">Status code returned to client.</param>
         public HyperlambdaException(string message, bool isPublic, int status)
             : base(message)
         {

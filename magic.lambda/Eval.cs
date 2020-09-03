@@ -27,7 +27,7 @@ namespace magic.lambda
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            Execute(signaler, GetNodes(signaler, input));
+            Execute(signaler, GetNodes(input));
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace magic.lambda
         /// <returns>An awaiatble task.</returns>
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
-            await ExecuteAsync(signaler, GetNodes(signaler, input));
+            await ExecuteAsync(signaler, GetNodes(input));
         }
 
         #region [ -- Private helper methods -- ]
@@ -46,7 +46,7 @@ namespace magic.lambda
         /*
          * Helper to retrieve execution nodes for slot.
          */
-        IEnumerable<Node> GetNodes(ISignaler signaler, Node input)
+        IEnumerable<Node> GetNodes(Node input)
         {
             // Sanity checking invocation. Notice non [eval] keywords might have expressions and children.
             if ((input.Name == "eval" || input.Name == "wait.eval" || input.Name == "*eval") && input.Value != null && input.Children.Any())

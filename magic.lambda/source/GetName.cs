@@ -27,7 +27,7 @@ namespace magic.lambda.source
             var src = input.Evaluate();
             if (src.Count() > 1)
                 throw new ApplicationException("Too many nodes returned from [name] expression");
-            input.Value = src.FirstOrDefault()?.Name ?? null;
+            input.Value = src.FirstOrDefault()?.Name;
         }
     }
 }

@@ -47,7 +47,7 @@ namespace magic.lambda.comparison
                 return false;
             else if (lhs != null && rhs == null)
                 return false;
-            else if (lhs == null && rhs != null)
+            else if (lhs == null)
                 return true;
             else if (lhs.GetType() != rhs.GetType())
                 return false;

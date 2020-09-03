@@ -18,6 +18,10 @@ namespace magic.lambda.threading
     {
         readonly ThreadRunner _runner;
 
+        /// <summary>
+        /// CTOR for slot.
+        /// </summary>
+        /// <param name="runner">Dependency injected implementation</param>
         public Fork(ThreadRunner runner)
         {
             _runner = runner;
