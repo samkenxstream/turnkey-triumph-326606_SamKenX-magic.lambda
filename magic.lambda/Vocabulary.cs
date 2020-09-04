@@ -26,7 +26,7 @@ namespace magic.lambda.slots
         /// <param name="signalProvider">Slot provider, providing all slots that exists in the system.</param>
         public Vocabulary(ISignalsProvider signalProvider)
         {
-            _signalProvider = signalProvider ?? throw new ArgumentNullException(nameof(signalProvider));
+            _signalProvider = signalProvider;
         }
 
         /// <summary>
