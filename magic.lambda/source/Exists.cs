@@ -8,7 +8,7 @@ using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
 
-namespace magic.lambda.comparison
+namespace magic.lambda.source
 {
     /// <summary>
     /// [exists] slot returning true if whatever expression it's given actually yields a result.

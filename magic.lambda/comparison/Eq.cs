@@ -4,10 +4,7 @@
  */
 
 using System;
-using System.Threading.Tasks;
-using magic.node;
 using magic.signals.contracts;
-using magic.lambda.comparison.utilities;
 
 namespace magic.lambda.comparison
 {
@@ -16,32 +13,12 @@ namespace magic.lambda.comparison
     /// </summary>
     [Slot(Name = "eq")]
     [Slot(Name = "wait.eq")]
-    public class Eq : ISlot, ISlotAsync
+    public class Eq : BaseComparison
     {
-        /// <summary>
-        /// Implementation of signal
-        /// </summary>
-        /// <param name="signaler">Signaler used to signal</param>
-        /// <param name="input">Parameters passed from signaler</param>
-        public void Signal(ISignaler signaler, Node input)
-        {
-            Common.Compare(signaler, input, (lhs, rhs) => Compare(lhs, rhs));
-        }
+        #region [ -- Protected overridden methods -- ]
 
-        /// <summary>
-        /// Implementation of signal
-        /// </summary>
-        /// <param name="signaler">Signaler used to signal</param>
-        /// <param name="input">Parameters passed from signaler</param>
-        /// <returns>An awaitable task.</returns>
-        public async Task SignalAsync(ISignaler signaler, Node input)
-        {
-            await Common.CompareAsync(signaler, input, (lhs, rhs) => Compare(lhs, rhs));
-        }
-
-        #region [ -- Private helper methods -- ]
-
-        bool Compare(object lhs, object rhs)
+        /// <inheritdoc />
+        protected override bool Compare(object lhs, object rhs)
         {
             if (lhs == null && rhs == null)
                 return true;
