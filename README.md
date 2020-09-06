@@ -89,8 +89,9 @@ namespace acme.foo
     {
         public void Signal(ISignaler signaler, Node input)
         {
-            input.Value = input.Children.First().Get<int>() +
-               input.Children.Skipe(1).First().Get<int>();
+            var arg1 = input.Children.First().Get<int>();
+            var arg2 = input.Children.Skip(1).First().Get<int>();
+            input.Value = arg1 + arg2;
             input.Clear();
         }
     }
