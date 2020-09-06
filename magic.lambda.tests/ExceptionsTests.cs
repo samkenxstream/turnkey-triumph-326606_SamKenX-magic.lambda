@@ -107,13 +107,30 @@ try
         }
 
         [Fact]
-        public async Task Throws_FinallyInvokedAsync()
+        public async Task Throws_FinallyInvokedAsync_01()
         {
             var lambda = await Common.EvaluateAsync(@"
 .throws:bool:false
 wait.try
    wait.try
       throw:foo
+   .finally
+      set-value:x:@.throws
+         .:bool:true
+.catch
+");
+            Assert.Equal(true, lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public async Task Throws_FinallyInvokedAsync_02()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.throws:bool:false
+wait.try
+   wait.try
+      throw:foo
+   .catch
    .finally
       set-value:x:@.throws
          .:bool:true

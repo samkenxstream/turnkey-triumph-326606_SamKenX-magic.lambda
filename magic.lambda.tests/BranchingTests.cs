@@ -108,6 +108,23 @@ if
         }
 
         [Fact]
+        public async Task IfWithOrSlotYieldingFalseAsync()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.result:OK
+.false:bool:false
+wait.if
+   wait.or
+      .:bool:false
+      .:bool:false
+      get-value:x:@.false
+   .lambda
+      set-value:x:../*/.result
+         .:error");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
         public async Task IfWithOrAsync()
         {
             var lambda = await Common.EvaluateAsync(@"
