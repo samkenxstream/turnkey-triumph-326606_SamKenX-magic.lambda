@@ -44,7 +44,7 @@ you might expect.
 <img alt="Hyperlambda Evaluator" title="Hyperlambda Evaluator" src="https://servergardens.files.wordpress.com/2020/05/evaluator.png" />
 
 Logically the Hyperlambda evaluator will signal each nodes in your Hyperlambda code, sequentially, assuming
-all of your nodes are referencing a `ISlot` class, unless the node's name starts with a _"."_.
+all of your nodes are referencing a `ISlot` class, unless the node's name starts with a _"."_ or has an empty name.
 
 ## Hyperlambda structure
 
@@ -71,6 +71,41 @@ express idioms such as _"if"_, _"while"_, _"for-each"_, etc.
 Since each slot will be invoked with the node referencing the slot itself as the _"input"_ `Node`,
 this makes the Hyperlambda evaluator recursive in nature, allowing a slot to evaluate all of its children,
 after executing its custom logic, etc.
+
+### Extending Hyperlambda
+
+To understand the relationship between C# and Hyperlambda, it might be beneficial for you to analyze the
+following code. The following code creates a new `ISlot` for you, implementing the interface found in
+the NuGet package called _"magic.signals"_.
+
+```csharp
+using magic.node;
+using magic.signals.contracts;
+
+namespace acme.foo
+{
+    [Slot(Name = "acme.foo")]
+    public class Foo : ISlot
+    {
+        public void Signal(ISignaler signaler, Node input)
+        {
+            input.Value = "Hello World";
+        }
+    }
+}
+```
+
+The above will result in a slot you can invoke from Hyperlambda using the following code.
+
+```
+acme.foo
+```
+
+Notice the relationship between the `[Slot(Name = "acme.foo")]` C# code, and the way we invoke the `acme.foo`
+slot from Hyperlambda afterwards. It might help to imagine Hyperlambda as simply a string/type Dictionary,
+which resolves an object from your IoC container, using the name of the node as the key.
+
+### The gory details
 
 All nodes starting with a _"."_ will be ignored, and not attempted to raised from the Hyperlambda evaluator.
 This has two benefits.
