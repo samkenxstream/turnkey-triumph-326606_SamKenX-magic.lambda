@@ -13,6 +13,7 @@ using magic.node;
 using magic.signals.services;
 using magic.signals.contracts;
 using magic.node.extensions.hyperlambda;
+using magic.lambda.threading;
 
 namespace magic.lambda.tests
 {
@@ -61,6 +62,7 @@ namespace magic.lambda.tests
             var services = new ServiceCollection();
             services.AddTransient<IConfiguration>((svc) => configuration);
             services.AddTransient<ISignaler, Signaler>();
+            services.AddSingleton(typeof(ThreadRunner));
             var types = new SignalsProvider(InstantiateAllTypes<ISlot>(services));
             services.AddTransient<ISignalsProvider>((svc) => types);
             var provider = services.BuildServiceProvider();
