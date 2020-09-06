@@ -313,11 +313,11 @@ wait.try
         [Fact]
         public void SerializeException()
         {
-            HyperlambdaException ex = new HyperlambdaException("Test", true, 123);
             using (MemoryStream stream = new MemoryStream())
             {
                try
                {
+                  HyperlambdaException ex = new HyperlambdaException("Test", true, 123, new ArgumentException("Foo"));
                   var formatter = new BinaryFormatter(null, new StreamingContext(StreamingContextStates.File));
                   formatter.Serialize(stream, ex);
                   stream.Position = 0;
@@ -333,6 +333,7 @@ wait.try
                   Assert.Equal("Test", error.Message);
                   Assert.Equal(123, error.Status);
                   Assert.True(error.IsPublic);
+                  Assert.Equal(typeof(ArgumentException), error.InnerException.GetType());
                }
             }
          }
