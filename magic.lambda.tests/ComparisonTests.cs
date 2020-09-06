@@ -3,6 +3,7 @@
  * See the enclosed LICENSE file for details.
  */
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -82,6 +83,30 @@ eq
             var lambda = Common.Evaluate(@"
 .foo1:OK
 not
+   eq
+      get-value:x:../*/.foo1
+      .:OK");
+            Assert.Equal(false, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void NotThrows()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+.foo1:OK
+not
+   .throws
+   eq
+      get-value:x:../*/.foo1
+      .:OK"));
+        }
+
+        [Fact]
+        public async Task Not_01Async()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.foo1:OK
+wait.not
    eq
       get-value:x:../*/.foo1
       .:OK");

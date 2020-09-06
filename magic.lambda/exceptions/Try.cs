@@ -74,15 +74,26 @@ namespace magic.lambda.exceptions
         {
             if (input.Next?.Name == ".catch")
             {
-                var next = input.Next;
-                var args = new Node(".arguments");
-                args.Add(new Node("message", err.Message));
-                args.Add(new Node("type", err.GetType().FullName));
-                next.Insert(0, args);
+                Node next = InsertException(input, err);
                 signaler.Signal("eval", next);
                 return true;
             }
             return false;
+        }
+
+        static Node InsertException(Node input, Exception err)
+        {
+            var next = input.Next;
+            var args = new Node(".arguments");
+            args.Add(new Node("message", err.Message));
+            args.Add(new Node("type", err.GetType().FullName));
+            if (err is HyperlambdaException hl)
+            {
+                args.Add(new Node("status", hl.Status));
+                args.Add(new Node("public", hl.IsPublic));
+            }
+            next.Insert(0, args);
+            return next;
         }
 
         /*
@@ -103,11 +114,7 @@ namespace magic.lambda.exceptions
         {
             if (input.Next?.Name == ".catch")
             {
-                var next = input.Next;
-                var args = new Node(".arguments");
-                args.Add(new Node("message", err.Message));
-                args.Add(new Node("type", err.GetType().FullName));
-                next.Insert(0, args);
+                Node next = InsertException(input, err);
                 await signaler.SignalAsync("wait.eval", next);
                 return true;
             }

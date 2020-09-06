@@ -3,6 +3,7 @@
  * See the enclosed LICENSE file for details.
  */
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -83,6 +84,34 @@ if
         }
 
         [Fact]
+        public async Task If_02Async()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.result
+wait.if
+   wait.and
+      .:bool:true
+      .:bool:true
+   .lambda
+      set-value:x:../*/.result
+         .:OK");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void IfThrows()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+.result
+if
+   and
+      .:bool:true
+   .lambda
+      set-value:x:../*/.result
+         .:OK"));
+        }
+
+        [Fact]
         public void If_03()
         {
             var lambda = Common.Evaluate(@"
@@ -108,6 +137,38 @@ if
       set-value:x:../*/.result
          .:failure
 else
+   set-value:x:../*/.result
+      .:OK");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void ElseThrows_01()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+.result
+else
+   set-value:x:../*/.result
+      .:OK"));
+        }
+
+        [Fact]
+        public void ElseThrows_02()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate("else"));
+        }
+
+        [Fact]
+        public async Task Else_01Async()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.result
+if
+   .:bool:false
+   .lambda
+      set-value:x:../*/.result
+         .:failure
+wait.else
    set-value:x:../*/.result
       .:OK");
             Assert.Equal("OK", lambda.Children.First().Value);

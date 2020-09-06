@@ -3,7 +3,9 @@
  * See the enclosed LICENSE file for details.
  */
 
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace magic.lambda.tests
@@ -17,6 +19,29 @@ namespace magic.lambda.tests
 .foo:bar
 switch:x:@.foo
    case:bar
+      set-value:x:@.result
+         .:OK");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void CaseThrows()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+.result
+.foo:bar
+case:bar
+   set-value:x:@.result
+      .:OK"));
+        }
+
+        [Fact]
+        public async Task SwitchSimpleAsync()
+        {
+            var lambda = await Common.EvaluateAsync(@".result
+.foo:bar
+wait.switch:x:@.foo
+   wait.case:bar
       set-value:x:@.result
          .:OK");
             Assert.Equal("OK", lambda.Children.First().Value);
