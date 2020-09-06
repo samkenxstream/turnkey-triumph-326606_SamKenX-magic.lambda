@@ -116,6 +116,10 @@ Notice the relationship between the `[Slot(Name = "acme.foo")]` C# code, and the
 slot from Hyperlambda afterwards. It might help to imagine Hyperlambda as simply a string/type Dictionary,
 which resolves an object from your IoC container, using the name of the node as the key.
 
+If you want to create your own `ISlot` classes, you'll have to reference the NuGet 
+called `magic.signals.contracts`, implement the `ISlot` interface, and mark your class with the `Slot` attribute,
+passing in the name of your slot as your `Name` property.
+
 ### The gory details
 
 All nodes starting with a _"."_ will be ignored, and not attempted to raised from the Hyperlambda evaluator.
