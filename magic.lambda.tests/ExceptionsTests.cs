@@ -29,6 +29,53 @@ try
         }
 
         [Fact]
+        public void Throws_02_Throws()
+        {
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
+try
+   throw:foo
+"));
+        }
+
+        [Fact]
+        public void NoThrow_01()
+        {
+            var lambda = Common.Evaluate(@"
+.throws:bool:false
+try
+   .throw:foo
+.catch
+   set-value:x:@.throws
+      .:bool:true
+");
+            Assert.Equal(false, lambda.Children.First().Value);
+        }
+
+
+        [Fact]
+        public async Task Throws_02_ThrowsAsync()
+        {
+            await Assert.ThrowsAsync<HyperlambdaException>(async () => await Common.EvaluateAsync(@"
+wait.try
+   throw:foo
+"));
+        }
+
+        [Fact]
+        public async Task NoThrow_01Async()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.throws:bool:false
+wait.try
+   .throw:foo
+.catch
+   set-value:x:@.throws
+      .:bool:true
+");
+            Assert.Equal(false, lambda.Children.First().Value);
+        }
+
+        [Fact]
         public void Throws_02()
         {
             var lambda = Common.Evaluate(@"

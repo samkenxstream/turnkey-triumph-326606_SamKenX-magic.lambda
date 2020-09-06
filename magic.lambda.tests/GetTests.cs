@@ -32,6 +32,16 @@ get-name:x:../*/.foo1
         }
 
         [Fact]
+        public void NameThrows()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+.foo1
+.foo1
+get-name:x:../*/.foo1
+"));
+        }
+
+        [Fact]
         public void NameNull()
         {
             var lambda = Common.Evaluate(@"
@@ -62,6 +72,15 @@ get-name:x:../*/.foo1/*
 get-count:x:../*/.foo1/*
 ");
             Assert.Equal(2, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void CountThrows()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+
+get-count
+"));
         }
     }
 }

@@ -80,7 +80,7 @@ set-name:x:../*/.foo1
         }
 
         [Fact]
-        public void SetNameWithExpressionReturningNull()
+        public void SetValueWithExpressionReturningNull()
         {
             var lambda = Common.Evaluate(@"
 .foo1:error
@@ -109,6 +109,28 @@ set-name:x:../*/.foo1
             var lambda = Common.Evaluate(@"
 .foo1
 set-value:x:../*/.foo1
+   .:OK
+");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void SetValueThrows()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+.foo1
+set-value:x:../*/.foo1
+   .:error
+   .:error
+"));
+        }
+
+        [Fact]
+        public async Task SetValueWithStaticAsync()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.foo1
+wait.set-value:x:../*/.foo1
    .:OK
 ");
             Assert.Equal("OK", lambda.Children.First().Value);

@@ -46,6 +46,34 @@ fork-slot-2
         }
 
         [Fact]
+        public void Semaphore_01()
+        {
+            ForkSlot1.ExecutionCount = 0;
+            var lambda = Common.Evaluate(@"
+fork
+   semaphore:foo
+      fork-slot-2
+semaphore:foo
+   fork-slot-2
+");
+            Assert.Equal(2, ForkSlot1.ExecutionCount);
+        }
+
+        [Fact]
+        public async Task Semaphore_01Async()
+        {
+            ForkSlot1.ExecutionCount = 0;
+            var lambda = await Common.EvaluateAsync(@"
+wait.fork
+   wait.semaphore:foo
+      fork-slot-2
+wait.semaphore:foo
+   fork-slot-2
+");
+            Assert.Equal(2, ForkSlot1.ExecutionCount);
+        }
+
+        [Fact]
         public async Task ForkWithSleepAsync()
         {
             ForkSlot1.ExecutionCount = 0;

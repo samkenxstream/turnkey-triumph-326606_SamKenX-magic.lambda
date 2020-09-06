@@ -58,6 +58,29 @@ switch:x:@.foo"));
         }
 
         [Fact]
+        public void SwitchThrow_03()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@".result
+.foo:bar
+switch:x:@.foo
+   case
+      set-value:x:@.result
+         .:OK"));
+        }
+
+        [Fact]
+        public void SwitchThrow_04()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@".result
+.foo:bar
+switch:x:@.foo
+   case:xxx
+   default:howdy
+      set-value:x:@.result
+         .:OK"));
+        }
+
+        [Fact]
         public void CaseThrows()
         {
             Assert.Throws<ArgumentException>(() => Common.Evaluate(@"

@@ -73,7 +73,7 @@ namespace magic.lambda.threading
             }
         }
 
-        #region [ -- Private helepr methods -- ]
+        #region [ -- Private helper methods -- ]
 
         string GetKey(Node input)
         {
