@@ -33,7 +33,6 @@ namespace magic.lambda.change
         {
             SanityCheck(input);
             signaler.Signal("eval", input);
-
             SetValueToSource(input, input.Evaluate().ToList());
         }
 
