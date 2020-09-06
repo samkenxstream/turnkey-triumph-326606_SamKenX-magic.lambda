@@ -26,6 +26,31 @@ namespace magic.lambda.tests
         }
 
         [Fact]
+        public void InvokeEval()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+eval
+   """"
+   .
+   set-value:x:@.src
+      .:OK
+");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void InvokeEvalThrows()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+.src
+eval:x:@.src
+   set-value:x:@.src
+      .:OK
+"));
+        }
+
+        [Fact]
         public async Task InvokeEvalAsync()
         {
             var lambda = await Common.EvaluateAsync(@"

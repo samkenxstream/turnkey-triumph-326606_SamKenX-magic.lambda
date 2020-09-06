@@ -25,6 +25,39 @@ switch:x:@.foo
         }
 
         [Fact]
+        public void SwitchFallthrough()
+        {
+            var lambda = Common.Evaluate(@".result
+.foo:bar
+switch:x:@.foo
+   case:foo
+   case:bar
+      set-value:x:@.result
+         .:OK");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void SwitchThrow_01()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@".result
+.foo:bar
+switch:x:@.foo
+   caseX:foo
+   case:bar
+      set-value:x:@.result
+         .:OK"));
+        }
+
+        [Fact]
+        public void SwitchThrow_02()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@".result
+.foo:bar
+switch:x:@.foo"));
+        }
+
+        [Fact]
         public void CaseThrows()
         {
             Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
@@ -56,6 +89,29 @@ switch:x:@.foo
    case:bar
       .do-nothing
    default
+      set-value:x:@.result
+         .:OK");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void DefaultThrows()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+default
+   set-value:x:@.result
+      .:OK"));
+        }
+
+        [Fact]
+        public async Task SwitchDefaultAsync()
+        {
+            var lambda = await Common.EvaluateAsync(@".result
+.foo:barXX
+wait.switch:x:@.foo
+   case:bar
+      .do-nothing
+   wait.default
       set-value:x:@.result
          .:OK");
             Assert.Equal("OK", lambda.Children.First().Value);

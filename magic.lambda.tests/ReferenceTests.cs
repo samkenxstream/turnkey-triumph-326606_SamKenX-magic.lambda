@@ -7,6 +7,7 @@ using System.Linq;
 using Xunit;
 using magic.node;
 using magic.node.extensions;
+using System;
 
 namespace magic.lambda.tests
 {
@@ -21,6 +22,23 @@ reference:x:-");
             Assert.True(lambda.Children.Skip(1).First().Value is Node);
             Assert.Equal(".foo", lambda.Children.Skip(1).First().GetEx<Node>().Name);
             Assert.Equal("bar", lambda.Children.Skip(1).First().GetEx<Node>().Children.First().Name);
+        }
+
+        [Fact]
+        public void ReferenceThrows_01()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@".foo
+   bar
+reference"));
+        }
+
+        [Fact]
+        public void ReferenceThrows_02()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@".foo
+   bar1
+   bar2
+reference:x:-/*"));
         }
     }
 }

@@ -44,8 +44,8 @@ namespace magic.lambda.branching
 
         void SanityCheckInvocation(Node input)
         {
-            if (input.Parent?.Name != "switch")
-                throw new ArgumentException("[defalut] must be a child of [switch]");
+            if (input.Parent?.Name != "switch" && input.Parent?.Name != "wait.switch")
+                throw new ArgumentException("[default] must be a child of [switch]");
         }
 
         #endregion

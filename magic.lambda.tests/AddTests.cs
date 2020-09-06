@@ -13,7 +13,12 @@ namespace magic.lambda.tests
         [Fact]
         public void AddChildrenSrc()
         {
-            var lambda = Common.Evaluate(".dest\nadd:x:../*/.dest\n   .\n      foo1:bar1\n      foo2:bar2");
+            var lambda = Common.Evaluate(@"
+.dest
+add:x:../*/.dest
+   .
+      foo1:bar1
+      foo2:bar2");
             Assert.Equal(2, lambda.Children.First().Children.Count());
             Assert.Equal("foo1", lambda.Children.First().Children.First().Name);
             Assert.Equal("bar1", lambda.Children.First().Children.First().Value);
@@ -24,12 +29,28 @@ namespace magic.lambda.tests
         [Fact]
         public void AddExpressionSrc()
         {
-            var lambda = Common.Evaluate(".dest\n.src\n   foo1:bar1\n   foo2:bar2\nadd:x:../*/.dest\n   get-nodes:x:../*/.src/*");
+            var lambda = Common.Evaluate(@"
+.dest
+.src
+   foo1:bar1
+   foo2:bar2
+add:x:../*/.dest
+   get-nodes:x:../*/.src/*");
             Assert.Equal(2, lambda.Children.First().Children.Count());
             Assert.Equal("foo1", lambda.Children.First().Children.First().Name);
             Assert.Equal("bar1", lambda.Children.First().Children.First().Value);
             Assert.Equal("foo2", lambda.Children.First().Children.Skip(1).First().Name);
             Assert.Equal("bar2", lambda.Children.First().Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void AddExpressionSrcEmptyValue()
+        {
+            var lambda = Common.Evaluate(@"
+.dest
+add:x:../*/.dest
+   get-nodes");
+            Assert.Empty(lambda.Children.First().Children);
         }
     }
 }

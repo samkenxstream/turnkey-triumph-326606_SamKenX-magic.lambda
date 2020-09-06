@@ -25,6 +25,15 @@ eq
         }
 
         [Fact]
+        public void Eq_Throws()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+.foo1:OK
+eq
+   get-value:x:../*/.foo1"));
+        }
+
+        [Fact]
         public async Task Eq_01Async()
         {
             var lambda = await Common.EvaluateAsync(@"
@@ -77,6 +86,26 @@ eq
    get-value:x:../*/.foo1
    .:OK");
             Assert.Equal(false, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void Eq_06()
+        {
+            var lambda = Common.Evaluate(@"
+eq
+   .
+   .");
+            Assert.Equal(true, lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void Eq_07()
+        {
+            var lambda = Common.Evaluate(@"
+eq
+   .:int:5
+   .:uint:5");
+            Assert.Equal(false, lambda.Children.First().Value);
         }
 
         [Fact]
@@ -182,6 +211,17 @@ mt
         }
 
         [Fact]
+        public void Mt_06()
+        {
+            var lambda = Common.Evaluate(@"
+.foo1:int:5
+mt
+   get-value:x:../*/.foo1
+   .:string:5");
+            Assert.Equal(false, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
         public void Lt_01()
         {
             var lambda = Common.Evaluate(@"
@@ -244,6 +284,17 @@ lt
 lt
    get-value:x:../*/.foo1
    .");
+            Assert.Equal(false, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void Lt_06()
+        {
+            var lambda = Common.Evaluate(@"
+.foo1:uint:5
+lt
+   get-value:x:../*/.foo1
+   .:int:5");
             Assert.Equal(false, lambda.Children.Skip(1).First().Value);
         }
 
@@ -325,6 +376,17 @@ lte
         }
 
         [Fact]
+        public void Lte_07()
+        {
+            var lambda = Common.Evaluate(@"
+.foo1:int:5
+lte
+   get-value:x:../*/.foo1
+   .:uint:5");
+            Assert.Equal(false, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
         public void Mte_01()
         {
             var lambda = Common.Evaluate(@"
@@ -399,6 +461,17 @@ mte
    get-value:x:../*/.foo1
    .");
             Assert.Equal(true, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void Mte_07()
+        {
+            var lambda = Common.Evaluate(@"
+.foo1:string:5
+mte
+   get-value:x:../*/.foo1
+   .:int:5");
+            Assert.Equal(false, lambda.Children.Skip(1).First().Value);
         }
     }
 }

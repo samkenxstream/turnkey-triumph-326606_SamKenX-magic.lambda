@@ -84,7 +84,7 @@ namespace magic.lambda.change
                     break;
 
                 case "guid":
-                    input.Value = new Guid(value?.ToString() ?? Guid.NewGuid().ToString());
+                    input.Value = new Guid(value?.ToString() ?? Guid.Empty.ToString());
                     break;
 
                 case "char":

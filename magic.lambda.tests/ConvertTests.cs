@@ -212,7 +212,6 @@ convert:x:-
             Assert.Equal("5", lambda.Children.Skip(1).First().Value);
         }
 
-
         [Fact]
         public void ConvertThrows()
         {
@@ -220,6 +219,210 @@ convert:x:-
 .src:int:5
 convert:x:-
    type:nont-existing-type"));
+        }
+
+        [Fact]
+        public void ConvertThrows_01()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+.src:5
+convert:x:-"));
+        }
+
+        [Fact]
+        public void ConvertThrows_02()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+.src:5
+convert:x:-
+   bogus:foo"));
+        }
+
+        [Fact]
+        public void ConvertToIntDefault()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+convert:x:-
+   type:int");
+            Assert.Equal(typeof(int), lambda.Children.Skip(1).First().Value.GetType());
+            Assert.Equal(0, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertToUIntDefault()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+convert:x:-
+   type:uint");
+            Assert.Equal(typeof(uint), lambda.Children.Skip(1).First().Value.GetType());
+            Assert.Equal((uint)0, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertToShortDefault()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+convert:x:-
+   type:short");
+            Assert.Equal(typeof(short), lambda.Children.Skip(1).First().Value.GetType());
+            Assert.Equal((short)0, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertToUShortDefault()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+convert:x:-
+   type:ushort");
+            Assert.Equal(typeof(ushort), lambda.Children.Skip(1).First().Value.GetType());
+            Assert.Equal((ushort)0, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertToLongDefault()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+convert:x:-
+   type:long");
+            Assert.Equal(typeof(long), lambda.Children.Skip(1).First().Value.GetType());
+            Assert.Equal((long)0, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertToULongDefault()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+convert:x:-
+   type:ulong");
+            Assert.Equal(typeof(ulong), lambda.Children.Skip(1).First().Value.GetType());
+            Assert.Equal((ulong)0, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertToDecimalDefault()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+convert:x:-
+   type:decimal");
+            Assert.Equal(typeof(decimal), lambda.Children.Skip(1).First().Value.GetType());
+            Assert.Equal((decimal)0, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertToDoubleDefault()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+convert:x:-
+   type:double");
+            Assert.Equal(typeof(double), lambda.Children.Skip(1).First().Value.GetType());
+            Assert.Equal((double)0, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertToSingle_01Default()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+convert:x:-
+   type:single");
+            Assert.Equal(typeof(float), lambda.Children.Skip(1).First().Value.GetType());
+            Assert.Equal((float)0, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertToSingle_02Default()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+convert:x:-
+   type:float");
+            Assert.Equal(typeof(float), lambda.Children.Skip(1).First().Value.GetType());
+            Assert.Equal((float)0, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertToBoolDefault()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+convert:x:-
+   type:bool");
+            Assert.Equal(typeof(bool), lambda.Children.Skip(1).First().Value.GetType());
+            Assert.Equal(false, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertToDateDefault()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+convert:x:-
+   type:date");
+            Assert.Equal(typeof(DateTime), lambda.Children.Skip(1).First().Value.GetType());
+            Assert.Equal(DateTime.MinValue.ToUniversalTime(), lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertToGuidDefault()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+convert:x:-
+   type:guid");
+            Assert.Equal(typeof(Guid), lambda.Children.Skip(1).First().Value.GetType());
+            Assert.Equal(Guid.Empty, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertToCharDefault()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+convert:x:-
+   type:char");
+            Assert.Equal(typeof(char), lambda.Children.Skip(1).First().Value.GetType());
+            Assert.Equal((char)0, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertToByteDefault()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+convert:x:-
+   type:byte");
+            Assert.Equal(typeof(byte), lambda.Children.Skip(1).First().Value.GetType());
+            Assert.Equal((byte)0, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertToNodeDefault()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+convert:x:-
+   type:node");
+            Assert.Equal(typeof(Node), lambda.Children.Skip(1).First().Value.GetType());
+            Assert.Equal("", lambda.Children.Skip(1).First().Get<Node>().Name);
+            Assert.Empty(lambda.Children.Skip(1).First().Get<Node>().Children);
+        }
+
+        [Fact]
+        public void ConvertToStringDefault()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+convert:x:-
+   type:string");
+            Assert.Equal("", lambda.Children.Skip(1).First().Value);
         }
     }
 }

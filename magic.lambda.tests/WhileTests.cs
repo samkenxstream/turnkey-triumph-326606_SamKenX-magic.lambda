@@ -80,6 +80,46 @@ while
         }
 
         [Fact]
+        public void WhileTerminateNodes()
+        {
+            var lambda = Common.Evaluate(@".src
+   bar1
+   bar2
+.dest
+while
+   mt
+      get-count:x:../*/.src/*
+      .:int:0
+   .lambda
+      add:x:../*/.dest
+         get-nodes:x:../*/.src/0
+      remove-nodes:x:../*/.src/0
+      return
+         result:done");
+            Assert.Single(lambda.Children.Skip(1).First().Children);
+        }
+
+        [Fact]
+        public void WhileThrows()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+.src
+   bar1
+   bar2
+.dest
+while
+   mt
+      get-count:x:../*/.src/*
+      .:int:0
+   .lambdaXX
+      add:x:../*/.dest
+         get-nodes:x:../*/.src/0
+      remove-nodes:x:../*/.src/0
+      return
+         result:done"));
+        }
+
+        [Fact]
         public async Task WhileTerminateAsync()
         {
             var lambda = await Common.EvaluateAsync(@".src

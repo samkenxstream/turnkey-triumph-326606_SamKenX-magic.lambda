@@ -26,6 +26,29 @@ if
         }
 
         [Fact]
+        public void Or_Throws_01()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+.result
+or
+   .lambda
+      set-value:x:../*/.result
+         .:OK"));
+        }
+
+        [Fact]
+        public void If_Throws_02()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+.result
+if
+   .:bool:true
+   .lambdaXX
+      set-value:x:../*/.result
+         .:OK"));
+        }
+
+        [Fact]
         public void IfWithOr()
         {
             var lambda = Common.Evaluate(@"
@@ -185,6 +208,79 @@ if
       set-value:x:../*/.result
          .:failure
 else-if
+   eq
+      get-name:x:../*/.result
+      .:.result
+   .lambda
+      set-value:x:../*/.result
+         .:OK");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void ElseIf_Throws_01()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+.result
+if
+   .:bool:false
+   .lambda
+      set-value:x:../*/.result
+         .:failure
+else-if
+   .:throws!
+   eq
+      get-name:x:../*/.result
+      .:.result
+   .lambda
+      set-value:x:../*/.result
+         .:OK"));
+        }
+
+        [Fact]
+        public void ElseIf_Throws_02()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+.result
+if
+   .:bool:false
+   .lambda
+      set-value:x:../*/.result
+         .:failure
+else-if
+   eq
+      get-name:x:../*/.result
+      .:.result
+   .lambdaXX
+      set-value:x:../*/.result
+         .:OK"));
+        }
+
+        [Fact]
+        public void ElseIf_Throws_03()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+.result
+else-if
+   eq
+      get-name:x:../*/.result
+      .:.result
+   .lambdaXX
+      set-value:x:../*/.result
+         .:OK"));
+        }
+
+        [Fact]
+        public async Task ElseIf_01Async()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.result
+if
+   .:bool:false
+   .lambda
+      set-value:x:../*/.result
+         .:failure
+wait.else-if
    eq
       get-name:x:../*/.result
       .:.result
