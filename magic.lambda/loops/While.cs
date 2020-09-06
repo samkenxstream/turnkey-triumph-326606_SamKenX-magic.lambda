@@ -139,7 +139,7 @@ namespace magic.lambda.loops
         void SanityCheck(Node input)
         {
             if (input.Children.Count() != 2)
-                throw new ArgumentException("[while] can have maximum one child node");
+                throw new ArgumentException("[while] must have exactly two argument nodes, a condition and a [.lambda]");
         }
 
         int SanityCheckIterations(int iterations)

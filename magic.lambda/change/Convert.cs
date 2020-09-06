@@ -42,6 +42,14 @@ namespace magic.lambda.change
                     input.Value = System.Convert.ToUInt32(value ?? 0, CultureInfo.InvariantCulture);
                     break;
 
+                case "short":
+                    input.Value = System.Convert.ToInt16(value ?? 0, CultureInfo.InvariantCulture);
+                    break;
+
+                case "ushort":
+                    input.Value = System.Convert.ToUInt16(value ?? 0, CultureInfo.InvariantCulture);
+                    break;
+
                 case "long":
                     input.Value = System.Convert.ToInt64(value ?? 0, CultureInfo.InvariantCulture);
                     break;
@@ -59,6 +67,7 @@ namespace magic.lambda.change
                     break;
 
                 case "single":
+                case "float":
                     input.Value = System.Convert.ToSingle(value ?? 0, CultureInfo.InvariantCulture);
                     break;
 
@@ -71,7 +80,7 @@ namespace magic.lambda.change
                         value?.ToString() ?? DateTime.MinValue.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture),
                         "yyyy-MM-ddTHH:mm:ss",
                         CultureInfo.InvariantCulture,
-                        DateTimeStyles.AssumeUniversal);
+                        DateTimeStyles.AssumeUniversal).ToUniversalTime();
                     break;
 
                 case "guid":

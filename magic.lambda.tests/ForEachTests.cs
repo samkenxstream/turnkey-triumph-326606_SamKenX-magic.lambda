@@ -4,6 +4,7 @@
  */
 
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 using magic.node;
 using magic.signals.contracts;
@@ -26,6 +27,7 @@ namespace magic.lambda.tests
         [Fact]
         public void ForEach_01()
         {
+            Foo2Slot.ExecutionCount = 0;
             Common.Evaluate(@".foo1
    bar1
    bar2
@@ -33,6 +35,47 @@ namespace magic.lambda.tests
 for-each:x:../*/.foo1/*
    foo2");
             Assert.Equal(3, Foo2Slot.ExecutionCount);
+        }
+
+        [Fact]
+        public void ForEach_02()
+        {
+            Foo2Slot.ExecutionCount = 0;
+            Common.Evaluate(@".foo1
+   bar1
+   bar2
+   bar3
+for-each:x:../*/.foo1/*
+   foo2
+   return:done");
+            Assert.Equal(1, Foo2Slot.ExecutionCount);
+        }
+
+        [Fact]
+        public async Task ForEachAsync_01()
+        {
+            Foo2Slot.ExecutionCount = 0;
+            await Common.EvaluateAsync(@".foo1
+   bar1
+   bar2
+   bar3
+wait.for-each:x:../*/.foo1/*
+   foo2");
+            Assert.Equal(3, Foo2Slot.ExecutionCount);
+        }
+
+        [Fact]
+        public async Task ForEachAsync_02()
+        {
+            Foo2Slot.ExecutionCount = 0;
+            await Common.EvaluateAsync(@".foo1
+   bar1
+   bar2
+   bar3
+wait.for-each:x:../*/.foo1/*
+   foo2
+   return:done");
+            Assert.Equal(1, Foo2Slot.ExecutionCount);
         }
     }
 }

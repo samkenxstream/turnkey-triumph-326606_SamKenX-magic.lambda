@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace magic.lambda.tests
@@ -42,7 +43,63 @@ while
         }
 
         [Fact]
-        public void While_04_InfiniteLoop()
+        public async Task WhileAync()
+        {
+            var lambda = await Common.EvaluateAsync(@".src
+   bar1
+   bar2
+.dest
+wait.while
+   mt
+      get-count:x:../*/.src/*
+      .:int:0
+   .lambda
+      add:x:../*/.dest
+         get-nodes:x:../*/.src/0
+      remove-nodes:x:../*/.src/0");
+            Assert.Equal(2, lambda.Children.Skip(1).First().Children.Count());
+        }
+
+        [Fact]
+        public void WhileTerminate()
+        {
+            var lambda = Common.Evaluate(@".src
+   bar1
+   bar2
+.dest
+while
+   mt
+      get-count:x:../*/.src/*
+      .:int:0
+   .lambda
+      add:x:../*/.dest
+         get-nodes:x:../*/.src/0
+      remove-nodes:x:../*/.src/0
+      return:done");
+            Assert.Equal(1, lambda.Children.Skip(1).First().Children.Count());
+        }
+
+        [Fact]
+        public async Task WhileTerminateAsync()
+        {
+            var lambda = await Common.EvaluateAsync(@".src
+   bar1
+   bar2
+.dest
+wait.while
+   mt
+      get-count:x:../*/.src/*
+      .:int:0
+   .lambda
+      add:x:../*/.dest
+         get-nodes:x:../*/.src/0
+      remove-nodes:x:../*/.src/0
+      return:done");
+            Assert.Equal(1, lambda.Children.Skip(1).First().Children.Count());
+        }
+
+        [Fact]
+        public void While_InfiniteLoop()
         {
             Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
 while
@@ -51,7 +108,32 @@ while
         }
 
         [Fact]
-        public void While_05_InfiniteLoopStopsTooLate()
+        public async Task While_InfiniteLoopAsync()
+        {
+            await Assert.ThrowsAsync<ArgumentException>(async () => await Common.EvaluateAsync(@"
+wait.while
+   .:bool:true
+   .lambda"));
+        }
+
+        [Fact]
+        public void WhileNoLambdaThrows()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+while
+   .:bool:true"));
+        }
+
+        [Fact]
+        public async Task WhileNoLambdaAsyncThrows()
+        {
+            await Assert.ThrowsAsync<ArgumentException>(async () => await Common.EvaluateAsync(@"
+wait.while
+   .:bool:true"));
+        }
+
+        [Fact]
+        public void While_InfiniteLoopStopsTooLate()
         {
             Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
 .no:int:0

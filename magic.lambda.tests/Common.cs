@@ -32,7 +32,11 @@ namespace magic.lambda.tests
             var services = Initialize();
             var lambda = new Parser(hl).Lambda();
             var signaler = services.GetService(typeof(ISignaler)) as ISignaler;
-            signaler.Signal("eval", lambda);
+            var evalResult = new Node();
+            signaler.Scope("slots.result", evalResult, () =>
+            {
+                signaler.Signal("eval", lambda);
+            });
             return lambda;
         }
 
@@ -41,7 +45,11 @@ namespace magic.lambda.tests
             var services = Initialize();
             var lambda = new Parser(hl).Lambda();
             var signaler = services.GetService(typeof(ISignaler)) as ISignaler;
-            await signaler.SignalAsync("wait.eval", lambda);
+            var evalResult = new Node();
+            await signaler.ScopeAsync("slots.result", evalResult, async () =>
+            {
+                await signaler.SignalAsync("wait.eval", lambda);
+            });
             return lambda;
         }
 
