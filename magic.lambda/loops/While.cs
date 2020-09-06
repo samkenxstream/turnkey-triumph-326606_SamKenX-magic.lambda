@@ -38,8 +38,7 @@ namespace magic.lambda.loops
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            if (input.Children.Count() != 2)
-                throw new ArgumentException("Keyword [while] requires exactly two child nodes");
+            SanityCheck(input);
 
             // Storing termination node, to check if we should terminate early for some reasons.
             var terminate = signaler.Peek<Node>("slots.result");
@@ -92,8 +91,7 @@ namespace magic.lambda.loops
         /// <returns>An awaitable task.</returns>
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
-            if (input.Children.Count() != 2)
-                throw new ArgumentException("Keyword [while] requires exactly two child nodes");
+            SanityCheck(input);
 
             // Storing termination node, to check if we should terminate early for some reasons.
             var terminate = signaler.Peek<Node>("slots.result");
@@ -137,5 +135,15 @@ namespace magic.lambda.loops
                     return;
             }
         }
+
+        #region [ -- Private helper methods -- ]
+
+        void SanityCheck(Node input)
+        {
+            if (input.Children.Count() != 2)
+                throw new ArgumentException("[while] can have maximum one child node");
+        }
+
+        #endregion
     }
 }

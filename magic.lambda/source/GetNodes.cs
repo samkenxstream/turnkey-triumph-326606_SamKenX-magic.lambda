@@ -9,7 +9,6 @@ using magic.signals.contracts;
 
 namespace magic.lambda.source
 {
-    // TODO: Consider renaming.
     /// <summary>
     /// [get-nodes] slot that will return all nodes from evaluating an expression.
     /// </summary>

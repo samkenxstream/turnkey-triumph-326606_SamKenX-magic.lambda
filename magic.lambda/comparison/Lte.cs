@@ -11,7 +11,6 @@ using magic.lambda.comparison.utilities;
 
 namespace magic.lambda.comparison
 {
-    // TODO: Consider renaming and providing "alias".
     /// <summary>
     /// [lte] slot returning true if its first child's value is "less than or equal" to its second child's value.
     /// </summary>

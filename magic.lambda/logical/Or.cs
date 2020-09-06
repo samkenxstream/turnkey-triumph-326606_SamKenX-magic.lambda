@@ -27,8 +27,7 @@ namespace magic.lambda.logical
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            if (input.Children.Count() < 2)
-                throw new ArgumentException("Operator [or] requires at least two children nodes");
+            SanityCheck(input);
 
             // Notice, to support short circuit evaluation, we cannot use same logic as we're using in [and].
             foreach (var idx in input.Children)
@@ -53,8 +52,7 @@ namespace magic.lambda.logical
         /// <returns>An awaitable task.</returns>
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
-            if (input.Children.Count() < 2)
-                throw new ArgumentException("Operator [or] requires at least two children nodes");
+            SanityCheck(input);
 
             // Notice, to support short circuit evaluation, we cannot use same logic as we're using in [and].
             foreach (var idx in input.Children)
@@ -70,5 +68,15 @@ namespace magic.lambda.logical
             }
             input.Value = false;
         }
+
+        #region [ -- Private helper methods -- ]
+
+        void SanityCheck(Node input)
+        {
+            if (input.Children.Count() < 2)
+                throw new ArgumentException("[or] can have maximum one child node");
+        }
+
+        #endregion
     }
 }

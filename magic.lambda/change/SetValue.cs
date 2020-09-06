@@ -31,9 +31,7 @@ namespace magic.lambda.change
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            if (input.Children.Count() > 1)
-                throw new ArgumentException("[set-value] can have maximum one child node");
-
+            SanityCheck(input);
             signaler.Signal("eval", input);
 
             SetValueToSource(input, input.Evaluate().ToList());
@@ -47,9 +45,7 @@ namespace magic.lambda.change
         /// <returns>An awaitable task.</returns>
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
-            if (input.Children.Count() > 1)
-                throw new ArgumentException("[set-value] can have maximum one child node");
-
+            SanityCheck(input);
             await signaler.SignalAsync("wait.eval", input);
             SetValueToSource(input, input.Evaluate().ToList());
         }
@@ -63,6 +59,12 @@ namespace magic.lambda.change
             {
                 idx.Value = source;
             }
+        }
+
+        void SanityCheck(Node input)
+        {
+            if (input.Children.Count() > 1)
+                throw new ArgumentException("[set-xxx] can have maximum one child node");
         }
 
         #endregion

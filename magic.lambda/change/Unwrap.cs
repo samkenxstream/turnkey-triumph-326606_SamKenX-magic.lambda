@@ -12,7 +12,6 @@ using magic.signals.contracts;
 
 namespace magic.lambda.change
 {
-    // TODO: Consider renaming to something else.
     /// <summary>
     /// [unwrap] slot allowing you to forward evaluate expressions in your lambda graph object.
     /// </summary>

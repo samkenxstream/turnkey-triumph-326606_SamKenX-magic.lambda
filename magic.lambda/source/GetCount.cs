@@ -11,7 +11,6 @@ using magic.signals.contracts;
 
 namespace magic.lambda.source
 {
-    // TODO: Consider renaming.
     /// <summary>
     /// [get-count] slot that will return the count of nodes found for an expression.
     /// </summary>

@@ -27,10 +27,8 @@ namespace magic.lambda.logical
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            if (input.Children.Count() < 2)
-                throw new ArgumentException("Operator [and] requires at least two children nodes");
+            SanityCheck(input);
             signaler.Signal("eval", input);
-
             input.Value = IsTrue(input);
         }
 
@@ -42,11 +40,8 @@ namespace magic.lambda.logical
         /// <returns>An awaitable task.</returns>
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
-            if (input.Children.Count() < 2)
-                throw new ArgumentException("Operator [and] requires at least two children nodes");
-
+            SanityCheck(input);
             await signaler.SignalAsync("wait.eval", input);
-
             input.Value = IsTrue(input);
         }
 
@@ -60,6 +55,12 @@ namespace magic.lambda.logical
                     return false;
             }
             return true;
+        }
+
+        void SanityCheck(Node input)
+        {
+            if (input.Children.Count() < 2)
+                throw new ArgumentException("[and] can have maximum one child node");
         }
 
         #endregion

@@ -19,7 +19,6 @@ namespace magic.lambda.slots
     {
         readonly ISignalsProvider _signalProvider;
 
-        // TODO: Rename ISignalsProvider to ISlotProvider.
         /// <summary>
         /// Constructor creating an object requiring a signals provider to be able to fetch all slots that exists.
         /// </summary>

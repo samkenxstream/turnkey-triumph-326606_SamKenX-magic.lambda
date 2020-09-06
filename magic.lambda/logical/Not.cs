@@ -26,11 +26,8 @@ namespace magic.lambda.logical
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            if (input.Children.Count() != 1)
-                throw new ArgumentException("Operator [not] requires exactly one child");
-
+            SanityCheck(input);
             signaler.Signal("eval", input);
-
             input.Value = !input.Children.First().GetEx<bool>();
         }
 
@@ -42,12 +39,19 @@ namespace magic.lambda.logical
         /// <returns>An awaitable task.</returns>
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
-            if (input.Children.Count() != 1)
-                throw new ArgumentException("Operator [not] requires exactly one child");
-
+            SanityCheck(input);
             await signaler.SignalAsync("wait.eval", input);
-
             input.Value = !input.Children.First().GetEx<bool>();
         }
+
+        #region [ -- Private helper methods -- ]
+
+        void SanityCheck(Node input)
+        {
+            if (input.Children.Count() != 1)
+                throw new ArgumentException("[not] can have maximum one child node");
+        }
+
+        #endregion
     }
 }

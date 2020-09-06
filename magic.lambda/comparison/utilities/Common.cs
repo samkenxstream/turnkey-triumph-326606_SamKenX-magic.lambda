@@ -22,11 +22,8 @@ namespace magic.lambda.comparison.utilities
             Node input,
             Func<object, object, bool> functor)
         {
-            if (input.Children.Count() != 2)
-                throw new ArgumentException($"Comparison operation [{input.Name}] requires exactly two operands");
-
+            SanityCheck(input);
             signaler.Signal("eval", input);
-
             input.Value = functor(
                 input.Children.First().GetEx<object>(),
                 input.Children.Skip(1).First().GetEx<object>());
@@ -37,14 +34,17 @@ namespace magic.lambda.comparison.utilities
             Node input,
             Func<object, object, bool> functor)
         {
-            if (input.Children.Count() != 2)
-                throw new ArgumentException($"Comparison operation [{input.Name}] requires exactly two operands");
-
+            SanityCheck(input);
             await signaler.SignalAsync("wait.eval", input);
-
             input.Value = functor(
                 input.Children.First().GetEx<object>(),
                 input.Children.Skip(1).First().GetEx<object>());
+        }
+
+        static void SanityCheck(Node input)
+        {
+            if (input.Children.Count() != 2)
+                throw new ArgumentException($"Comparison operation [{input.Name}] requires exactly two operands");
         }
     }
 }
