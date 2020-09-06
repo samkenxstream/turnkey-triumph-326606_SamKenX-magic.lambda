@@ -91,6 +91,38 @@ try
         }
 
         [Fact]
+        public void Throws_FinallyInvoked()
+        {
+            var lambda = Common.Evaluate(@"
+.throws:bool:false
+try
+   try
+      throw:foo
+   .finally
+      set-value:x:@.throws
+         .:bool:true
+.catch
+");
+            Assert.Equal(true, lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public async Task Throws_FinallyInvokedAsync()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.throws:bool:false
+wait.try
+   wait.try
+      throw:foo
+   .finally
+      set-value:x:@.throws
+         .:bool:true
+.catch
+");
+            Assert.Equal(true, lambda.Children.First().Value);
+        }
+
+        [Fact]
         public void Throws_03Throws()
         {
             var lambda = Common.Evaluate(@"

@@ -26,6 +26,19 @@ if
         }
 
         [Fact]
+        public void If_Throws()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+.result
+if
+   .:bool:true
+   .:bool:true
+   .lambda
+      set-value:x:../*/.result
+         .:OK"));
+        }
+
+        [Fact]
         public void Or_Throws_01()
         {
             Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
@@ -60,6 +73,37 @@ if
    .lambda
       set-value:x:../*/.result
          .:OK");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void IfWithOrSlot()
+        {
+            var lambda = Common.Evaluate(@"
+.result
+.value:bool:true
+if
+   or
+      .:bool:false
+      get-value:x:@.value
+   .lambda
+      set-value:x:../*/.result
+         .:OK");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void IfWithOrSlotYieldingFalse()
+        {
+            var lambda = Common.Evaluate(@"
+.result:OK
+if
+   or
+      .:bool:false
+      .:bool:false
+   .lambda
+      set-value:x:../*/.result
+         .:error");
             Assert.Equal("OK", lambda.Children.First().Value);
         }
 

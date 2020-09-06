@@ -52,9 +52,11 @@ namespace magic.lambda.change
 
         #region [ -- Private helper methods -- ]
 
-        private static void SetValueToSource(Node input, IEnumerable<Node> destinations)
+        static void SetValueToSource(Node input, IEnumerable<Node> destinations)
         {
-            var source = input.Name.EndsWith("set-value", StringComparison.InvariantCulture) ? input.Children.FirstOrDefault()?.GetEx<object>() : input.Children.FirstOrDefault()?.Get<object>();
+            var source = input.Name.EndsWith("set-value", StringComparison.InvariantCulture) ?
+                input.Children.FirstOrDefault()?.GetEx<object>() :
+                input.Children.FirstOrDefault()?.Get<object>();
             foreach (var idx in destinations)
             {
                 idx.Value = source;

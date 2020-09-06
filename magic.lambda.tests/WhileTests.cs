@@ -120,6 +120,26 @@ while
         }
 
         [Fact]
+        public async Task WhileThrowsAsync()
+        {
+            await Assert.ThrowsAsync<ArgumentException>(async () => await Common.EvaluateAsync(@"
+.src
+   bar1
+   bar2
+.dest
+wait.while
+   mt
+      get-count:x:../*/.src/*
+      .:int:0
+   .lambdaXX
+      add:x:../*/.dest
+         get-nodes:x:../*/.src/0
+      remove-nodes:x:../*/.src/0
+      return
+         result:done"));
+        }
+
+        [Fact]
         public async Task WhileTerminateAsync()
         {
             var lambda = await Common.EvaluateAsync(@".src

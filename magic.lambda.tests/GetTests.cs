@@ -22,6 +22,16 @@ get-value:x:../*/.src
         }
 
         [Fact]
+        public void ValueReturnsNull()
+        {
+            var lambda = Common.Evaluate(@"
+.src:foo1
+get-value:x:../*/.srcXXX
+");
+            Assert.Null(lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
         public void Name()
         {
             var lambda = Common.Evaluate(@"

@@ -40,6 +40,22 @@ eval
         }
 
         [Fact]
+        public void InvokeEvalExpression()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+try
+   .eval
+      throw:foo
+   eval:x:@.eval
+.catch
+   set-value:x:@.src
+      .:OK
+");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
         public void InvokeEvalThrows()
         {
             Assert.Throws<ArgumentException>(() => Common.Evaluate(@"

@@ -8,6 +8,7 @@ using Xunit;
 using magic.node;
 using magic.signals.contracts;
 using System.Threading.Tasks;
+using System;
 
 namespace magic.lambda.tests
 {
@@ -60,14 +61,22 @@ semaphore:foo
         }
 
         [Fact]
+        public void Semaphore_Throws()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+semaphore
+"));
+        }
+
+        [Fact]
         public async Task Semaphore_01Async()
         {
             ForkSlot1.ExecutionCount = 0;
             var lambda = await Common.EvaluateAsync(@"
 wait.fork
-   wait.semaphore:foo
+   wait.semaphore:foo2
       fork-slot-2
-wait.semaphore:foo
+wait.semaphore:foo2
    fork-slot-2
 ");
             Assert.Equal(2, ForkSlot1.ExecutionCount);
