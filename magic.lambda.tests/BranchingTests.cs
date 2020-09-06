@@ -4,6 +4,7 @@
  */
 
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace magic.lambda.tests
@@ -13,21 +14,86 @@ namespace magic.lambda.tests
         [Fact]
         public void If_01()
         {
-            var lambda = Common.Evaluate(".result\nif\n   .:bool:true\n   .lambda\n      set-value:x:../*/.result\n         .:OK");
+            var lambda = Common.Evaluate(@"
+.result
+if
+   .:bool:true
+   .lambda
+      set-value:x:../*/.result
+         .:OK");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void IfWithOr()
+        {
+            var lambda = Common.Evaluate(@"
+.result
+if
+   or
+      .:bool:false
+      .:bool:true
+   .lambda
+      set-value:x:../*/.result
+         .:OK");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public async Task IfWithOrAsync()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.result
+wait.if
+   wait.or
+      .:bool:false
+      .:bool:true
+   .lambda
+      set-value:x:../*/.result
+         .:OK");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public async Task If_01Async()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.result
+wait.if
+   .:bool:true
+   .lambda
+      set-value:x:../*/.result
+         .:OK");
             Assert.Equal("OK", lambda.Children.First().Value);
         }
 
         [Fact]
         public void If_02()
         {
-            var lambda = Common.Evaluate(".result\nif\n   and\n      .:bool:true\n      .:bool:true\n   .lambda\n      set-value:x:../*/.result\n         .:OK");
+            var lambda = Common.Evaluate(@"
+.result
+if
+   and
+      .:bool:true
+      .:bool:true
+   .lambda
+      set-value:x:../*/.result
+         .:OK");
             Assert.Equal("OK", lambda.Children.First().Value);
         }
 
         [Fact]
         public void If_03()
         {
-            var lambda = Common.Evaluate(".result\nif\n   and\n      .:bool:true\n      .:bool:false\n   .lambda\n      set-value:x:../*/.result\n         .:FAILURE");
+            var lambda = Common.Evaluate(@"
+.result
+if
+   and
+      .:bool:true
+      .:bool:false
+   .lambda
+      set-value:x:../*/.result
+         .:FAILURE");
             Assert.Null(lambda.Children.First().Value);
         }
 
