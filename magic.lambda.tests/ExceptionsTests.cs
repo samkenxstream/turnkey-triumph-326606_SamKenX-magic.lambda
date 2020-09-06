@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Xunit;
 using magic.node.extensions;
 using magic.lambda.exceptions;
+using System;
 
 namespace magic.lambda.tests
 {
@@ -156,7 +157,58 @@ wait.try
    set-value:x:@.throws
       .:bool:true
 ");
-            Assert.Equal(true, lambda.Children.First().Value);
+            Assert.True(lambda.Children.First().Get<bool>());
+        }
+
+        [Fact]
+        public void ThrowsCSharp_01()
+        {
+            HyperlambdaException ex = null;
+            try
+            {
+                throw new HyperlambdaException();
+            }
+            catch(HyperlambdaException ex2)
+            {
+                ex = ex2;
+            }
+            Assert.Equal(500, ex.Status);
+            Assert.False(ex.IsPublic);
+        }
+
+        [Fact]
+        public void ThrowsCSharp_02()
+        {
+            HyperlambdaException ex = null;
+            try
+            {
+                throw new HyperlambdaException("foo");
+            }
+            catch(HyperlambdaException ex2)
+            {
+                ex = ex2;
+            }
+            Assert.Equal(500, ex.Status);
+            Assert.False(ex.IsPublic);
+            Assert.Equal("foo", ex.Message);
+        }
+
+        [Fact]
+        public void ThrowsCSharp_03()
+        {
+            HyperlambdaException ex = null;
+            try
+            {
+                throw new HyperlambdaException("foo", new ArgumentException());
+            }
+            catch(HyperlambdaException ex2)
+            {
+                ex = ex2;
+            }
+            Assert.Equal(500, ex.Status);
+            Assert.False(ex.IsPublic);
+            Assert.Equal("foo", ex.Message);
+            Assert.Equal(typeof(ArgumentException), ex.InnerException.GetType());
         }
     }
 }

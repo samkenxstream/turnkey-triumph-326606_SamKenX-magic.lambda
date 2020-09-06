@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using magic.node.extensions;
 
 namespace magic.lambda.tests
 {
@@ -23,6 +24,7 @@ eq
             Assert.Equal(true, lambda.Children.Skip(1).First().Value);
         }
 
+        [Fact]
         public async Task Eq_01Async()
         {
             var lambda = await Common.EvaluateAsync(@"
@@ -30,7 +32,7 @@ eq
 wait.eq
    get-value:x:../*/.foo1
    .:OK");
-            Assert.Equal(true, lambda.Children.Skip(1).First().Value);
+            Assert.True(lambda.Children.Skip(1).First().Get<bool>());
         }
 
         [Fact]

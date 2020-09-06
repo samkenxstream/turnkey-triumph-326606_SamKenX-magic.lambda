@@ -25,7 +25,7 @@ namespace magic.lambda.tests
             Assert.True(lambda.Children.First().Children.Count() > 10);
             foreach (var idx in lambda.Children.First().Children.Select(x => x.GetEx<string>()))
             {
-                Assert.True(idx.StartsWith("wait."));
+                Assert.StartsWith("wait.", idx);
             }
         }
     }

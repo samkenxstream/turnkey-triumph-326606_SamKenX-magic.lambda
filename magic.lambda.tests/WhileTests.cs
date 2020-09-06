@@ -76,7 +76,7 @@ while
          get-nodes:x:../*/.src/0
       remove-nodes:x:../*/.src/0
       return:done");
-            Assert.Equal(1, lambda.Children.Skip(1).First().Children.Count());
+            Assert.Single(lambda.Children.Skip(1).First().Children);
         }
 
         [Fact]
@@ -95,7 +95,7 @@ wait.while
          get-nodes:x:../*/.src/0
       remove-nodes:x:../*/.src/0
       return:done");
-            Assert.Equal(1, lambda.Children.Skip(1).First().Children.Count());
+            Assert.Single(lambda.Children.Skip(1).First().Children);
         }
 
         [Fact]
