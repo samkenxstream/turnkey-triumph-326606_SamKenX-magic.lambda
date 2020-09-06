@@ -50,8 +50,7 @@ namespace magic.lambda.loops
             while (true)
             {
                 // Checking if we've passed our maximum number of iterations.
-                if (iterations++ == _maxIterations)
-                    throw new ArgumentException($"Your [while] loop exceeded the maximum number of iterations, which are {_maxIterations}. Refactor your Hyperlambda, or increase your configuration setting.");
+                iterations = SanityCheckIterations(iterations);
 
                 // Making sure we can reset back to original nodes after every single iteration.
                 var old = input.Children.Select(x => x.Clone()).ToList();
@@ -103,8 +102,7 @@ namespace magic.lambda.loops
             while (true)
             {
                 // Checking if we've passed our maximum number of iterations.
-                if (iterations++ == _maxIterations)
-                    throw new ArgumentException($"Your [while] loop exceeded the maximum number of iterations, which are {_maxIterations}. Refactor your Hyperlambda, or increase your configuration setting.");
+                iterations = SanityCheckIterations(iterations);
 
                 // Making sure we can reset back to original nodes after every single iteration.
                 var old = input.Children.Select(x => x.Clone()).ToList();
@@ -142,6 +140,13 @@ namespace magic.lambda.loops
         {
             if (input.Children.Count() != 2)
                 throw new ArgumentException("[while] can have maximum one child node");
+        }
+
+        int SanityCheckIterations(int iterations)
+        {
+            if (iterations++ == _maxIterations)
+                throw new ArgumentException($"Your [while] loop exceeded the maximum number of iterations, which are {_maxIterations}. Refactor your Hyperlambda, or increase your configuration setting.");
+            return iterations;
         }
 
         #endregion
