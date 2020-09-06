@@ -118,7 +118,12 @@ which resolves an object from your IoC container, using the name of the node as 
 
 If you want to create your own `ISlot` classes, you'll have to reference the NuGet 
 called `magic.signals.contracts`, implement the `ISlot` interface, and mark your class with the `Slot` attribute,
-passing in the name of your slot as your `Name` property.
+passing in the name of your slot as your `Name` property. Below is a list of things you'll have to do, in the
+specified order.
+
+1. Reference NuGet package `magic.signals.contracts` in your project.
+2. Create your class, and implement the `ISlot` interface.
+3. Mark your class with the `Slot` attribute, giving it an adequate `Name` property value.
 
 ### The gory details
 
