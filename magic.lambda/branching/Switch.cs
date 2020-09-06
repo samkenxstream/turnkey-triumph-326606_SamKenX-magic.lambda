@@ -78,7 +78,7 @@ namespace magic.lambda.branching
         }
 
         /*
-         * Returns the node to execute, if any.
+         * Sanity checks invocation.
          */
         void SanityCheckInvocation(Node input)
         {
