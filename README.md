@@ -89,7 +89,9 @@ namespace acme.foo
     {
         public void Signal(ISignaler signaler, Node input)
         {
-            input.Value = "Hello World";
+            input.Value = input.Children.First().Get<int>() +
+               input.Children.Skipe(1).First().Get<int>();
+            input.Clear();
         }
     }
 }
@@ -99,6 +101,14 @@ The above will result in a slot you can invoke from Hyperlambda using the follow
 
 ```
 acme.foo
+   arg1:5
+   arg2:7
+```
+
+Which of course will result in the following after having been executed.
+
+```
+acme.foo:int:12
 ```
 
 Notice the relationship between the `[Slot(Name = "acme.foo")]` C# code, and the way we invoke the `acme.foo`
