@@ -76,7 +76,7 @@ after executing its custom logic, etc.
 
 To understand the relationship between C# and Hyperlambda, it might be beneficial for you to analyze the
 following code. The following code creates a new `ISlot` for you, implementing the interface found in
-the NuGet package called _"magic.signals"_.
+the NuGet package called _"magic.signals.contracts"_.
 
 ```csharp
 using magic.node;
@@ -113,19 +113,21 @@ acme.foo:int:12
 ```
 
 Notice the relationship between the `[Slot(Name = "acme.foo")]` C# code, and the way we invoke the `acme.foo`
-slot from Hyperlambda afterwards. It might help to imagine Hyperlambda as simply a string/type Dictionary,
+slot from Hyperlambda afterwards. It might help to imagine Hyperlambda as a simple string/type Dictionary,
 which resolves an object from your IoC container, using the name of the node as the key.
 
-If you want to create your own `ISlot` classes, you'll have to reference the NuGet 
-called `magic.signals.contracts`, implement the `ISlot` interface, and mark your class with the `Slot` attribute,
-passing in the name of your slot as your `Name` property. Below is a list of things you'll have to do, in the
-specified order.
+To create your own slots, follow the recipe below.
 
-1. Reference NuGet package `magic.signals.contracts` in your project.
+1. Reference the NuGet package `magic.signals.contracts` in your project.
 2. Create your class, and implement the `ISlot` interface.
 3. Mark your class with the `Slot` attribute, giving it an adequate `Name` property value.
 
+**Notice** - You can also implement `ISlotAsync` if you want to create an `async` slot.
+
 ### The gory details
+
+At the heart of Hyperlambda is the **[eval]** slot, this slot is responsible for executing your lambda object,
+and it follows a couple of simple rules.
 
 All nodes starting with a _"."_ will be ignored, and not attempted to raised from the Hyperlambda evaluator.
 This has two benefits.
