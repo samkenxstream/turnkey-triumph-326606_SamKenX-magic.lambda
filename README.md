@@ -165,10 +165,6 @@ mail.pop3.fetch
 The `ISlot` called **[mail.pop3.fetch]** will invoke the above **[.lambda]** object once for each email
 it finds on the POP3 server it connects to.
 
-If this sounds complex to you, don't worry and just play around with existing snippets in your _"Evaluator"_
-component, which should have tons of documentation and example snippets for you, that you can play around
-with, to easily understand Hyperlambda by trying it out for yourself.
-
 ### Tokens
 
 The separating of a node's name and its value, is done by using a ":" character. To the left is the node's
@@ -209,7 +205,7 @@ and their children collection - For either to manipulate these, or read their va
 
 Notice, Hyperlambda does not separate between a _"variable"_ and a _"function invocation"_ - Hence, a node
 might serve as both at the same time. This allows you to dynamically modify your lambda structure, as you
-traverse it, and executes it - But this creates another problem for you, which is that you will need
+traverse it, and execute it - But this creates another problem for you, which is that you will need
 a mechanism to store data. This is accomplished by prefixing a node's name with a "." character, at which point
 the Hyperlambda evaluator will ignore it, as it is traversing your tree, and _not_ attempt to signal
 that particular node as a slot.
