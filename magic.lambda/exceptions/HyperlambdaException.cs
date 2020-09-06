@@ -88,6 +88,7 @@ namespace magic.lambda.exceptions
 
         #region [ -- Serialization implementation -- ]
 
+        /// <inheritdoc/>
         [SecurityPermissionAttribute(SecurityAction.Demand, SerializationFormatter = true)]
         protected HyperlambdaException(SerializationInfo info, StreamingContext context)
             : base(info, context)
@@ -96,6 +97,7 @@ namespace magic.lambda.exceptions
             this.Status = (int)info.GetValue("Status", typeof(int));
         }
 
+        /// <inheritdoc/>
         [SecurityPermissionAttribute(SecurityAction.Demand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
