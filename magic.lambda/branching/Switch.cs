@@ -51,21 +51,7 @@ namespace magic.lambda.branching
          */
         Node GetExecutionNode(Node input)
         {
-            if (!input.Children.Any(x => x.Name == "case" || x.Name == "wait.case"))
-                throw new ArgumentException("[switch] must have one at least one [case] child");
-
-            if (input.Children.Any(x => 
-                x.Name != "case" &&
-                x.Name != "default" &&
-                x.Name != "wait.case" &&
-                x.Name != "wait.default"))
-                throw new ArgumentException("[switch] can only handle [case] and [default] children");
-
-            if (input.Children.Any(x => (x.Name == "case" || x.Name == "wait.case") && x.Value == null))
-                throw new ArgumentException("[case] with null value found");
-
-            if (input.Children.Any(x => (x.Name == "default" || x.Name == "wait.default") && x.Value != null))
-                throw new ArgumentException("[default] with non-null value found");
+            SanityCheckInvocation(input);
 
             var result = input.GetEx<object>();
 
@@ -89,6 +75,28 @@ namespace magic.lambda.branching
                 return executionNode;
             }
             return null;
+        }
+
+        /*
+         * Returns the node to execute, if any.
+         */
+        void SanityCheckInvocation(Node input)
+        {
+            if (!input.Children.Any(x => x.Name == "case" || x.Name == "wait.case"))
+                throw new ArgumentException("[switch] must have one at least one [case] child");
+
+            if (input.Children.Any(x => 
+                x.Name != "case" &&
+                x.Name != "default" &&
+                x.Name != "wait.case" &&
+                x.Name != "wait.default"))
+                throw new ArgumentException("[switch] can only handle [case] and [default] children");
+
+            if (input.Children.Any(x => (x.Name == "case" || x.Name == "wait.case") && x.Value == null))
+                throw new ArgumentException("[case] with null value found");
+
+            if (input.Children.Any(x => (x.Name == "default" || x.Name == "wait.default") && x.Value != null))
+                throw new ArgumentException("[default] with non-null value found");
         }
 
         #endregion
