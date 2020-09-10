@@ -8,7 +8,6 @@ using System.Linq;
 using Xunit;
 using magic.node;
 using magic.node.extensions;
-using magic.node.expressions;
 
 namespace magic.lambda.tests
 {

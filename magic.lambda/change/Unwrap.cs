@@ -7,7 +7,6 @@ using System;
 using System.Linq;
 using magic.node;
 using magic.node.extensions;
-using magic.node.expressions;
 using magic.signals.contracts;
 
 namespace magic.lambda.change
