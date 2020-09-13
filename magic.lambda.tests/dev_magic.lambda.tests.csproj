@@ -27,9 +27,4 @@
     <ProjectReference Include="..\magic.lambda\dev_magic.lambda.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Microsoft.Extensions.Configuration">
-    </Reference>
-  </ItemGroup>
-
 </Project>
