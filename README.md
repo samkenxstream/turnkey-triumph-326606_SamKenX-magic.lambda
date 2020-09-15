@@ -10,12 +10,6 @@ making them easily available for you in your Hyperlambda code. Althought technic
 
 ```
 mail.smtp.send
-   server
-      host:foo.com
-      port:123
-      secure:true
-      username:xxx
-      password:yyy
    message
       to
          John Doe:john@doe.com
