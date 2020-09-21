@@ -799,11 +799,14 @@ to be passed in as its main value.
 sleep:1000
 ```
 
+**Notice** - You should really use the _"wait."_ overload for this slot, if you choose to use
+it at all - Since the synchronous version will lead to thread starvation, if used too frequently.
+
 ## Miscellaneous slots
 
 ### [vocabulary]
 
-Returns the name of every static slot in your system, optional passing in a string,or an expression leading to
+Returns the name of every static slot in your system, optional passing in a string, or an expression leading to
 a string, which is a filtering condition where the slot must _start_ with the filter in its name, to be considered
 a part of the end result.
 
@@ -814,9 +817,6 @@ vocabulary
 // Returns only slots starting with [io.file]
 vocabulary:io.file
 ```
-
-**Notice** - You should really use the _"wait."_ overload for this slot, since the synchronous version
-will lead to thread starvation, if used too frequently.
 
 ### [apply]
 
