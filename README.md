@@ -685,6 +685,8 @@ convert:x:-
    type:int
 ```
 
+## Exceptions
+
 ### [try]
 
 This slot allows you to create a try/catch/finally block of lambda, from where exceptions are caught,
@@ -703,9 +705,13 @@ try
 
 This slot simply throws an exception, with the exception message taken from its value.
 See the **[try]** slot for an example. Notice, you can make the exception propagate to the client
-by adding the **[public]** parameter, and settings its value to boolean _"true"_. At which point
+by adding a **[public]** parameter, and set its value to boolean _"true"_. At which point
 the exception will be returned to the client, even in release builds. Otherwise, the exception
-will only be visible in debug builds, and never returned to the client.
+will only be visible in debug builds, and never returned to the client. You can also modify
+the **[status]** HTTP return value that's returned to the client, to become e.g. 404,
+indicating _"not found"_, etc.
+
+## Loops
 
 ### [for-each]
 
