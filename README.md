@@ -219,7 +219,7 @@ What the above code basically translates into, is.
 
 > Set the value of the [.dest] node to the value of [.src]
 
-## Reference documentation
+## Branching and conditional execution
 
 Magic Lambda contains the following slots. Most of these slots also have async (wait.) overrides, which
 will be executed asynchronously using async tasks from .Net.
@@ -241,7 +241,7 @@ if
          .:yup!
 ```
 
-All conditional slots, including **[if]**, accepts optionally slots as their first condition argument.
+All conditional slots, including **[if]**, optionally accepts slots as their first condition argument.
 This allows you to invoke slots, treating the return value of the slot as the condition deciding
 whether or not the **[.lambda]** object should be executed or not. Below is an example.
 
@@ -249,6 +249,7 @@ whether or not the **[.lambda]** object should be executed or not. Below is an e
 .arguments
    foo:bool:true
 .dest
+
 if
    get-value:x:@.arguments/*/foo
    .lambda
@@ -258,7 +259,7 @@ if
 
 ### [else-if]
 
-**[else-if]** is the younger brother of **[if]**, and must be preceeded by its older brother, or other **[else-if]** nodes,
+**[else-if]** is the younger sibling of **[if]**, and must be preceeded by its older sibling, or other **[else-if]** nodes,
 and will only be evaluated if all of its previous conditional slots evaluates to false - At which point **[else-if]** is
 allowed to test its condition - And only if it evaluates to true, evaluate its lambda object. Semantically **[else-if]**
 is similar to **[if]**, in that it requires exactly two arguments with the same structure as **[if]**.
@@ -305,6 +306,53 @@ else
    set-value:x:@.dest
       .:nope
 ```
+
+### [switch]
+
+**[switch]** works similarly as a switch/case block in a traditional programming language, and will find the
+first **[case]** node with a value matching the evaluated value of the **[switch]** node, and execute that
+**[case]** node as a lambda object.
+
+```
+.val:foo
+.result
+switch:x:@.val
+   case:bar
+      set-value:x:@.result
+         .:Oops
+   case:foo
+      set-value:x:@.result
+         .:Success!
+```
+
+The **[switch]** slot can only contain two children nodes, **[case]** and **[default]**. The **[default]** node
+will be evaluated if _none_ of the **[case]** node's values are matching the evaluated value of your **[switch]**.
+Try evaluating the following in your _"Evaluator"_ to understand what I mean.
+
+```
+.val:fooXX
+.result
+switch:x:@.val
+   case:bar
+      set-value:x:@.result
+         .:Oops
+   case:foo
+      set-value:x:@.result
+         .:Oops2.0
+   default
+      set-value:x:@.result
+         .:Success!
+```
+
+In the above, the expression evaluated in the switch, which is `@.val` will become _"fooXX"_ after evaluating it.
+None of its children **[case]** nodes contains this as an option, hence the **[default]** node will be evaluated,
+and this results in setting the **[.result]** node's value to _"Success!"_.
+
+**[default]** _cannot_ have a value, and all your **[case]** nodes must have a _constant_ value, meaning not
+an expression. However, any types can be used as values for your **[case]** nodes. And your **[switch]** node
+must at the very least have minimum one **[case]** node. The **[default]** node is optional though.
+
+## Comparisons
 
 ### [eq]
 
@@ -367,6 +415,8 @@ mte
    get-value:x:@.src1
    .:int:5
 ```
+
+## Boolean logical conditions
 
 ### [exists]
 
@@ -440,54 +490,11 @@ not
 **[not]** will also evaluate its argument, allowing you to use it in richer comparison trees, the same you could do
 with both **[or]** and **[and]**.
 
-### [switch]
-
-**[switch]** works similarly as a switch/case block in a traditional programming language, and will find the
-first **[case]** node with a value matching the evaluated value of the **[switch]** node, and execute that
-**[case]** node as a lambda object.
-
-```
-.val:foo
-.result
-switch:x:@.val
-   case:bar
-      set-value:x:@.result
-         .:Oops
-   case:foo
-      set-value:x:@.result
-         .:Success!
-```
-
-The **[switch]** slot can only contain two children nodes, **[case]** and **[default]**. The **[default]** node
-will be evaluated if _none_ of the **[case]** node's values are matching the evaluated value of your **[switch]**.
-Try evaluating the following in your _"Evaluator"_ to understand what I mean.
-
-```
-.val:fooXX
-.result
-switch:x:@.val
-   case:bar
-      set-value:x:@.result
-         .:Oops
-   case:foo
-      set-value:x:@.result
-         .:Oops2.0
-   default
-      set-value:x:@.result
-         .:Success!
-```
-
-In the above, the expression evaluated in the switch, which is `@.val` will become _"fooXX"_ after evaluating it.
-None of its children **[case]** nodes contains this as an option, hence the **[default]** node will be evaluated,
-and this results in setting the **[.result]** node's value to _"Success!"_.
-
-**[default]** _cannot_ have a value, and all your **[case]** nodes must have a _constant_ value, meaning not
-an expression. However, any types can be used as values for your **[case]** nodes. And your **[switch]** node
-must at the very least have minimum one **[case]** node. The **[default]** node is optional though.
+## Modifying your graph
 
 ### [add]
 
-This slot allws you to dynamically add nodes into a destination node. Its primary argument is the destination,
+This slot allows you to dynamically add nodes into a destination node. Its primary argument is the destination,
 and it assumes that each children is a collection of nodes it should append to the destination node's children
 collection. The reasons for this additional level of indirection, is because the **[add]** slot might have
 children that are by themselves slot invocations, which it will evaluate before it starts adding the children
@@ -560,6 +567,20 @@ This slot will remove all nodes its expression is pointing to.
 remove-nodes:x:@.data/*/foo2
 ```
 
+### [set-value]
+
+Changes the value of a node referenced as its main expression to whatever its single source happens to be.
+Notice, when you invoke a slot that tries to change the value, name, or the node itself of some expression,
+and you supply a source expression to your invocation - Then the result of the source expression
+_cannot_ return more than one result. The destination expression however can modify multiple nodes
+at the same time.
+
+```
+.foo
+set-value:x:@.foo
+   .:SUCCESS
+```
+
 ### [set-name]
 
 Changes the name of a node referenced as its main expression to whatever its single source happens to be.
@@ -569,16 +590,6 @@ Changes the name of a node referenced as its main expression to whatever its sin
    old-name
 set-name:x:@.foo/*
    .:new-name
-```
-
-### [set-value]
-
-Changes the value of a node referenced as its main expression to whatever its single source happens to be.
-
-```
-.foo
-set-value:x:@.foo
-   .:SUCCESS
 ```
 
 ### [unwrap]
@@ -594,6 +605,30 @@ unwrap:x:+
 
 In the above example, before the **[.dest]** node is reached by the Hyperlambda instruction pointer, the value
 of the **[.dest]** node will have been _"unwrapped"_ (evaluated), and its value will be _"Hello World"_.
+When you invoke lambda objects that are cloned for some reasons, this slot becomes very handy, since
+it allows you to _"forward evaluate"_ expressions inside your lambda object. It's also useful when
+you have expressions inside for instance a **[return]** slot, and you want to return the _value_
+the expression evaluates to, and not the expression itself.
+
+## Source slots
+
+### [get-value]
+
+Returns the value of the node its expression is pointing to.
+
+```
+.data:Hello World
+get-value:x:-
+```
+
+### [get-name]
+
+Returns the name of the node referenced in its expression.
+
+```
+.foo
+get-name:x:-
+```
 
 ### [get-count]
 
@@ -604,15 +639,6 @@ This slot returns the number of nodes its expression is pointing to.
    foo1
    foo2
 get-count:x:@.data/*
-```
-
-### [get-name]
-
-Returns the name of the node referenced in its expression.
-
-```
-.foo
-get-name:x:-
 ```
 
 ### [get-nodes]
@@ -626,20 +652,12 @@ Returns the nodes its expression is referencing.
 get-nodes:x:-/*
 ```
 
-### [get-value]
-
-Returns the value of the node its expression is pointing to.
-
-```
-.data:Hello World
-get-value:x:-
-```
-
 ### [reference]
 
 This slot will evaluate its expression, and add the entire node the expression is pointing to, as a referenced node into
-its value. This allows you to pass a node _into_ a slot, and have that slot modify the node itself by reference,
-which might sometimes be useful to have slots modify some original graph object, or parts of a graph.
+its value. This allows you to pass a node _into_ a slot by reference, and have that slot modify the node itself, or
+its children. This might sometimes be useful to have slots modify some original graph object, or parts of a graph -
+Or get access to iterate over parts of your graph object's children.
 
 ```
 .foo
@@ -648,9 +666,13 @@ set-value:x:-/#
    .:Yup!
 ```
 
-You can think of this slot as the singular version og **[get-nodes]**, except instead of returning multiple
+You can think of this slot as the singular version of **[get-nodes]**, except instead of returning multiple
 nodes, it assumes its expression only points to a single node, and instead of returning a copy of the node,
 it returns the actual node by reference.
+
+**Notice** - The `#` iterator above, will enter into the node referenced as a value of its current
+result - Implying it allows you to deeply traverse nodes passed in as references. This is sometimes
+useful in combination with referenced nodes, passed in as values of other nodes.
 
 ### [convert]
 
