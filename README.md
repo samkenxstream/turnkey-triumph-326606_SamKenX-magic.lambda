@@ -155,7 +155,7 @@ mail.pop3.fetch
 ```
 
 The `ISlot` called **[mail.pop3.fetch]** will invoke the above **[.lambda]** object once for each email
-it finds on the POP3 server it connects to.
+it finds on the POP3 server it connects to. It will use the **[eval]* slot to do this.
 
 ## Tokens
 
@@ -187,6 +187,8 @@ or single line comments, like the following example illustrates.
 
 // Single line comment.
 ```
+
+You _cannot_ put comments on lines containing nodes however.
 
 ## Lambda expressions
 
