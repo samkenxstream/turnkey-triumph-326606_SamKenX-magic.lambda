@@ -6,6 +6,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using magic.node.extensions;
 using Xunit;
 
 namespace magic.lambda.tests
@@ -195,6 +196,82 @@ wait.if
       set-value:x:../*/.result
          .:OK");
             Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void IfShortCircuitAnd()
+        {
+            var lambda = Common.Evaluate(@"
+.arg1:bool:false
+.arg2:bool:false
+.result
+if
+   and
+      get-value:x:@.arg1
+      get-value:x:@.arg2
+   .lambda
+      set-value:x:../*/.result
+         .:OK");
+            Assert.NotEqual("OK", lambda.Children.Skip(2).First().Value);
+            Assert.Equal(typeof(bool), lambda.Children.Skip(3).First().Children.First().Children.First().Value.GetType());
+            Assert.Equal(typeof(Expression), lambda.Children.Skip(3).First().Children.First().Children.Skip(1).First().Value.GetType());
+        }
+
+        [Fact]
+        public void IfShortCircuitOr()
+        {
+            var lambda = Common.Evaluate(@"
+.arg1:bool:true
+.arg2:bool:false
+.result
+if
+   or
+      get-value:x:@.arg1
+      get-value:x:@.arg2
+   .lambda
+      set-value:x:../*/.result
+         .:OK");
+            Assert.Equal("OK", lambda.Children.Skip(2).First().Value);
+            Assert.Equal(typeof(bool), lambda.Children.Skip(3).First().Children.First().Children.First().Value.GetType());
+            Assert.Equal(typeof(Expression), lambda.Children.Skip(3).First().Children.First().Children.Skip(1).First().Value.GetType());
+        }
+
+        [Fact]
+        public async Task IfShortCircuitAndAsync()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.arg1:bool:false
+.arg2:bool:false
+.result
+wait.if
+   wait.and
+      get-value:x:@.arg1
+      get-value:x:@.arg2
+   .lambda
+      set-value:x:../*/.result
+         .:OK");
+            Assert.NotEqual("OK", lambda.Children.Skip(2).First().Value);
+            Assert.Equal(typeof(bool), lambda.Children.Skip(3).First().Children.First().Children.First().Value.GetType());
+            Assert.Equal(typeof(Expression), lambda.Children.Skip(3).First().Children.First().Children.Skip(1).First().Value.GetType());
+        }
+
+        [Fact]
+        public async Task IfShortCircuitOrAsync()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.arg1:bool:true
+.arg2:bool:false
+.result
+wait.if
+   wait.or
+      get-value:x:@.arg1
+      get-value:x:@.arg2
+   .lambda
+      set-value:x:../*/.result
+         .:OK");
+            Assert.Equal("OK", lambda.Children.Skip(2).First().Value);
+            Assert.Equal(typeof(bool), lambda.Children.Skip(3).First().Children.First().Children.First().Value.GetType());
+            Assert.Equal(typeof(Expression), lambda.Children.Skip(3).First().Children.First().Children.Skip(1).First().Value.GetType());
         }
 
         [Fact]

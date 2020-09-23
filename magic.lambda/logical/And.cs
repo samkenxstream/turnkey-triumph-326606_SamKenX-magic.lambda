@@ -7,7 +7,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using magic.node;
-using magic.node.extensions;
 using magic.signals.contracts;
 
 namespace magic.lambda.logical
@@ -28,8 +27,7 @@ namespace magic.lambda.logical
         public void Signal(ISignaler signaler, Node input)
         {
             SanityCheck(input);
-            signaler.Signal("eval", input);
-            input.Value = IsTrue(input);
+            input.Value = !Common.Signal(signaler, input, false);
         }
 
         /// <summary>
@@ -41,21 +39,10 @@ namespace magic.lambda.logical
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
             SanityCheck(input);
-            await signaler.SignalAsync("wait.eval", input);
-            input.Value = IsTrue(input);
+            input.Value = !await Common.SignalAsync(signaler, input, false);
         }
 
         #region [ -- Private helper methods -- ]
-
-        bool IsTrue(Node input)
-        {
-            foreach (var idx in input.Children)
-            {
-                if (!idx.GetEx<bool>())
-                    return false;
-            }
-            return true;
-        }
 
         void SanityCheck(Node input)
         {
