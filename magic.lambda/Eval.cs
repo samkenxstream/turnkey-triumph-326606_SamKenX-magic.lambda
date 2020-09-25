@@ -44,25 +44,6 @@ namespace magic.lambda
         #region [ -- Private helper methods -- ]
 
         /*
-         * Helper to retrieve execution nodes for slot.
-         */
-        IEnumerable<Node> GetNodes(Node input)
-        {
-            // Sanity checking invocation. Notice non [eval] keywords might have expressions and children.
-            if ((input.Name == "eval" || input.Name == "wait.eval" || input.Name == "*eval") && input.Value != null && input.Children.Any())
-                throw new ArgumentException("[eval] cannot handle both expression values and children at the same time");
-
-            // Children have precedence, in case invocation is from a non [eval] keyword.
-            if (input.Children.Any())
-                return input.Children;
-            if ((input.Name == "eval" || input.Name == "wait.eval" || input.Name == "*eval") && input.Value != null)
-                return input.Evaluate().SelectMany(x => x.Children);
-
-            // Nothing to evaluate here.
-            return Array.Empty<Node>();
-        }
-
-        /*
          * Executes the given scope.
          */
         void Execute(ISignaler signaler, IEnumerable<Node> nodes)
@@ -73,12 +54,9 @@ namespace magic.lambda
             // Evaluating "scope".
             foreach (var idx in nodes)
             {
-                if (idx.Name == "" || idx.Name.FirstOrDefault() == '.')
-                    continue;
-
                 // Making sure we have no async invocations in our lambda.
                 if (idx.Name.StartsWith("wait.", StringComparison.InvariantCulture))
-                    throw new ArgumentException($"You shouldn't raise an async signal in a synchronous context.");
+                    throw new ArgumentException($"You can't raise an async signal in a synchronous context.");
 
                 // Invoking signal.
                 signaler.Signal(idx.Name, idx);
@@ -100,9 +78,6 @@ namespace magic.lambda
             // Evaluating "scope".
             foreach (var idx in nodes)
             {
-                if (idx.Name == "" || idx.Name.FirstOrDefault() == '.')
-                    continue;
-
                 if (idx.Name.StartsWith("wait.", StringComparison.InvariantCulture))
                     await signaler.SignalAsync(idx.Name, idx);
                 else if (idx.Name.StartsWith("*", StringComparison.InvariantCulture))
@@ -114,6 +89,35 @@ namespace magic.lambda
                 if (terminate != null && (terminate.Value != null || terminate.Children.Any()))
                     return;
             }
+        }
+
+        /*
+         * Helper to retrieve execution nodes for slot.
+         */
+        IEnumerable<Node> GetNodes(Node input)
+        {
+            // Sanity checking invocation. Notice non [eval] keywords might have expressions and children.
+            if (input.Value != null &&
+                input.Children.Any() &&
+                (input.Name == "eval" || input.Name == "wait.eval" || input.Name == "*eval"))
+                throw new ArgumentException("[eval] cannot handle both expression values and children at the same time");
+
+            // Children have precedence, in case invocation is from a non [eval] keyword.
+            if (input.Children.Any())
+                return input
+                    .Children
+                    .Where(x => x.Name != string.Empty && !x.Name.StartsWith("."));
+
+            if (input.Value != null && 
+                (input.Name == "eval" || input.Name == "wait.eval" || input.Name == "*eval"))
+                return input
+                    .Evaluate()
+                    .SelectMany(x => 
+                        x.Children
+                            .Where(x2 => x2.Name != string.Empty && !x2.Name.StartsWith(".")));
+
+            // Nothing to evaluate here.
+            return Array.Empty<Node>();
         }
 
         #endregion
