@@ -17,7 +17,6 @@ namespace magic.lambda.loops
     /// [while] slot that will evaluate its lambda object as long as its condition is true.
     /// </summary>
     [Slot(Name = "while")]
-    [Slot(Name = "wait.while")]
     public class While : ISlot, ISlotAsync
     {
         readonly int _maxIterations;
@@ -108,7 +107,7 @@ namespace magic.lambda.loops
                 var old = input.Children.Select(x => x.Clone()).ToList();
 
                 // This will evaluate the condition.
-                await signaler.SignalAsync("wait.eval", input);
+                await signaler.SignalAsync("eval", input);
 
                 // Verifying we're supposed to proceed into body of [while].
                 if (!input.Children.First().GetEx<bool>())
@@ -120,7 +119,7 @@ namespace magic.lambda.loops
                     throw new ArgumentException("Keyword [while] requires its second child to be [.lambda]");
 
                 // Evaluating "body" lambda of [while].
-                await signaler.SignalAsync("wait.eval", lambda);
+                await signaler.SignalAsync("eval", lambda);
 
                 // Resetting back to original nodes.
                 input.Clear();

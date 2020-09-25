@@ -42,8 +42,7 @@ namespace magic.lambda.slots
             {
                 input.AddRange(_signalProvider.Keys
                     .Where(x => 
-                        !x.StartsWith(".", StringComparison.InvariantCulture) &&
-                        !x.StartsWith("wait."))
+                        !x.StartsWith(".", StringComparison.InvariantCulture))
                     .Select(x => new Node("", x)));
             }
             else
@@ -51,7 +50,6 @@ namespace magic.lambda.slots
                 input.AddRange(_signalProvider.Keys
                     .Where(x => 
                         !x.StartsWith(".", StringComparison.InvariantCulture) && 
-                        !x.StartsWith("wait.") &&
                         x.StartsWith(filter, StringComparison.InvariantCulture))
                     .Select(x => new Node("", x)));
             }

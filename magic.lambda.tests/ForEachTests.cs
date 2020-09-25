@@ -74,7 +74,7 @@ for-each:x:../*/.foo1/*
    bar1
    bar2
    bar3
-wait.for-each:x:../*/.foo1/*
+for-each:x:../*/.foo1/*
    foo2");
             Assert.Equal(3, Foo2Slot.ExecutionCount);
         }
@@ -87,7 +87,7 @@ wait.for-each:x:../*/.foo1/*
    bar1
    bar2
    bar3
-wait.for-each:x:../*/.foo1/*
+for-each:x:../*/.foo1/*
    foo2
    return:done");
             Assert.Equal(1, Foo2Slot.ExecutionCount);
@@ -101,7 +101,7 @@ wait.for-each:x:../*/.foo1/*
    bar1
    bar2
    bar3
-wait.for-each:x:../*/.foo1/*
+for-each:x:../*/.foo1/*
    foo2
    return
       result:done");

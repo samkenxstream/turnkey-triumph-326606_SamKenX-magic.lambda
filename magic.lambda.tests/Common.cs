@@ -49,7 +49,7 @@ namespace magic.lambda.tests
             var evalResult = new Node();
             await signaler.ScopeAsync("slots.result", evalResult, async () =>
             {
-                await signaler.SignalAsync("wait.eval", lambda);
+                await signaler.SignalAsync("eval", lambda);
             });
             return lambda;
         }

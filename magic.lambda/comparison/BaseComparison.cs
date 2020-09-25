@@ -40,7 +40,7 @@ namespace magic.lambda.comparison
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
             SanityCheck(input);
-            await signaler.SignalAsync("wait.eval", input);
+            await signaler.SignalAsync("eval", input);
             input.Value = Compare(
                 input.Children.First().GetEx<object>(),
                 input.Children.Skip(1).First().GetEx<object>());

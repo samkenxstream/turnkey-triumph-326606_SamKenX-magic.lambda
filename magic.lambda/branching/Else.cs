@@ -14,7 +14,6 @@ namespace magic.lambda.branching
     /// [else] slot for matching with an [if] and/or [else-if] slot. Must come after either or the previously mentioned slots.
     /// </summary>
     [Slot(Name = "else")]
-    [Slot(Name = "wait.else")]
     public class Else : ISlot, ISlotAsync
     {
         /// <summary>
@@ -37,7 +36,7 @@ namespace magic.lambda.branching
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
             if (ShouldEvaluate(input))
-                await signaler.SignalAsync("wait.eval", input);
+                await signaler.SignalAsync("eval", input);
         }
 
         #region [ -- Private helper methods -- ]
@@ -53,8 +52,7 @@ namespace magic.lambda.branching
              */
             var previous = input.Previous;
             if (previous == null ||
-                (previous.Name != "if" && previous.Name != "else-if" &&
-                previous.Name != "wait.if" && previous.Name != "wait.else-if"))
+                (previous.Name != "if" && previous.Name != "else-if"))
                 throw new ArgumentException("[else] must have an [if] or [else-if] before it");
 
             return ElseIf.PreviousIsFalse(previous);

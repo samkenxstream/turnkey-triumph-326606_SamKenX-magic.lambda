@@ -16,7 +16,6 @@ namespace magic.lambda.logical
     /// [not] slot, negating the value of its first children's value.
     /// </summary>
     [Slot(Name = "not")]
-    [Slot(Name = "wait.not")]
     public class Not : ISlot, ISlotAsync
     {
         /// <summary>
@@ -40,7 +39,7 @@ namespace magic.lambda.logical
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
             SanityCheck(input);
-            await signaler.SignalAsync("wait.eval", input);
+            await signaler.SignalAsync("eval", input);
             input.Value = !input.Children.First().GetEx<bool>();
         }
 

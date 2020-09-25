@@ -13,7 +13,6 @@ namespace magic.lambda.threading
     /// [fork] slot, allowing you to create and start a new thread.
     /// </summary>
     [Slot(Name = "fork")]
-    [Slot(Name = "wait.fork")]
     public class Fork : ISlot, ISlotAsync
     {
         readonly ThreadRunner _runner;

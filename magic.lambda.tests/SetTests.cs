@@ -61,7 +61,7 @@ set-name:x:../*/.foo1
         {
             var lambda = await Common.EvaluateAsync(@"
 .foo1
-wait.set-name:x:../*/.foo1
+set-name:x:../*/.foo1
    .:.foo2
 ");
             Assert.Equal(".foo2", lambda.Children.First().Name);
@@ -129,7 +129,7 @@ set-value:x:../*/.foo1
         {
             var lambda = await Common.EvaluateAsync(@"
 .foo1
-wait.set-value:x:../*/.foo1
+set-value:x:../*/.foo1
    .:OK
 ");
             Assert.Equal("OK", lambda.Children.First().Value);

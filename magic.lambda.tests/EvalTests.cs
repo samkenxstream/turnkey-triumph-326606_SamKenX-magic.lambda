@@ -71,7 +71,7 @@ eval:x:@.src
         {
             var lambda = await Common.EvaluateAsync(@"
 .src
-wait.eval
+eval
    set-value:x:@.src
       .:OK
 ");

@@ -114,8 +114,8 @@ if
             var lambda = await Common.EvaluateAsync(@"
 .result:OK
 .false:bool:false
-wait.if
-   wait.or
+if
+   or
       .:bool:false
       .:bool:false
       get-value:x:@.false
@@ -130,8 +130,8 @@ wait.if
         {
             var lambda = await Common.EvaluateAsync(@"
 .result:OK
-wait.if
-   wait.or
+if
+   or
       .:bool:false
       .:bool:false
    .lambda
@@ -145,8 +145,8 @@ wait.if
         {
             var lambda = await Common.EvaluateAsync(@"
 .result
-wait.if
-   wait.or
+if
+   or
       .:bool:false
       .:bool:true
    .lambda
@@ -160,7 +160,7 @@ wait.if
         {
             var lambda = await Common.EvaluateAsync(@"
 .result
-wait.if
+if
    .:bool:true
    .lambda
       set-value:x:../*/.result
@@ -188,8 +188,8 @@ if
         {
             var lambda = await Common.EvaluateAsync(@"
 .result
-wait.if
-   wait.and
+if
+   and
       .:bool:true
       .:bool:true
    .lambda
@@ -243,8 +243,8 @@ if
 .arg1:bool:false
 .arg2:bool:false
 .result
-wait.if
-   wait.and
+if
+   and
       get-value:x:@.arg1
       get-value:x:@.arg2
    .lambda
@@ -262,8 +262,8 @@ wait.if
 .arg1:bool:true
 .arg2:bool:false
 .result
-wait.if
-   wait.or
+if
+   or
       get-value:x:@.arg1
       get-value:x:@.arg2
    .lambda
@@ -344,7 +344,7 @@ if
    .lambda
       set-value:x:../*/.result
          .:failure
-wait.else
+else
    set-value:x:../*/.result
       .:OK");
             Assert.Equal("OK", lambda.Children.First().Value);
@@ -433,7 +433,7 @@ if
    .lambda
       set-value:x:../*/.result
          .:failure
-wait.else-if
+else-if
    eq
       get-name:x:../*/.result
       .:.result

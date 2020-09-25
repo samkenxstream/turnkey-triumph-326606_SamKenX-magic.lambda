@@ -73,10 +73,10 @@ semaphore
         {
             ForkSlot1.ExecutionCount = 0;
             var lambda = await Common.EvaluateAsync(@"
-wait.fork
-   wait.semaphore:foo2
+fork
+   semaphore:foo2
       fork-slot-2
-wait.semaphore:foo2
+semaphore:foo2
    fork-slot-2
 ");
             Assert.Equal(2, ForkSlot1.ExecutionCount);
@@ -87,9 +87,9 @@ wait.semaphore:foo2
         {
             ForkSlot1.ExecutionCount = 0;
             var lambda = await Common.EvaluateAsync(@"
-wait.fork
+fork
    fork-slot-1
-wait.sleep:100
+sleep:100
 fork-slot-2
 ");
         }

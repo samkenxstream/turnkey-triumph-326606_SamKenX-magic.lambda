@@ -32,7 +32,7 @@ insert-after:x:-/*
             var lambda = await Common.EvaluateAsync(@"
 .dest
    dest
-wait.insert-after:x:-/*
+insert-after:x:-/*
    .
       .foo1
       .foo2
@@ -62,7 +62,7 @@ insert-before:x:-/*
             var lambda = await Common.EvaluateAsync(@"
 .dest
    dest
-wait.insert-before:x:-/*
+insert-before:x:-/*
    .
       .foo1
       .foo2

@@ -12,7 +12,6 @@ namespace magic.lambda.comparison
     /// [lt] slot returning true if its first child's value is "less than" its second child's value.
     /// </summary>
     [Slot(Name = "lt")]
-    [Slot(Name = "wait.lt")]
     public class Lt : BaseComparison
     {
         #region [ -- Protected overridden methods -- ]

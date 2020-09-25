@@ -15,7 +15,6 @@ namespace magic.lambda.loops
     /// [for-each] slot allowing you to iterate through a list of node, resulting from the evaluation of an expression.
     /// </summary>
     [Slot(Name = "for-each")]
-    [Slot(Name = "wait.for-each")]
     public class ForEach : ISlot, ISlotAsync
     {
         /// <summary>
@@ -71,7 +70,7 @@ namespace magic.lambda.loops
                 input.Insert(0, new Node(".dp", idx));
 
                 // Evaluating "body" lambda of [for-each]
-                await signaler.SignalAsync("wait.eval", input);
+                await signaler.SignalAsync("eval", input);
 
                 // Resetting back to original nodes.
                 input.Clear();

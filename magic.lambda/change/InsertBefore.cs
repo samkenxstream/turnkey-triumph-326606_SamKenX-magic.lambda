@@ -16,7 +16,6 @@ namespace magic.lambda.change
     /// in your lambda graph object.
     /// </summary>
     [Slot(Name = "insert-before")]
-    [Slot(Name = "wait.insert-before")]
     public class InsertBefore : ISlot, ISlotAsync
     {
         /// <summary>
@@ -38,7 +37,7 @@ namespace magic.lambda.change
         /// <returns>An awaitable task.</returns>
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
-            await signaler.SignalAsync("wait.eval", input);
+            await signaler.SignalAsync("eval", input);
             Insert(input);
         }
 

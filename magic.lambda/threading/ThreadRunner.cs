@@ -31,7 +31,7 @@ namespace magic.lambda.threading
         public void Run(Node input)
         {
             // Notice, fire && forget invocation of async method.
-            _signaler.SignalAsync("wait.eval", input);
+            _signaler.SignalAsync("eval", input);
         }
     }
 }

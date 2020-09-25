@@ -16,7 +16,6 @@ namespace magic.lambda.branching
     /// [else-if] slot for branching logic. Must come after either another [else-if] or an [if] slot.
     /// </summary>
     [Slot(Name = "else-if")]
-    [Slot(Name = "wait.else-if")]
     public class ElseIf : ISlot, ISlotAsync
     {
         /// <summary>
@@ -50,11 +49,11 @@ namespace magic.lambda.branching
             if (ShouldEvaluate(input, out Node lambda))
             {
                 // Evaluating condition.
-                await signaler.SignalAsync("wait.eval", input);
+                await signaler.SignalAsync("eval", input);
 
                 // Checking if evaluation of condition evaluated to true.
                 if (input.Children.First().GetEx<bool>())
-                    await signaler.SignalAsync("wait.eval", lambda);
+                    await signaler.SignalAsync("eval", lambda);
             }
         }
 
@@ -74,8 +73,7 @@ namespace magic.lambda.branching
 
             var previous = input.Previous;
             if (previous == null ||
-                (previous.Name != "if" && previous.Name != "else-if" && 
-                previous.Name != "wait.if" && previous.Name != "wait.else-if"))
+                (previous.Name != "if" && previous.Name != "else-if"))
                 throw new ArgumentException("[else-if] must have an [if] or [else-if] before it");
 
             return PreviousIsFalse(previous);
@@ -87,8 +85,7 @@ namespace magic.lambda.branching
 
         static internal bool PreviousIsFalse(Node input)
         {
-            while (input != null && (input.Name == "if" || input.Name == "else-if" ||
-                input.Name == "wait.if" || input.Name == "wait.else-if"))
+            while (input != null && (input.Name == "if" || input.Name == "else-if"))
             {
                 var current = input.Children.First();
                 if (current.Value != null && current.GetEx<bool>())

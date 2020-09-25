@@ -41,12 +41,7 @@ namespace magic.lambda.logical
             foreach (var idx in input.Children)
             {
                 if (idx.Name.Any() && idx.Name.FirstOrDefault() != '.')
-                {
-                    if (idx.Name.StartsWith("wait."))
-                        await signaler.SignalAsync(idx.Name, idx);
-                    else
-                        signaler.Signal(idx.Name, idx);
-                }
+                    await signaler.SignalAsync(idx.Name, idx);
                 if (idx.GetEx<bool>() == condition)
                     return true;
             }

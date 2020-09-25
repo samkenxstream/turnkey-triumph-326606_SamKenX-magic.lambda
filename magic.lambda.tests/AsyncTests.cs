@@ -16,11 +16,11 @@ namespace magic.lambda.tests
         {
             var lambda = await Common.EvaluateAsync(@"
 .dest
-wait.add:x:../*/.dest
+add:x:../*/.dest
    .
       foo1:bar1
       foo2:bar2
-wait.add:x:../*/.dest
+add:x:../*/.dest
    .
       foo1:bar1
       foo2:bar2");

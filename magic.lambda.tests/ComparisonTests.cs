@@ -38,7 +38,7 @@ eq
         {
             var lambda = await Common.EvaluateAsync(@"
 .foo1:OK
-wait.eq
+eq
    get-value:x:../*/.foo1
    .:OK");
             Assert.True(lambda.Children.Skip(1).First().Get<bool>());
@@ -137,7 +137,7 @@ not
         {
             var lambda = await Common.EvaluateAsync(@"
 .foo1:OK
-wait.not
+not
    eq
       get-value:x:../*/.foo1
       .:OK");
@@ -160,7 +160,7 @@ mt
         {
             var lambda = await Common.EvaluateAsync(@"
 .foo1:A
-wait.mt
+mt
    get-value:x:../*/.foo1
    .:B");
             Assert.Equal(false, lambda.Children.Skip(1).First().Value);
@@ -237,7 +237,7 @@ lt
         {
             var lambda = await Common.EvaluateAsync(@"
 .foo1:A
-wait.lt
+lt
    get-value:x:../*/.foo1
    .:B");
             Assert.Equal(true, lambda.Children.Skip(1).First().Value);
@@ -314,7 +314,7 @@ lte
         {
             var lambda = await Common.EvaluateAsync(@"
 .foo1:A
-wait.lte
+lte
    get-value:x:../*/.foo1
    .:A");
             Assert.Equal(true, lambda.Children.Skip(1).First().Value);
@@ -402,7 +402,7 @@ mte
         {
             var lambda = await Common.EvaluateAsync(@"
 .foo1:A
-wait.mte
+mte
    get-value:x:../*/.foo1
    .:A");
             Assert.Equal(true, lambda.Children.Skip(1).First().Value);

@@ -14,7 +14,6 @@ namespace magic.lambda.branching
     /// [case] slot for [switch] slots.
     /// </summary>
     [Slot(Name = "case")]
-    [Slot(Name = "wait.case")]
     public class Case : ISlot, ISlotAsync
     {
         /// <summary>
@@ -37,14 +36,14 @@ namespace magic.lambda.branching
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
             SanityCheckInvocation(input);
-            await signaler.SignalAsync("wait.eval", input);
+            await signaler.SignalAsync("eval", input);
         }
 
         #region [ -- Private helper methods -- ]
 
         void SanityCheckInvocation(Node input)
         {
-            if (input.Parent?.Name != "switch" && input.Parent?.Name != "wait.switch")
+            if (input.Parent?.Name != "switch")
                 throw new ArgumentException("[case] must be a child of [switch]");
         }
 

@@ -59,7 +59,7 @@ try
         public async Task Throws_02_ThrowsAsync()
         {
             await Assert.ThrowsAsync<HyperlambdaException>(async () => await Common.EvaluateAsync(@"
-wait.try
+try
    throw:foo
 "));
         }
@@ -69,7 +69,7 @@ wait.try
         {
             var lambda = await Common.EvaluateAsync(@"
 .throws:bool:false
-wait.try
+try
    .throw:foo
 .catch
    set-value:x:@.throws
@@ -114,8 +114,8 @@ try
         {
             var lambda = await Common.EvaluateAsync(@"
 .throws:bool:false
-wait.try
-   wait.try
+try
+   try
       throw:foo
    .finally
       set-value:x:@.throws
@@ -130,8 +130,8 @@ wait.try
         {
             var lambda = await Common.EvaluateAsync(@"
 .throws:bool:false
-wait.try
-   wait.try
+try
+   try
       throw:foo
    .catch
    .finally
@@ -180,7 +180,7 @@ try
 .public
 .message
 .type
-wait.try
+try
    throw:foo
 .catch
    set-value:x:@.throws
@@ -250,7 +250,7 @@ try
         {
             var lambda = await Common.EvaluateAsync(@"
 .throws:bool:false
-wait.try
+try
    throw:foo
 .catch
    set-value:x:@.throws

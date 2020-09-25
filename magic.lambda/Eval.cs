@@ -17,7 +17,6 @@ namespace magic.lambda
     /// [eval] slot, allowing you to dynamically evaluate a piece of lambda.
     /// </summary>
     [Slot(Name = "eval")]
-    [Slot(Name = "wait.eval")]
     public class Eval : ISlot, ISlotAsync
     {
         /// <summary>
@@ -54,10 +53,6 @@ namespace magic.lambda
             // Evaluating "scope".
             foreach (var idx in nodes)
             {
-                // Making sure we have no async invocations in our lambda.
-                if (idx.Name.StartsWith("wait.", StringComparison.InvariantCulture))
-                    throw new ArgumentException($"You can't raise an async signal in a synchronous context.");
-
                 // Invoking signal.
                 signaler.Signal(idx.Name, idx);
 
@@ -94,7 +89,7 @@ namespace magic.lambda
             // Sanity checking invocation. Notice non [eval] keywords might have expressions and children.
             if (input.Value != null &&
                 input.Children.Any() &&
-                (input.Name == "eval" || input.Name == "wait.eval" || input.Name == "*eval"))
+                input.Name == "eval")
                 throw new ArgumentException("[eval] cannot handle both expression values and children at the same time");
 
             // Children have precedence, in case invocation is from a non [eval] keyword.
@@ -104,7 +99,7 @@ namespace magic.lambda
                     .Where(x => x.Name != string.Empty && !x.Name.StartsWith("."));
 
             if (input.Value != null && 
-                (input.Name == "eval" || input.Name == "wait.eval" || input.Name == "*eval"))
+                input.Name == "eval")
                 return input
                     .Evaluate()
                     .SelectMany(x => 

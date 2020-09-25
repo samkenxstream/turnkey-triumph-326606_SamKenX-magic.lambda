@@ -16,7 +16,6 @@ namespace magic.lambda.threading
     /// only allowing one caller entry into some lambda object at the same time.
     /// </summary>
     [Slot(Name = "sleep")]
-    [Slot(Name = "wait.sleep")]
     public class Sleep : ISlot, ISlotAsync
     {
         /// <summary>

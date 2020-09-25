@@ -20,8 +20,6 @@ namespace magic.lambda.change
     /// </summary>
     [Slot(Name = "set-x")]
     [Slot(Name = "set-value")]
-    [Slot(Name = "wait.set-x")]
-    [Slot(Name = "wait.set-value")]
     public class SetValue : ISlot, ISlotAsync
     {
         /// <summary>
@@ -45,7 +43,7 @@ namespace magic.lambda.change
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
             SanityCheck(input);
-            await signaler.SignalAsync("wait.eval", input);
+            await signaler.SignalAsync("eval", input);
             SetValueToSource(input, input.Evaluate().ToList());
         }
 

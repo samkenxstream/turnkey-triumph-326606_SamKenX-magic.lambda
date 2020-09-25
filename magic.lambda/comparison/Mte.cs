@@ -12,7 +12,6 @@ namespace magic.lambda.comparison
     /// [mtw] slot returning true if its first child's value is "more than or equal" to its second child's value.
     /// </summary>
     [Slot(Name = "mte")]
-    [Slot(Name = "wait.mte")]
     public class Mte : BaseComparison
     {
         #region [ -- Protected overridden methods -- ]

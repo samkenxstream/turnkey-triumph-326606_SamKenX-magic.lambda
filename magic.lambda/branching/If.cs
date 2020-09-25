@@ -16,7 +16,6 @@ namespace magic.lambda.branching
     /// [if] slot, allowing you to do branching in your code.
     /// </summary>
     [Slot(Name = "if")]
-    [Slot(Name = "wait.if")]
     public class If : ISlot, ISlotAsync
     {
         /// <summary>
@@ -46,13 +45,13 @@ namespace magic.lambda.branching
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
             // Evaluating condition.
-            await signaler.SignalAsync("wait.eval", input);
+            await signaler.SignalAsync("eval", input);
 
             // Checking if condition evaluated to true.
             if (input.Children.First().GetEx<bool>())
             {
                 // Retrieving and evaluating lambda node.
-                await signaler.SignalAsync("wait.eval", GetLambdaNode(input));
+                await signaler.SignalAsync("eval", GetLambdaNode(input));
             }
         }
 

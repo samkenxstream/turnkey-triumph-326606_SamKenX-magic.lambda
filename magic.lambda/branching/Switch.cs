@@ -16,7 +16,6 @@ namespace magic.lambda.branching
     /// [switch] slot allowing you to do branching in your code.
     /// </summary>
     [Slot(Name = "switch")]
-    [Slot(Name = "wait.switch")]
     public class Switch : ISlot, ISlotAsync
     {
         /// <summary>
@@ -56,16 +55,15 @@ namespace magic.lambda.branching
             var result = input.GetEx<object>();
 
             var executionNode = input.Children
-                .FirstOrDefault(x => (x.Name == "case" || x.Name == "wait.case") && x.Value.Equals(result)) ??
+                .FirstOrDefault(x => x.Name == "case" && x.Value.Equals(result)) ??
                 input.Children
-                    .FirstOrDefault(x => x.Name == "default" || x.Name == "wait.default");
+                    .FirstOrDefault(x => x.Name == "default");
 
             if (executionNode != null)
             {
                 while (executionNode != null &&
                     !executionNode.Children.Any() &&
-                    executionNode.Name != "default" &&
-                    executionNode.Name != "wait.default")
+                    executionNode.Name != "default")
                 {
                     executionNode = executionNode.Next;
                 }
@@ -82,20 +80,18 @@ namespace magic.lambda.branching
          */
         void SanityCheckInvocation(Node input)
         {
-            if (!input.Children.Any(x => x.Name == "case" || x.Name == "wait.case"))
+            if (!input.Children.Any(x => x.Name == "case"))
                 throw new ArgumentException("[switch] must have one at least one [case] child");
 
             if (input.Children.Any(x => 
                 x.Name != "case" &&
-                x.Name != "default" &&
-                x.Name != "wait.case" &&
-                x.Name != "wait.default"))
+                x.Name != "default"))
                 throw new ArgumentException("[switch] can only handle [case] and [default] children");
 
-            if (input.Children.Any(x => (x.Name == "case" || x.Name == "wait.case") && x.Value == null))
+            if (input.Children.Any(x => x.Name == "case" && x.Value == null))
                 throw new ArgumentException("[case] with null value found");
 
-            if (input.Children.Any(x => (x.Name == "default" || x.Name == "wait.default") && x.Value != null))
+            if (input.Children.Any(x => x.Name == "default" && x.Value != null))
                 throw new ArgumentException("[default] with non-null value found");
         }
 

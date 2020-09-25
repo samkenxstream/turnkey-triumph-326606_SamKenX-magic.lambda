@@ -18,7 +18,6 @@ namespace magic.lambda.threading
     /// only allowing one caller entry into some lambda object at the same time.
     /// </summary>
     [Slot(Name = "semaphore")]
-    [Slot(Name = "wait.semaphore")]
     public class Semaphore : ISlot, ISlotAsync
     {
         static readonly ConcurrentDictionary<string, sys.SemaphoreSlim> _semaphores =
@@ -65,7 +64,7 @@ namespace magic.lambda.threading
             await semaphore.WaitAsync();
             try
             {
-                await signaler.SignalAsync("wait.eval", input);
+                await signaler.SignalAsync("eval", input);
             }
             finally
             {

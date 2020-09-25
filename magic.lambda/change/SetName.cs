@@ -16,7 +16,6 @@ namespace magic.lambda.change
     /// [set-name] slot allowing you to change the names of nodes in your lambda graph object.
     /// </summary>
     [Slot(Name = "set-name")]
-    [Slot(Name = "wait.set-name")]
     public class SetName : ISlot, ISlotAsync
     {
         /// <summary>
@@ -40,7 +39,7 @@ namespace magic.lambda.change
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
             SanityCheck(input);
-            await signaler.SignalAsync("wait.eval", input);
+            await signaler.SignalAsync("eval", input);
             SetNameToSource(input);
         }
 

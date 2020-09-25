@@ -49,7 +49,7 @@ while
    bar1
    bar2
 .dest
-wait.while
+while
    mt
       get-count:x:../*/.src/*
       .:int:0
@@ -127,7 +127,7 @@ while
    bar1
    bar2
 .dest
-wait.while
+while
    mt
       get-count:x:../*/.src/*
       .:int:0
@@ -146,7 +146,7 @@ wait.while
    bar1
    bar2
 .dest
-wait.while
+while
    mt
       get-count:x:../*/.src/*
       .:int:0
@@ -171,7 +171,7 @@ while
         public async Task While_InfiniteLoopAsync()
         {
             await Assert.ThrowsAsync<ArgumentException>(async () => await Common.EvaluateAsync(@"
-wait.while
+while
    .:bool:true
    .lambda"));
         }
@@ -188,7 +188,7 @@ while
         public async Task WhileNoLambdaAsyncThrows()
         {
             await Assert.ThrowsAsync<ArgumentException>(async () => await Common.EvaluateAsync(@"
-wait.while
+while
    .:bool:true"));
         }
 

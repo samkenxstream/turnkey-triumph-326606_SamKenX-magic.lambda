@@ -96,8 +96,8 @@ case:bar
         {
             var lambda = await Common.EvaluateAsync(@".result
 .foo:bar
-wait.switch:x:@.foo
-   wait.case:bar
+switch:x:@.foo
+   case:bar
       set-value:x:@.result
          .:OK");
             Assert.Equal("OK", lambda.Children.First().Value);
@@ -131,10 +131,10 @@ default
         {
             var lambda = await Common.EvaluateAsync(@".result
 .foo:barXX
-wait.switch:x:@.foo
+switch:x:@.foo
    case:bar
       .do-nothing
-   wait.default
+   default
       set-value:x:@.result
          .:OK");
             Assert.Equal("OK", lambda.Children.First().Value);
