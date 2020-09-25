@@ -77,17 +77,5 @@ wait.eval
 ");
             Assert.Equal("OK", lambda.Children.First().Value);
         }
-
-        [Fact]
-        public async Task InvokeEvalAsync_Throws()
-        {
-            await Assert.ThrowsAsync<ArgumentException>(async () => await Common.EvaluateAsync(@"
-.src
-eval
-   wait.eval
-      set-value:x:@.src
-         :OK
-"));
-        }
     }
 }

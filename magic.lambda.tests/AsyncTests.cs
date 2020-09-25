@@ -20,7 +20,7 @@ wait.add:x:../*/.dest
    .
       foo1:bar1
       foo2:bar2
-*add:x:../*/.dest
+wait.add:x:../*/.dest
    .
       foo1:bar1
       foo2:bar2");

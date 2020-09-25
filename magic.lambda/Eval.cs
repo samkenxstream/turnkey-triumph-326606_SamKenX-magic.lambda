@@ -78,12 +78,7 @@ namespace magic.lambda
             // Evaluating "scope".
             foreach (var idx in nodes)
             {
-                if (idx.Name.StartsWith("wait.", StringComparison.InvariantCulture))
-                    await signaler.SignalAsync(idx.Name, idx);
-                else if (idx.Name.StartsWith("*", StringComparison.InvariantCulture))
-                    await signaler.SignalAsync(idx.Name.Substring(1), idx);
-                else
-                    signaler.Signal(idx.Name, idx);
+                await signaler.SignalAsync(idx.Name, idx);
 
                 // Checking if execution for some reasons was terminated.
                 if (terminate != null && (terminate.Value != null || terminate.Children.Any()))

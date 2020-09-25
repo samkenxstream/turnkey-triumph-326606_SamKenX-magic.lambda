@@ -41,13 +41,18 @@ namespace magic.lambda.slots
             if (filter == null)
             {
                 input.AddRange(_signalProvider.Keys
-                    .Where(x => !x.StartsWith(".", StringComparison.InvariantCulture))
+                    .Where(x => 
+                        !x.StartsWith(".", StringComparison.InvariantCulture) &&
+                        !x.StartsWith("wait."))
                     .Select(x => new Node("", x)));
             }
             else
             {
                 input.AddRange(_signalProvider.Keys
-                    .Where(x => !x.StartsWith(".", StringComparison.InvariantCulture) && x.StartsWith(filter, StringComparison.InvariantCulture))
+                    .Where(x => 
+                        !x.StartsWith(".", StringComparison.InvariantCulture) && 
+                        !x.StartsWith("wait.") &&
+                        x.StartsWith(filter, StringComparison.InvariantCulture))
                     .Select(x => new Node("", x)));
             }
         }

@@ -10,7 +10,7 @@
     <Description>A microscopic and super dynamic scripting language and DSL for .Net Core, based upon Hyperlambda syntax, and Super Signals. This project is the Hyperlambda core implementation (keywords) for Magic.</Description>
     <PackageProjectUrl>https://github.com/polterguy/magic.lambda</PackageProjectUrl>
     <PackOnBuild>true</PackOnBuild>
-    <PackageVersion>8.1.18</PackageVersion>
+    <PackageVersion>8.2.0</PackageVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/polterguy/magic.lambda.git</RepositoryUrl>
@@ -39,8 +39,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="magic.node.extensions" Version="8.1.*" />
-    <PackageReference Include="magic.signals.contracts" Version="8.1.*" />
+    <PackageReference Include="magic.node.extensions" Version="8.2.*" />
+    <PackageReference Include="magic.signals.contracts" Version="8.2.*" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.7" />
   </ItemGroup>
 </Project>

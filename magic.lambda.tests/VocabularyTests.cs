@@ -32,11 +32,11 @@ namespace magic.lambda.tests
         [Fact]
         public void VocabularyWithFilter()
         {
-            var lambda = Common.Evaluate(@"vocabulary:wait.");
-            Assert.True(lambda.Children.First().Children.Count() > 10);
+            var lambda = Common.Evaluate(@"vocabulary:whi");
+            Assert.True(lambda.Children.First().Children.Any());
             foreach (var idx in lambda.Children.First().Children.Select(x => x.GetEx<string>()))
             {
-                Assert.StartsWith("wait.", idx);
+                Assert.StartsWith("while", idx);
             }
         }
     }
