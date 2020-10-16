@@ -3,8 +3,10 @@
  * See the enclosed LICENSE file for details.
  */
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
@@ -23,10 +25,15 @@ namespace magic.lambda.logical
          */
         static internal bool Signal(ISignaler signaler, Node input, bool condition)
         {
+            var whitelist = signaler.Peek<List<Node>>("whitelist");
             foreach (var idx in input.Children)
             {
                 if (idx.Name != string.Empty && idx.Name.FirstOrDefault() != '.')
+                {
+                    if (whitelist != null && !whitelist.Any(x => x.Name == idx.Name))
+                        throw new ArgumentException($"Slot [{idx.Name}] doesn't exist in currrent scope");
                     signaler.Signal(idx.Name, idx);
+                }
                 if (idx.GetEx<bool>() == condition)
                     return true;
             }
@@ -38,10 +45,15 @@ namespace magic.lambda.logical
          */
         static internal async Task<bool> SignalAsync(ISignaler signaler, Node input, bool condition)
         {
+            var whitelist = signaler.Peek<List<Node>>("whitelist");
             foreach (var idx in input.Children)
             {
                 if (idx.Name.Any() && idx.Name.FirstOrDefault() != '.')
+                {
+                    if (whitelist != null && !whitelist.Any(x => x.Name == idx.Name))
+                        throw new ArgumentException($"Slot [{idx.Name}] doesn't exist in currrent scope");
                     await signaler.SignalAsync(idx.Name, idx);
+                }
                 if (idx.GetEx<bool>() == condition)
                     return true;
             }
