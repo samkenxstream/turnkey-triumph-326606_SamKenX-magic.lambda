@@ -49,10 +49,14 @@ namespace magic.lambda
         {
             // Storing termination node, to check if we should terminate early for some reasons.
             var terminate = signaler.Peek<Node>("slots.result");
+            var whitelist = signaler.Peek<List<Node>>("whitelist");
 
             // Evaluating "scope".
             foreach (var idx in nodes)
             {
+                if (whitelist != null && !whitelist.Any(x => x.Name == idx.Name))
+                    throw new ArgumentException($"Slot [{idx.Name}] doesn't exist in currrent scope");
+
                 // Invoking signal.
                 signaler.Signal(idx.Name, idx);
 
@@ -69,10 +73,15 @@ namespace magic.lambda
         {
             // Storing termination node, to check if we should terminate early for some reasons.
             var terminate = signaler.Peek<Node>("slots.result");
+            var whitelist = signaler.Peek<List<Node>>("whitelist");
 
             // Evaluating "scope".
             foreach (var idx in nodes)
             {
+                if (whitelist != null && !whitelist.Any(x => x.Name == idx.Name))
+                    throw new ArgumentException($"Slot [{idx.Name}] doesn't exist in currrent scope");
+
+                // Invoking signal.
                 await signaler.SignalAsync(idx.Name, idx);
 
                 // Checking if execution for some reasons was terminated.

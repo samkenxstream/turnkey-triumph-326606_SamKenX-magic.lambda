@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using System.Collections.Generic;
 using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
@@ -38,19 +39,22 @@ namespace magic.lambda.slots
             input.Clear();
             var filter = input.GetEx<string>();
             input.Value = null;
+            var whitelist = signaler.Peek<List<Node>>("whitelist");
             if (filter == null)
             {
                 input.AddRange(_signalProvider.Keys
                     .Where(x => 
-                        !x.StartsWith(".", StringComparison.InvariantCulture))
+                        !x.StartsWith(".", StringComparison.InvariantCulture) &&
+                        (whitelist == null || whitelist.Any(x2 => x2.Name == x)))
                     .Select(x => new Node("", x)));
             }
             else
             {
                 input.AddRange(_signalProvider.Keys
                     .Where(x => 
-                        !x.StartsWith(".", StringComparison.InvariantCulture) && 
-                        x.StartsWith(filter, StringComparison.InvariantCulture))
+                        !x.StartsWith(".", StringComparison.InvariantCulture) &&
+                        x.StartsWith(filter, StringComparison.InvariantCulture) &&
+                        (whitelist == null || whitelist.Any(x2 => x2.Name == x)))
                     .Select(x => new Node("", x)));
             }
         }

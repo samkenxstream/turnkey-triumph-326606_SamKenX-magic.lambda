@@ -32,7 +32,7 @@ namespace magic.lambda.tests
         [Fact]
         public void VocabularyWithFilter()
         {
-            var lambda = Common.Evaluate(@"vocabulary:whi");
+            var lambda = Common.Evaluate(@"vocabulary:whil");
             Assert.True(lambda.Children.First().Children.Any());
             foreach (var idx in lambda.Children.First().Children.Select(x => x.GetEx<string>()))
             {
