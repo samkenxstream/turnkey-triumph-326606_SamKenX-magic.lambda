@@ -778,6 +778,8 @@ whitelist
    vocabulary
       set-value
    .lambda
+
+      // Inside of this [.lambda] object, we can only invoke [set-value], and no other slots!
       set-value:x:@.result
          .:foo
 
