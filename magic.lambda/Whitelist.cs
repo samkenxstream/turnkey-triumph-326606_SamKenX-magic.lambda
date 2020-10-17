@@ -56,6 +56,7 @@ namespace magic.lambda
             var vocabulary = input.Children
                 .FirstOrDefault(x => x.Name == "vocabulary")?
                 .Children?
+                .Select(x => x.Clone())
                 .ToList() ??
                     throw new ArgumentException("No [vocabulary] provided to [whitelist]");
 
