@@ -25,10 +25,17 @@ namespace magic.lambda
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            var whitelist = GetWhitelist(input);
-            signaler.Scope("whitelist", whitelist.Vocabulary, () =>
+            var result = new Node();
+            signaler.Scope("slots.result", result, () =>
             {
-                signaler.Signal("eval", whitelist.Lambda);
+                var whitelist = GetWhitelist(input);
+                signaler.Scope("whitelist", whitelist.Vocabulary, () =>
+                {
+                    signaler.Signal("eval", whitelist.Lambda.Clone());
+                });
+                input.Clear();
+                input.Value = result.Value;
+                input.AddRange(result.Children.ToList());
             });
         }
 
@@ -39,10 +46,17 @@ namespace magic.lambda
         /// <param name="input">Parameters passed from signaler</param>
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
-            var whitelist = GetWhitelist(input);
-            await signaler.ScopeAsync("whitelist", whitelist.Vocabulary, async () =>
+            var result = new Node();
+            await signaler.ScopeAsync("slots.result", result, async () =>
             {
-                await signaler.SignalAsync("eval", whitelist.Lambda);
+                var whitelist = GetWhitelist(input);
+                await signaler.ScopeAsync("whitelist", whitelist.Vocabulary, async () =>
+                {
+                    await signaler.SignalAsync("eval", whitelist.Lambda.Clone());
+                });
+                input.Clear();
+                input.Value = result.Value;
+                input.AddRange(result.Children.ToList());
             });
         }
 
@@ -56,7 +70,6 @@ namespace magic.lambda
             var vocabulary = input.Children
                 .FirstOrDefault(x => x.Name == "vocabulary")?
                 .Children?
-                .Select(x => x.Clone())
                 .ToList() ??
                     throw new ArgumentException("No [vocabulary] provided to [whitelist]");
 

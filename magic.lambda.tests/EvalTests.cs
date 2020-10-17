@@ -84,19 +84,20 @@ eval
         {
             var lambda = Common.Evaluate(@"
 .result
-whitelist
-   vocabulary
-      add
+add:x:-
+   whitelist
       vocabulary
-   .lambda
-      add:x:@.result
+         return
          vocabulary
+      .lambda
+         vocabulary
+         return:x:-/*
 ");
             Assert.Equal(2, lambda.Children.First().Children.Count());
             var first = lambda.Children.First().Children.First().Get<string>();
             var second = lambda.Children.First().Children.Skip(1).First().Get<string>();
-            Assert.True(first == "add" || first == "vocabulary");
-            Assert.True(second == "add" || second == "vocabulary");
+            Assert.True(first == "return" || first == "vocabulary");
+            Assert.True(second == "return" || second == "vocabulary");
         }
 
         [Fact]
@@ -104,19 +105,20 @@ whitelist
         {
             var lambda = await Common.EvaluateAsync(@"
 .result
-whitelist
-   vocabulary
-      add
+add:x:-
+   whitelist
       vocabulary
-   .lambda
-      add:x:@.result
+         return
          vocabulary
+      .lambda
+         vocabulary
+         return:x:-/*
 ");
             Assert.Equal(2, lambda.Children.First().Children.Count());
             var first = lambda.Children.First().Children.First().Get<string>();
             var second = lambda.Children.First().Children.Skip(1).First().Get<string>();
-            Assert.True(first == "add" || first == "vocabulary");
-            Assert.True(second == "add" || second == "vocabulary");
+            Assert.True(first == "return" || first == "vocabulary");
+            Assert.True(second == "return" || second == "vocabulary");
         }
 
         [Fact]
@@ -124,15 +126,17 @@ whitelist
         {
             Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
 .result
-whitelist
-   vocabulary
-      add
+add:x:-
+   whitelist
       vocabulary
-   .lambda
-      add:x:@.result
+         return
          vocabulary
-      set-value:x:@.result
-         .:foo
+      .lambda
+         .foo
+         set-value:x:@.foo
+            .:foo
+         vocabulary
+         return:x:-/*
 "));
         }
 
@@ -141,15 +145,17 @@ whitelist
         {
             await Assert.ThrowsAsync<ArgumentException>(async () => await Common.EvaluateAsync(@"
 .result
-whitelist
-   vocabulary
-      add
+add:x:-
+   whitelist
       vocabulary
-   .lambda
-      add:x:@.result
+         return
          vocabulary
-      set-value:x:@.result
-         .:foo
+      .lambda
+         .foo
+         set-value:x:@.foo
+            .:foo
+         vocabulary
+         return:x:-/*
 "));
         }
 
@@ -157,12 +163,10 @@ whitelist
         public void EvalWhitelist_02_Throws()
         {
             Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
-.result
 whitelist
    .lambda
-      add:x:@.result
-         vocabulary
-      set-value:x:@.result
+      .foo
+      set-value:x:@.foo
          .:foo
 "));
         }
@@ -171,12 +175,10 @@ whitelist
         public async Task EvalWhitelistAsync_02_Throws()
         {
             await Assert.ThrowsAsync<ArgumentException>(async () => await Common.EvaluateAsync(@"
-.result
 whitelist
    .lambda
-      add:x:@.result
-         vocabulary
-      set-value:x:@.result
+      .foo
+      set-value:x:@.foo
          .:foo
 "));
         }
@@ -185,7 +187,6 @@ whitelist
         public void EvalWhitelist_03_Throws()
         {
             Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
-.result
 whitelist
    vocabulary
       add
@@ -197,7 +198,6 @@ whitelist
         public async Task EvalWhitelistAsync_03_Throws()
         {
             await Assert.ThrowsAsync<ArgumentException>(async () => await Common.EvaluateAsync(@"
-.result
 whitelist
    vocabulary
       add
