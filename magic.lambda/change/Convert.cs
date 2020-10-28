@@ -4,6 +4,7 @@
  */
 
 using System;
+using System.Text;
 using System.Linq;
 using System.Globalization;
 using magic.node;
@@ -31,6 +32,7 @@ namespace magic.lambda.change
 
             var value = input.GetEx<object>();
             var type = input.Children.First().GetEx<string>();
+            input.Clear(); // House cleaning.
             switch (type)
             {
                 case "int":
@@ -98,8 +100,15 @@ namespace magic.lambda.change
                     input.Value = new Expression(value?.ToString() ?? "");
                     break;
 
+                case "bytes":
+                    Encoding.UTF8.GetBytes(value?.ToString() ?? "");
+                    break;
+
                 case "string":
-                    input.Value = value?.ToString() ?? "";
+                    if (value is byte[] bytes)
+                        input.Value = Encoding.UTF8.GetString(bytes);
+                    else
+                        input.Value = value?.ToString() ?? "";
                     break;
 
                 case "node":
