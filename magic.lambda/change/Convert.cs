@@ -6,6 +6,7 @@
 using System;
 using System.Text;
 using System.Linq;
+using sys = System;
 using System.Globalization;
 using magic.node;
 using magic.node.extensions;
@@ -109,6 +110,13 @@ namespace magic.lambda.change
                         input.Value = Encoding.UTF8.GetString(bytes);
                     else
                         input.Value = value?.ToString() ?? "";
+                    break;
+
+                case "base64":
+                    if (value is byte[] bytes2)
+                        input.Value = sys.Convert.ToBase64String(bytes2);
+                    else
+                        throw new ArgumentException($"I don't know how to base64 encode {value}");
                     break;
 
                 case "node":
