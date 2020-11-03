@@ -27,6 +27,7 @@ namespace magic.lambda.change
         {
             signaler.Signal("eval", input);
             Insert(input);
+            input.Clear();
         }
 
         /// <summary>
@@ -39,6 +40,7 @@ namespace magic.lambda.change
         {
             await signaler.SignalAsync("eval", input);
             Insert(input);
+            input.Clear();
         }
 
         #region [ -- Private helper methods -- ]
