@@ -119,6 +119,13 @@ namespace magic.lambda.change
                         throw new ArgumentException($"I don't know how to base64 encode {value}");
                     break;
 
+                case "from-base64":
+                    if (value is string strValue)
+                        input.Value = sys.Convert.FromBase64String(strValue);
+                    else
+                        throw new ArgumentException($"I don't know how to base64 decode {value}");
+                    break;
+
                 case "node":
                     input.Value = new Parser(value?.ToString() ?? "").Lambda();
                     break;

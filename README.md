@@ -685,6 +685,9 @@ convert:x:-
    type:int
 ```
 
+**Notice** - You can also base64 encode and decode `byte[]` with this slot, by passing in _"base64"_ or
+_"from-base64"_ as your **[type]** argument.
+
 ### [get-context]
 
 This slot returns a context stack object, which is an object added to the stack using **[context]**.
