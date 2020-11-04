@@ -204,5 +204,68 @@ whitelist
       vocabulary
 "));
         }
+
+        [Fact]
+        public void EvalContext()
+        {
+            var lambda = Common.Evaluate(@"
+.result
+context:foo
+   value:bar
+   .lambda
+      set-value:x:@.result
+         get-context:foo
+");
+            Assert.Equal("bar", lambda.Children.First().Get<string>());
+        }
+
+        [Fact]
+        public async Task EvalContextAsync()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.result
+context:foo
+   value:bar
+   .lambda
+      set-value:x:@.result
+         get-context:foo
+");
+            Assert.Equal("bar", lambda.Children.First().Get<string>());
+        }
+
+        [Fact]
+        public void EvalContext_Throws_01()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+.result
+context
+   value:bar
+   .lambda
+      set-value:x:@.result
+         get-context:foo
+"));
+        }
+
+        [Fact]
+        public void EvalContext_Throws_02()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+.result
+context:foo
+   value
+   .lambda
+      set-value:x:@.result
+         get-context:foo
+"));
+        }
+
+        [Fact]
+        public void EvalContext_Throws_03()
+        {
+            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+context:foo
+   value:howdy
+"));
+        }
     }
 }

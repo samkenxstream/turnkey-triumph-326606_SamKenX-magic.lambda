@@ -685,6 +685,10 @@ convert:x:-
    type:int
 ```
 
+### [get-context]
+
+This slot returns a context stack object, which is an object added to the stack using **[context]**.
+
 ## Exceptions
 
 ### [try]
@@ -749,6 +753,8 @@ while
       math.increment:x:@.no
 ```
 
+## Evaluating slots
+
 ### [eval]
 
 Evaluates each lambda object found by either inspecting its children collection, or evaluating the
@@ -789,6 +795,24 @@ whitelist
          .
             foo:bar
 ```
+
+### [context]
+
+This slot allows you to add an object unto the stack, such that it can later be retrieved with
+the **[get-context]** slot. Below is an example.
+
+```
+.result
+context:foo
+   value:bar
+   .lambda
+      set-value:x:@.result
+         get-context:foo
+```
+
+The slot requires a name as the value of its slot invocation node, a **[value]** as the value
+you want to put onto the stack, and a **[.lambda]** object being the lambda where the stack object
+exists, and can be retrieved using **[get-context]**.
 
 ## Threading
 
