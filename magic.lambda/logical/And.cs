@@ -46,7 +46,7 @@ namespace magic.lambda.logical
         void SanityCheck(Node input)
         {
             if (input.Children.Count() < 2)
-                throw new ArgumentException("[and] can have maximum one child node");
+                throw new ArgumentException("[and] must have at least two children nodes");
         }
 
         #endregion
