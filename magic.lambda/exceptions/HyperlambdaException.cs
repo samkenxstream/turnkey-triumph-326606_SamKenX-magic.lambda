@@ -10,7 +10,9 @@ using System.Runtime.Serialization;
 namespace magic.lambda.exceptions
 {
     /// <summary>
-    /// Exception type thrown from Hyperlambda using [throw].
+    /// Exception type thrown from Hyperlambda using [throw], and other parts,
+    /// allowing you to return semantic errors to caller to explain details
+    /// about what was wrong.
     /// </summary>
     [Serializable]
     public class HyperlambdaException : Exception
@@ -58,6 +60,7 @@ namespace magic.lambda.exceptions
         {
             IsPublic = isPublic;
             Status = status;
+            FieldName = "";
         }
 
         /// <summary>
@@ -66,12 +69,29 @@ namespace magic.lambda.exceptions
         /// <param name="message">Exception error text.</param>
         /// <param name="isPublic">Whether or not exception message should propagate to client in release builds.</param>
         /// <param name="status">Status code returned to client.</param>
+        /// <param name="fieldName">Field that triggered exception, if any.</param>
+        public HyperlambdaException(string message, bool isPublic, int status, string fieldName)
+            : base(message)
+        {
+            IsPublic = isPublic;
+            Status = status;
+            FieldName = fieldName;
+        }
+
+        /// <summary>
+        /// Constructs a new instance of a Hyperlambda exception.
+        /// </summary>
+        /// <param name="message">Exception error text.</param>
+        /// <param name="isPublic">Whether or not exception message should propagate to client in release builds.</param>
+        /// <param name="status">Status code returned to client.</param>
+        /// <param name="fieldName">Field that triggered exception, if any.</param>
         /// <param name="innerException">Inner exception</param>
-        public HyperlambdaException(string message, bool isPublic, int status, Exception innerException)
+        public HyperlambdaException(string message, bool isPublic, int status, string fieldName, Exception innerException)
             : base(message, innerException)
         {
             IsPublic = isPublic;
             Status = status;
+            FieldName = fieldName;
         }
 
         /// <summary>
@@ -86,6 +106,12 @@ namespace magic.lambda.exceptions
         /// <value>HTTP status code to return to client.</value>
         public int Status { get; set; }
 
+        /// <summary>
+        /// Name of field that triggered exception, if any.
+        /// </summary>
+        /// <value>Field name that triggered exception.</value>
+        public string FieldName { get; set; }
+
         #region [ -- Serialization implementation -- ]
 
         /// <inheritdoc/>
@@ -95,16 +121,19 @@ namespace magic.lambda.exceptions
         {
             this.IsPublic = (bool)info.GetValue("IsPublic", typeof(bool));
             this.Status = (int)info.GetValue("Status", typeof(int));
+            this.FieldName = (string)info.GetValue("FieldName", typeof(string));
         }
 
         /// <inheritdoc/>
         [SecurityPermissionAttribute(SecurityAction.Demand, SerializationFormatter = true)]
+        /// <inheritdoc/>
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null)
                 throw new ArgumentNullException(nameof(info));
             info.AddValue("IsPublic", IsPublic, typeof(bool));
             info.AddValue("Status", Status, typeof(int));
+            info.AddValue("FieldName", FieldName, typeof(string));
             base.GetObjectData(info, context);
         }
 
