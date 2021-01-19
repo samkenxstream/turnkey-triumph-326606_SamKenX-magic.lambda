@@ -317,7 +317,7 @@ try
             {
                try
                {
-                  HyperlambdaException ex = new HyperlambdaException("Test", true, 123, new ArgumentException("Foo"));
+                  HyperlambdaException ex = new HyperlambdaException("Test", true, 123, null, new ArgumentException("Foo"));
                   var formatter = new BinaryFormatter(null, new StreamingContext(StreamingContextStates.File));
                   formatter.Serialize(stream, ex);
                   stream.Position = 0;
