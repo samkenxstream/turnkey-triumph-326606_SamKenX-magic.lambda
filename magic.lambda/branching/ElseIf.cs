@@ -90,6 +90,8 @@ namespace magic.lambda.branching
                 var current = input.Children.First();
                 if (current.Value != null && current.GetEx<bool>())
                     return false;
+                if (input.Name == "if")
+                    break;
                 input = input.Previous;
             }
             return true;
