@@ -11,7 +11,7 @@ using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
 
-namespace magic.lambda
+namespace magic.lambda.eval
 {
     /// <summary>
     /// [eval] slot, allowing you to dynamically evaluate a piece of lambda.

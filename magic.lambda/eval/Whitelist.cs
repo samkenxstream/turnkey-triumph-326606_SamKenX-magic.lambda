@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using magic.node;
 using magic.signals.contracts;
 
-namespace magic.lambda
+namespace magic.lambda.eval
 {
     /// <summary>
     /// [whitelist] slot, allowing you to create sub-vocabulary of legal slots.

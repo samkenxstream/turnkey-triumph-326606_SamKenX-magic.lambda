@@ -10,10 +10,11 @@ using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
 
-namespace magic.lambda.slots
+namespace magic.lambda.eval
 {
     /// <summary>
-    /// [vocabulary] slot allowing you to dynamically retrieve all the names of all slots that exists in the system.
+    /// [vocabulary] slot allowing you to dynamically retrieve the names
+    /// of all slots that exists in the system.
     /// </summary>
     [Slot(Name = "vocabulary")]
     public class Vocabulary : ISlot

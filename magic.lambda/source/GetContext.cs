@@ -10,7 +10,13 @@ using magic.signals.contracts;
 namespace magic.lambda.slots
 {
     /// <summary>
-    /// [context] slot allowing you to create a dynamica stack object context.
+    /// [get-context] slot allowing you to retrieve a previously created
+    /// context object, added to the stack using [context].
+    /// 
+    /// Notice, the slot will automatically prepend 'dynamic.' in front
+    /// of the name as it retrieves the context object, to prevent Hyperlambda
+    /// from being able to retrieve objects intended for only being used
+    /// by C# code - which would have been a security issue it was allowed.
     /// </summary>
     [Slot(Name = "get-context")]
     public class GetContext : ISlot

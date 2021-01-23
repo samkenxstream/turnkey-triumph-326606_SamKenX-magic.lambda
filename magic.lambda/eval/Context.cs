@@ -10,10 +10,11 @@ using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
 
-namespace magic.lambda.slots
+namespace magic.lambda.eval
 {
     /// <summary>
-    /// [context] slot allowing you to create a dynamica stack object context.
+    /// [context] slot allowing you to create a dynamic stack object context,
+    /// that you can retrieve in children scopes of your lambda using [get-context].
     /// </summary>
     [Slot(Name = "context")]
     public class Context : ISlot, ISlotAsync
