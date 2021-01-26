@@ -28,9 +28,6 @@ namespace magic.lambda.change
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            if (input.Children.Count() != 1 || !input.Children.Any(x => x.Name == "type"))
-                throw new ArgumentException("[convert] can only handle one argument, which is [type]");
-
             var value = input.GetEx<object>();
             var type = input.Children.First().GetEx<string>();
             input.Clear(); // House cleaning.
@@ -102,7 +99,7 @@ namespace magic.lambda.change
                     break;
 
                 case "bytes":
-                    Encoding.UTF8.GetBytes(value?.ToString() ?? "");
+                    input.Value = Encoding.UTF8.GetBytes(value?.ToString() ?? "");
                     break;
 
                 case "string":
