@@ -6,7 +6,7 @@
     <PackageId>magic.lambda</PackageId>
     <Authors>Thomas Hansen</Authors>
     <Company>Thomas Hansen</Company>
-    <Copyright>Thomas Hansen, thomas@gaiasoul.com</Copyright>
+    <Copyright>Thomas Hansen, thomas@servergardens.com</Copyright>
     <Description>A microscopic and super dynamic scripting language and DSL for .Net Core, based upon Hyperlambda syntax, and Super Signals. This project is the Hyperlambda core implementation (keywords) for Magic. To use package go to https://polterguy.github.io</Description>
     <PackageProjectUrl>https://github.com/polterguy/magic.lambda</PackageProjectUrl>
     <PackOnBuild>true</PackOnBuild>
@@ -38,8 +38,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="magic.node.extensions" Version="8.9.*" />
-    <PackageReference Include="magic.signals.contracts" Version="8.9.*" />
+    <PackageReference Include="magic.node.extensions" Version="8.9.9" />
+    <PackageReference Include="magic.signals.contracts" Version="8.9.9" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
   </ItemGroup>
 </Project>

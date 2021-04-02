@@ -688,6 +688,17 @@ convert:x:-
 **Notice** - You can also base64 encode and decode `byte[]` with this slot, by passing in _"base64"_ or
 _"from-base64"_ as your **[type]** argument.
 
+### [type]
+
+This slot return the Hyperlambda type name of some value.
+
+```
+.foo:int:57
+type:x:-
+```
+
+After invoking the above, the value of **[type]** will be `int`.
+
 ### [format]
 
 This slot converts the format some expression or value according to some specified `String.Format` expression.
