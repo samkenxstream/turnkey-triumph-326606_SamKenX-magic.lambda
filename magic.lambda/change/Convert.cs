@@ -29,7 +29,9 @@ namespace magic.lambda.change
         public void Signal(ISignaler signaler, Node input)
         {
             var value = input.GetEx<object>();
-            var type = input.Children.First().GetEx<string>();
+            var type = input.Children.FirstOrDefault()?
+                .GetEx<string>() ??
+                throw new ArgumentException("No [type] declaration found in invocation to [convert]");
             input.Clear(); // House cleaning.
             switch (type)
             {
