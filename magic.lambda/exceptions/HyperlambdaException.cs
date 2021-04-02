@@ -126,7 +126,6 @@ namespace magic.lambda.exceptions
 
         /// <inheritdoc/>
         [SecurityPermissionAttribute(SecurityAction.Demand, SerializationFormatter = true)]
-        /// <inheritdoc/>
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null)
