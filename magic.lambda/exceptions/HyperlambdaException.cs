@@ -24,6 +24,7 @@ namespace magic.lambda.exceptions
         {
             IsPublic = false;
             Status = 500;
+            FieldName = "";
         }
 
         /// <summary>
@@ -35,6 +36,7 @@ namespace magic.lambda.exceptions
         {
             IsPublic = false;
             Status = 500;
+            FieldName = "";
         }
 
         /// <summary>
@@ -47,6 +49,7 @@ namespace magic.lambda.exceptions
         {
             IsPublic = false;
             Status = 500;
+            FieldName = "";
         }
 
         /// <summary>
@@ -114,6 +117,7 @@ namespace magic.lambda.exceptions
 
         #region [ -- Serialization implementation -- ]
 
+        // TODO: Get rid of these. FieldName is not passed among other things, I suspect API of BinarySerializers is completely obsolete ...
         /// <inheritdoc/>
         [SecurityPermissionAttribute(SecurityAction.Demand, SerializationFormatter = true)]
         protected HyperlambdaException(SerializationInfo info, StreamingContext context)
