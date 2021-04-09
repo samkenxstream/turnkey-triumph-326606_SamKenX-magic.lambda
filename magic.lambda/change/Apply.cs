@@ -13,11 +13,11 @@ using magic.signals.contracts;
 namespace magic.lambda.change
 {
     /// <summary>
-    /// [apply-file] slot allowing you to use a Hyperlambda file as a template for braiding together
+    /// [apply] slot allowing you to use a lambda as a template for braiding together
     /// with variables of your own choosing.
     /// </summary>
     [Slot(Name = "apply")]
-    public class ApplyFile : ISlot
+    public class Apply : ISlot
     {
         /// <summary>
         /// Implementation of signal
@@ -31,7 +31,7 @@ namespace magic.lambda.change
             foreach (var idxDest in input.Evaluate())
             {
                 var destination = idxDest.Clone();
-                Apply(args, destination.Children);
+                Transform(args, destination.Children);
 
                 // Returning transformed template to caller.
                 input.AddRange(destination.Children.ToList());
@@ -44,7 +44,7 @@ namespace magic.lambda.change
         /*
          * Actual implementation that applies lambda object to destination.
          */
-        void Apply(IEnumerable<Node> args, IEnumerable<Node> templateNodes)
+        void Transform(IEnumerable<Node> args, IEnumerable<Node> templateNodes)
         {
             foreach (var idx in templateNodes)
             {
@@ -63,7 +63,7 @@ namespace magic.lambda.change
                 }
 
                 // Recursively invoking self
-                Apply(args, idx.Children);
+                Transform(args, idx.Children);
             }
         }
 
