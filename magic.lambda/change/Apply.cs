@@ -70,6 +70,7 @@ namespace magic.lambda.change
                         throw new ArgumentException($"[template] file expected argument named [{templateName}] which was not given");
 
                     idx.Name = argNode.Get<string>();
+                    idx.AddRange(argNode.Children.Select(x => x.Clone()));
                 }
 
                 // Recursively invoking self
