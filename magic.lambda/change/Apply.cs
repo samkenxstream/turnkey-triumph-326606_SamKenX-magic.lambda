@@ -61,6 +61,16 @@ namespace magic.lambda.change
                     idx.Value = argNode.Value;
                     idx.AddRange(argNode.Children.Select(x => x.Clone()));
                 }
+                if (idx.Name.StartsWith("{", StringComparison.InvariantCulture) &&
+                    idx.Name.EndsWith("}", StringComparison.InvariantCulture))
+                {
+                    var templateName = idx.Name.Substring(1, idx.Name.Length - 2);
+                    var argNode = args.FirstOrDefault(x => x.Name == templateName);
+                    if (argNode == null)
+                        throw new ArgumentException($"[template] file expected argument named [{templateName}] which was not given");
+
+                    idx.Name = argNode.Get<string>();
+                }
 
                 // Recursively invoking self
                 Transform(args, idx.Children);

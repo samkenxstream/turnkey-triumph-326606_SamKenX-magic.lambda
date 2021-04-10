@@ -904,45 +904,95 @@ result, allowing you to perform dynamic substitutions on lambda hierarchies such
 ```
 .lambda
    foo
-      arg1:{howdy}
-      arg2:{howdy}
+      arg1:{some_arg}
       some-static
-         howdy:world
+         static_node:static_value
 apply:x:-
-   howdy:world
+   some_arg:value of argument
 ```
 
 After execution of the above Hyperlambda you will have a result resembling the following.
 
 ```
-.lambda
-   foo
-      arg1:{howdy}
-      arg2:{howdy}
-      some-static
-         howdy:world
 apply
    foo
-      arg1:world
-      arg2:world
+      arg1:value of argument
       some-static
-         howdy:world
+         static_node:static_value
 ```
+
+Notice how the nodes from your template lambda object have been copied as children into your **[apply]**
+node, while during this _"copying process"_, the arguments you supplied to **[apply]** have been used
+to perform substitutions of all nodes in your template lambda having a value of `{xxx}`, where xxx is
+your argument name. In the above example for instance the `{arg1:some_arg}` template node had its value
+replaced by the value of the **[some_arg]** node passed in as a parameter to **[apply]**. So the name of
+the argument to **[apply]**, matches the value of your template node - Then the value of your argument
+becomes the value of your template node.
 
 Only node values starting out with `{` and ending with `}` will be substituted, and you are expected to provide
 all arguments found in the template lambda object, or the invocation will fail, resulting in an exception. This
-allows you to create _"template lambda objects"_ which you dynamically transform into something else, without
-really caring about its original structure, only its set of arguments. This slot also leaves all other nodes
-as is.
+allows you to create _"template lambda objects"_ that you dynamically transform into something else, without
+really caring about its original structure, bvut rather only its set of arguments. This slot leaves all other
+nodes as is.
 
 Basically, the way it works, is that it takes your expression, and recursively iterate each node below the
 result of your expression, checks to see if the node's value is an argument such as e.g. `{howdy}` above is -
 And if so, it substitutes the `{howdy}` parts with the value of the argument you are expected to supply to your
-invocation having the name of `howdy`. All other nodes are kept as is.
+invocation having the name of `howdy`.
 
-**Notice** - This slot is a bit experimental at the moment, and I do have plans to extend upon it, to allow
-for changing names of nodes, and/or having arguments being list of nodes, etc - So have in mind that the API
-might change in a future version of Magic. This slot is to be considered in BETA implementation at the moment.
+You can also reference the same argument multiple times in your template, in addition to create arguments that
+are by themselves lambda objects, instead of simple values. Below is an example of both of these constructs.
+
+```
+.lambda
+   foo
+      arg1:{some_arg1}
+      arg2:{some_arg1}
+      arg3:{some_arg2}
+apply:x:-
+   some_arg1:int:5
+   some_arg2
+      this:is
+         an:entire
+         lambda:object
+      used_as_an_argument
+```
+
+The above will result in the following.
+
+```
+apply
+   foo
+      arg1:int:5
+      arg2:int:5
+      arg3
+         this:is
+            an:entire
+            lambda:object
+         used_as_an_argument
+```
+
+Above you can also see how typing information is not lost, since the **[arg1]** and **[arg2]** nodes
+are both having integrer values of 5 after apply is done executing. At the same time you can see how
+the **[arg3]** node instead of having a simple value applied, actually ended up with a copy of all
+children passed in as **[some_arg2]**. You can also substitute names of nodes, such as the following
+illustrates.
+
+```
+.lambda
+   foo
+      {arg1}:value-is-preserved
+apply:x:-
+   arg1:foo1
+```
+
+The above of course results in the following.
+
+```
+apply
+   foo
+      foo1:value-is-preserved
+```
 
 ## Project website
 
