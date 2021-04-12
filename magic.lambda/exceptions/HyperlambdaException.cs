@@ -15,7 +15,7 @@ namespace magic.lambda.exceptions
     /// about what was wrong.
     /// </summary>
     [Serializable]
-    public class HyperlambdaException : Exception
+    public class HyperlambdaException : Exception, ISerializable
     {
         /// <summary>
         /// Creates a new instance of exception.
@@ -114,5 +114,31 @@ namespace magic.lambda.exceptions
         /// </summary>
         /// <value>Field name that triggered exception.</value>
         public string FieldName { get; set; }
+
+        #region [ -- Serialization implementation -- ]
+
+        /// <inheritdoc/>
+        [SecurityPermissionAttribute(SecurityAction.Demand, SerializationFormatter = true)]
+        protected HyperlambdaException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            this.IsPublic = (bool)info.GetValue("IsPublic", typeof(bool));
+            this.Status = (int)info.GetValue("Status", typeof(int));
+            this.FieldName = (string)info.GetValue("FieldName", typeof(string));
+        }
+
+        /// <inheritdoc/>
+        [SecurityPermissionAttribute(SecurityAction.Demand, SerializationFormatter = true)]
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null)
+                throw new ArgumentNullException(nameof(info));
+            info.AddValue("IsPublic", IsPublic, typeof(bool));
+            info.AddValue("Status", Status, typeof(int));
+            info.AddValue("FieldName", FieldName, typeof(string));
+            base.GetObjectData(info, context);
+        }
+
+        #endregion
     }
 }
