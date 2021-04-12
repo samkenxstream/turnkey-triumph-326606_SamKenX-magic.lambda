@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
+using magic.lambda.exceptions;
 
 namespace magic.lambda.logical
 {
@@ -31,7 +32,7 @@ namespace magic.lambda.logical
                 if (idx.Name != string.Empty && idx.Name.FirstOrDefault() != '.')
                 {
                     if (whitelist != null && !whitelist.Any(x => x.Name == idx.Name))
-                        throw new ArgumentException($"Slot [{idx.Name}] doesn't exist in currrent scope");
+                        throw new HyperlambdaException($"Slot [{idx.Name}] doesn't exist in currrent scope");
                     signaler.Signal(idx.Name, idx);
                 }
                 if (idx.GetEx<bool>() == condition)
@@ -51,7 +52,7 @@ namespace magic.lambda.logical
                 if (idx.Name.Any() && idx.Name.FirstOrDefault() != '.')
                 {
                     if (whitelist != null && !whitelist.Any(x => x.Name == idx.Name))
-                        throw new ArgumentException($"Slot [{idx.Name}] doesn't exist in currrent scope");
+                        throw new HyperlambdaException($"Slot [{idx.Name}] doesn't exist in currrent scope");
                     await signaler.SignalAsync(idx.Name, idx);
                 }
                 if (idx.GetEx<bool>() == condition)

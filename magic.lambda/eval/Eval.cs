@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
+using magic.lambda.exceptions;
 
 namespace magic.lambda.eval
 {
@@ -55,7 +56,7 @@ namespace magic.lambda.eval
             foreach (var idx in nodes)
             {
                 if (whitelist != null && !whitelist.Any(x => x.Name == idx.Name))
-                    throw new ArgumentException($"Slot [{idx.Name}] doesn't exist in currrent scope");
+                    throw new HyperlambdaException($"Slot [{idx.Name}] doesn't exist in currrent scope");
 
                 // Invoking signal.
                 signaler.Signal(idx.Name, idx);
@@ -79,7 +80,7 @@ namespace magic.lambda.eval
             foreach (var idx in nodes)
             {
                 if (whitelist != null && !whitelist.Any(x => x.Name == idx.Name))
-                    throw new ArgumentException($"Slot [{idx.Name}] doesn't exist in currrent scope");
+                    throw new HyperlambdaException($"Slot [{idx.Name}] doesn't exist in currrent scope");
 
                 // Invoking signal.
                 await signaler.SignalAsync(idx.Name, idx);
@@ -99,7 +100,7 @@ namespace magic.lambda.eval
             if (input.Value != null &&
                 input.Children.Any() &&
                 input.Name == "eval")
-                throw new ArgumentException("[eval] cannot handle both expression values and children at the same time");
+                throw new HyperlambdaException("[eval] cannot handle both expression values and children at the same time");
 
             // Children have precedence, in case invocation is from a non [eval] keyword.
             if (input.Children.Any())

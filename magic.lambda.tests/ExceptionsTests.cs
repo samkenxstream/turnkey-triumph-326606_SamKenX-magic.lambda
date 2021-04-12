@@ -309,33 +309,5 @@ try
             Assert.Equal("foo", ex.Message);
             Assert.Equal(typeof(ArgumentException), ex.InnerException.GetType());
         }
-
-        [Fact]
-        public void SerializeException()
-        {
-            using (MemoryStream stream = new MemoryStream())
-            {
-               try
-               {
-                  HyperlambdaException ex = new HyperlambdaException("Test", true, 123, null, new ArgumentException("Foo"));
-                  var formatter = new BinaryFormatter(null, new StreamingContext(StreamingContextStates.File));
-                  formatter.Serialize(stream, ex);
-                  stream.Position = 0;
-                  var deserializedException = (HyperlambdaException)formatter.Deserialize(stream);
-                  throw deserializedException;
-               }
-               catch (SerializationException)
-               {
-                  throw new Exception("Unable to serialize/deserialize the exception");
-               }
-               catch (HyperlambdaException error)
-               {
-                  Assert.Equal("Test", error.Message);
-                  Assert.Equal(123, error.Status);
-                  Assert.True(error.IsPublic);
-                  Assert.Equal(typeof(ArgumentException), error.InnerException.GetType());
-               }
-            }
-         }
     }
 }

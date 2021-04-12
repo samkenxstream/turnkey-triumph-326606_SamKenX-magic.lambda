@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using magic.node.extensions;
+using magic.lambda.exceptions;
 
 namespace magic.lambda.tests
 {
@@ -59,7 +60,7 @@ try
         [Fact]
         public void InvokeEvalThrows()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .src
 eval:x:@.src
    set-value:x:@.src
@@ -124,7 +125,7 @@ add:x:-
         [Fact]
         public void EvalWhitelist_01_Throws()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .result
 add:x:-
    whitelist
@@ -143,7 +144,7 @@ add:x:-
         [Fact]
         public async Task EvalWhitelistAsync_01_Throws()
         {
-            await Assert.ThrowsAsync<ArgumentException>(async () => await Common.EvaluateAsync(@"
+            await Assert.ThrowsAsync<HyperlambdaException>(async () => await Common.EvaluateAsync(@"
 .result
 add:x:-
    whitelist
