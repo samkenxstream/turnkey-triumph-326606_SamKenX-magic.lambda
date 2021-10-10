@@ -31,7 +31,11 @@ namespace magic.lambda.exceptions
                 .FirstOrDefault(x => x.Name == "status")?
                 .GetEx<int>() ?? 500;
 
-            throw new HyperlambdaException(input.GetEx<string>() ?? "[no-message]", isPublic, status);
+            var field = input.Children
+                .FirstOrDefault(x => x.Name == "field")?
+                .GetEx<string>();
+
+            throw new HyperlambdaException(input.GetEx<string>() ?? "[no-message]", isPublic, status, field);
         }
     }
 }
