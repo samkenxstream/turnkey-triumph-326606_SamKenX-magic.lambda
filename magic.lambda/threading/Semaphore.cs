@@ -5,11 +5,11 @@
 
 using System;
 using System.Threading.Tasks;
+using sys = System.Threading;
+using System.Collections.Concurrent;
 using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
-using sys = System.Threading;
-using System.Collections.Concurrent;
 
 namespace magic.lambda.threading
 {
@@ -77,7 +77,7 @@ namespace magic.lambda.threading
         string GetKey(Node input)
         {
             return input.GetEx<string>() ??
-                throw new ArgumentException("A semaphore must have a value, used to uniquely name the object");
+                throw new ArgumentException("A semaphore must have a value, used to uniquely identity your sempahore");
         }
 
         #endregion

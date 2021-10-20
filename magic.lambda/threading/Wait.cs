@@ -11,10 +11,11 @@ using magic.signals.contracts;
 namespace magic.lambda.threading
 {
     /// <summary>
-    /// [fork] slot, allowing you to create and start a new thread.
+    /// [join] slot, waiting for all (direct) children [fork] invocations to finish their work,
+    /// before allowing execution to continue.
     /// </summary>
-    [Slot(Name = "fork")]
-    public class Fork : ISlot, ISlotAsync
+    [Slot(Name = "join")]
+    public class Join : ISlot, ISlotAsync
     {
         readonly ThreadRunner _runner;
 
@@ -22,7 +23,7 @@ namespace magic.lambda.threading
         /// CTOR for slot.
         /// </summary>
         /// <param name="runner">Dependency injected implementation</param>
-        public Fork(ThreadRunner runner)
+        public Join(ThreadRunner runner)
         {
             _runner = runner;
         }
@@ -34,10 +35,12 @@ namespace magic.lambda.threading
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            var task = _runner.Run(input);
-
-            // Pushing task unto stack, if needed.
-            PushTaskToStack(signaler, input, task);
+            var tasks = new List<Task>();
+            signaler.Scope(".magic.lambe.join", tasks, () =>
+            {
+                signaler.Signal("eval", input);
+                Task.WaitAll(tasks.ToArray());
+            });
         }
 
         /// <summary>
@@ -46,29 +49,14 @@ namespace magic.lambda.threading
         /// <param name="signaler">Signaler used to signal</param>
         /// <param name="input">Parameters passed from signaler</param>
         /// <returns>An awaiatble task.</returns>
-        public Task SignalAsync(ISignaler signaler, Node input)
+        public async Task SignalAsync(ISignaler signaler, Node input)
         {
-            var task = _runner.Run(input);
-
-            // Pushing task unto stack, if needed.
-            PushTaskToStack(signaler, input, task);
-
-            // Notice, we do NOT wait for task to finish its job.
-            return Task.CompletedTask;
+            var tasks = new List<Task>();
+            await signaler.ScopeAsync(".magic.lambe.threading.join", tasks, async () =>
+            {
+                await signaler.SignalAsync("eval", input);
+                Task.WaitAll(tasks.ToArray());
+            });
         }
-
-        #region [ -- Private helper methods -- ]
-
-        /*
-         * Adds task to awaitable list of tasks if we're inside of a [join] invocation.
-         */
-        void PushTaskToStack(ISignaler signaler, Node input, Task task)
-        {
-            // Checking if parent node is [join] at which point we push task unto stack object.
-            if (input.Parent?.Name == "join")
-                signaler.Peek<List<Task>>(".magic.lambe.threading.join").Add(task);
-        }
-
-        #endregion
     }
 }
