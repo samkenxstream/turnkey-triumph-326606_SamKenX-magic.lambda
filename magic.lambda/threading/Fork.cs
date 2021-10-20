@@ -66,7 +66,7 @@ namespace magic.lambda.threading
         {
             // Checking if parent node is [join] at which point we push task unto stack object.
             if (input.Parent?.Name == "join")
-                signaler.Peek<List<Task>>(".magic.lambe.threading.join").Add(task);
+                signaler.Peek<List<Task>>(".magic.lambda.threading.join").Add(task);
         }
 
         #endregion

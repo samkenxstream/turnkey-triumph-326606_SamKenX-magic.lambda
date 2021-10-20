@@ -36,7 +36,7 @@ namespace magic.lambda.threading
         public void Signal(ISignaler signaler, Node input)
         {
             var tasks = new List<Task>();
-            signaler.Scope(".magic.lambe.join", tasks, () =>
+            signaler.Scope(".magic.lambda.threading.join", tasks, () =>
             {
                 signaler.Signal("eval", input);
                 Task.WaitAll(tasks.ToArray());
@@ -52,7 +52,7 @@ namespace magic.lambda.threading
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
             var tasks = new List<Task>();
-            await signaler.ScopeAsync(".magic.lambe.threading.join", tasks, async () =>
+            await signaler.ScopeAsync(".magic.lambda.threading.join", tasks, async () =>
             {
                 await signaler.SignalAsync("eval", input);
                 Task.WaitAll(tasks.ToArray());
