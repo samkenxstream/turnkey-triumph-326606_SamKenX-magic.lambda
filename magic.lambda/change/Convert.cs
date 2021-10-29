@@ -126,7 +126,7 @@ namespace magic.lambda.change
                     break;
 
                 case "node":
-                    input.Value = new Parser(value?.ToString() ?? "").Lambda();
+                    input.Value = HyperlambdaParser.Parse(value?.ToString() ?? "");
                     break;
 
                 default:
