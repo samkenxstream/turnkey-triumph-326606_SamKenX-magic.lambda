@@ -17,17 +17,6 @@ namespace magic.lambda.threading
     [Slot(Name = "join")]
     public class Join : ISlot, ISlotAsync
     {
-        readonly ThreadRunner _runner;
-
-        /// <summary>
-        /// CTOR for slot.
-        /// </summary>
-        /// <param name="runner">Dependency injected implementation</param>
-        public Join(ThreadRunner runner)
-        {
-            _runner = runner;
-        }
-
         /// <summary>
         /// Implementation of signal
         /// </summary>

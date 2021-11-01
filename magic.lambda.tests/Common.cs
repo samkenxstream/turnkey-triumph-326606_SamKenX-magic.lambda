@@ -31,7 +31,7 @@ namespace magic.lambda.tests
         static public Node Evaluate(string hl)
         {
             var services = Initialize();
-            var lambda = new Parser(hl).Lambda();
+            var lambda = HyperlambdaParser.Parse(hl);
             var signaler = services.GetService(typeof(ISignaler)) as ISignaler;
             var evalResult = new Node();
             signaler.Scope("slots.result", evalResult, () =>
@@ -44,7 +44,7 @@ namespace magic.lambda.tests
         static async public Task<Node> EvaluateAsync(string hl)
         {
             var services = Initialize();
-            var lambda = new Parser(hl).Lambda();
+            var lambda = HyperlambdaParser.Parse(hl);
             var signaler = services.GetService(typeof(ISignaler)) as ISignaler;
             var evalResult = new Node();
             await signaler.ScopeAsync("slots.result", evalResult, async () =>
