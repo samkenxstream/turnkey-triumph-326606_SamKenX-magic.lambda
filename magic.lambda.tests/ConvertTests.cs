@@ -213,7 +213,7 @@ convert:x:-
         [Fact]
         public void ConvertThrows()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .src:int:5
 convert:x:-
    type:nont-existing-type"));
@@ -222,7 +222,7 @@ convert:x:-
         [Fact]
         public void ConvertThrows_01()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .src:5
 convert:x:-"));
         }
@@ -230,7 +230,7 @@ convert:x:-"));
         [Fact]
         public void ConvertThrows_02()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .src:5
 convert:x:-
    bogus:foo"));

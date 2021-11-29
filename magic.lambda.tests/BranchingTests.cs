@@ -2,7 +2,6 @@
  * Magic Cloud, copyright Aista, Ltd. See the attached LICENSE file for details.
  */
 
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using magic.node.extensions;
@@ -28,7 +27,7 @@ if
         [Fact]
         public void If_Throws()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .result
 if
    .:bool:true
@@ -41,7 +40,7 @@ if
         [Fact]
         public void Or_Throws_01()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .result
 or
    .lambda
@@ -52,7 +51,7 @@ or
         [Fact]
         public void If_Throws_02()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .result
 if
    .:bool:true
@@ -276,7 +275,7 @@ if
         [Fact]
         public void IfThrows()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .result
 if
    and
@@ -320,7 +319,7 @@ else
         [Fact]
         public void ElseThrows_01()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .result
 else
    set-value:x:../*/.result
@@ -330,7 +329,7 @@ else
         [Fact]
         public void ElseThrows_02()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate("else"));
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate("else"));
         }
 
         [Fact]
@@ -372,7 +371,7 @@ else-if
         [Fact]
         public void ElseIf_Throws_01()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .result
 if
    .:bool:false
@@ -392,7 +391,7 @@ else-if
         [Fact]
         public void ElseIf_Throws_02()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .result
 if
    .:bool:false
@@ -411,7 +410,7 @@ else-if
         [Fact]
         public void ElseIf_Throws_03()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .result
 else-if
    eq

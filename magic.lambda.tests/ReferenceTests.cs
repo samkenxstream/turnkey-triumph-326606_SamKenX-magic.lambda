@@ -6,7 +6,6 @@ using System.Linq;
 using Xunit;
 using magic.node;
 using magic.node.extensions;
-using System;
 
 namespace magic.lambda.tests
 {
@@ -26,7 +25,7 @@ reference:x:-");
         [Fact]
         public void ReferenceThrows_01()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@".foo
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@".foo
    bar
 reference"));
         }
@@ -34,7 +33,7 @@ reference"));
         [Fact]
         public void ReferenceThrows_02()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@".foo
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@".foo
    bar1
    bar2
 reference:x:-/*"));

@@ -56,7 +56,7 @@ namespace magic.lambda.change
         void SanityCheck(Node input)
         {
             if (input.Children.Count() > 1)
-                throw new ArgumentException("[set-name] can have maximum one child node");
+                throw new HyperlambdaException("[set-name] can have maximum one child node");
         }
 
         #endregion

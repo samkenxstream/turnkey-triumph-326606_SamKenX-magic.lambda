@@ -64,16 +64,16 @@ namespace magic.lambda.branching
         bool ShouldEvaluate(Node input, out Node lambda)
         {
             if (input.Children.Count() != 2)
-                throw new ArgumentException("Keyword [else-if] requires exactly two children nodes");
+                throw new HyperlambdaException("Keyword [else-if] requires exactly two children nodes");
 
             lambda = input.Children.Skip(1).First();
             if (lambda.Name != ".lambda")
-                throw new ArgumentException("Keyword [else-if] requires its second child node to be [.lambda]");
+                throw new HyperlambdaException("Keyword [else-if] requires its second child node to be [.lambda]");
 
             var previous = input.Previous;
             if (previous == null ||
                 (previous.Name != "if" && previous.Name != "else-if"))
-                throw new ArgumentException("[else-if] must have an [if] or [else-if] before it");
+                throw new HyperlambdaException("[else-if] must have an [if] or [else-if] before it");
 
             return PreviousIsFalse(previous);
         }

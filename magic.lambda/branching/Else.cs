@@ -2,9 +2,9 @@
  * Magic Cloud, copyright Aista, Ltd. See the attached LICENSE file for details.
  */
 
-using System;
 using System.Threading.Tasks;
 using magic.node;
+using magic.node.extensions;
 using magic.signals.contracts;
 
 namespace magic.lambda.branching
@@ -52,7 +52,7 @@ namespace magic.lambda.branching
             var previous = input.Previous;
             if (previous == null ||
                 (previous.Name != "if" && previous.Name != "else-if"))
-                throw new ArgumentException("[else] must have an [if] or [else-if] before it");
+                throw new HyperlambdaException("[else] must have an [if] or [else-if] before it");
 
             return ElseIf.PreviousIsFalse(previous);
         }

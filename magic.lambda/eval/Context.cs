@@ -55,16 +55,16 @@ namespace magic.lambda.eval
         (string Name, object Value, Node Lambda) GetArguments(Node input)
         {
             var name = input.GetEx<string>() ??
-                throw new ArgumentException("[context] requires a [value] argument, being whatever object you want to push unto your stack");
+                throw new HyperlambdaException("[context] requires a [value] argument, being whatever object you want to push unto your stack");
             name = "dynamic." + name;
 
             var value = input.Children.FirstOrDefault(x => x.Name == "value")?.GetEx<object>() ??
-                throw new ArgumentException("[context] requires a [value] argument, being whatever object you want to push unto your stack");
+                throw new HyperlambdaException("[context] requires a [value] argument, being whatever object you want to push unto your stack");
             if (value is Node valueNode)
                 value = valueNode.Clone();
 
             var lambda = input.Children.FirstOrDefault(x => x.Name == ".lambda") ??
-                throw new ArgumentException("[context] requires a [.lambda] object to evaluate");
+                throw new HyperlambdaException("[context] requires a [.lambda] object to evaluate");
 
             return (name, value, lambda);
         }

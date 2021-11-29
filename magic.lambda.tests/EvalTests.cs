@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using magic.node.extensions;
-using magic.lambda.exceptions;
 
 namespace magic.lambda.tests
 {
@@ -162,7 +161,7 @@ add:x:-
         [Fact]
         public void EvalWhitelist_02_Throws()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 whitelist
    .lambda
       .foo
@@ -174,7 +173,7 @@ whitelist
         [Fact]
         public async Task EvalWhitelistAsync_02_Throws()
         {
-            await Assert.ThrowsAsync<ArgumentException>(async () => await Common.EvaluateAsync(@"
+            await Assert.ThrowsAsync<HyperlambdaException>(async () => await Common.EvaluateAsync(@"
 whitelist
    .lambda
       .foo
@@ -186,7 +185,7 @@ whitelist
         [Fact]
         public void EvalWhitelist_03_Throws()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 whitelist
    vocabulary
       add
@@ -197,7 +196,7 @@ whitelist
         [Fact]
         public async Task EvalWhitelistAsync_03_Throws()
         {
-            await Assert.ThrowsAsync<ArgumentException>(async () => await Common.EvaluateAsync(@"
+            await Assert.ThrowsAsync<HyperlambdaException>(async () => await Common.EvaluateAsync(@"
 whitelist
    vocabulary
       add
@@ -236,7 +235,7 @@ context:foo
         [Fact]
         public void EvalContext_Throws_01()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .result
 context
    value:bar
@@ -249,7 +248,7 @@ context
         [Fact]
         public void EvalContext_Throws_02()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .result
 context:foo
    value
@@ -262,7 +261,7 @@ context:foo
         [Fact]
         public void EvalContext_Throws_03()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 context:foo
    value:howdy
 "));

@@ -2,11 +2,10 @@
  * Magic Cloud, copyright Aista, Ltd. See the attached LICENSE file for details.
  */
 
+using System.Threading.Tasks;
 using System.Linq;
 using Xunit;
 using magic.node.extensions;
-using System.Threading.Tasks;
-using System;
 
 namespace magic.lambda.tests
 {
@@ -47,7 +46,7 @@ set-name:x:../*/.foo1
         [Fact]
         public void SetNameThrows_01()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .foo1
 set-name:x:../*/.foo1
    .:.foo2
@@ -92,7 +91,7 @@ set-value:x:../*/.foo1
         [Fact]
         public void SetNameWithExpression_Throws()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .foo1
    bar1
    bar2
@@ -115,7 +114,7 @@ set-value:x:../*/.foo1
         [Fact]
         public void SetValueThrows()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .foo1
 set-value:x:../*/.foo1
    .:error

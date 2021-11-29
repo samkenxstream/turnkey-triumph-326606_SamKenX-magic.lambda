@@ -2,12 +2,11 @@
  * Magic Cloud, copyright Aista, Ltd. See the attached LICENSE file for details.
  */
 
-using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 using magic.node;
+using magic.node.extensions;
 using magic.signals.contracts;
-using System.Threading.Tasks;
-using System;
 
 namespace magic.lambda.tests
 {
@@ -78,7 +77,7 @@ semaphore:foo
         [Fact]
         public void Semaphore_Throws()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 semaphore
 "));
         }

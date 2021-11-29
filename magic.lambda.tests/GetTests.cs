@@ -2,8 +2,8 @@
  * Magic Cloud, copyright Aista, Ltd. See the attached LICENSE file for details.
  */
 
-using System;
 using System.Linq;
+using magic.node.extensions;
 using Xunit;
 
 namespace magic.lambda.tests
@@ -43,7 +43,7 @@ get-name:x:../*/.foo1
         [Fact]
         public void NameThrows()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .foo1
 .foo1
 get-name:x:../*/.foo1
@@ -63,7 +63,7 @@ get-name:x:../*/.fooXX
         [Fact]
         public void NameThrows_01()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .foo1
   bar1
   bar2
@@ -86,7 +86,7 @@ get-count:x:../*/.foo1/*
         [Fact]
         public void CountThrows()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 
 get-count
 "));

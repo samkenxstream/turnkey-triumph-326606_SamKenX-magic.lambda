@@ -2,11 +2,11 @@
  * Magic Cloud, copyright Aista, Ltd. See the attached LICENSE file for details.
  */
 
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using magic.node;
+using magic.node.extensions;
 using magic.signals.contracts;
 
 namespace magic.lambda.eval
@@ -70,10 +70,10 @@ namespace magic.lambda.eval
                 .FirstOrDefault(x => x.Name == "vocabulary")?
                 .Children?
                 .ToList() ??
-                    throw new ArgumentException("No [vocabulary] provided to [whitelist]");
+                    throw new HyperlambdaException("No [vocabulary] provided to [whitelist]");
 
             var lambda = input.Children.FirstOrDefault(x => x.Name == ".lambda") ??
-                throw new ArgumentException("No [.lambda] provided to [whitelist]");
+                throw new HyperlambdaException("No [.lambda] provided to [whitelist]");
 
             return (vocabulary, lambda);
         }

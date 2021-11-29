@@ -30,7 +30,7 @@ namespace magic.lambda.change
             var value = input.GetEx<object>();
             var type = input.Children.FirstOrDefault()?
                 .GetEx<string>() ??
-                throw new ArgumentException("No [type] declaration found in invocation to [convert]");
+                throw new HyperlambdaException("No [type] declaration found in invocation to [convert]");
             input.Clear(); // House cleaning.
             switch (type)
             {
@@ -114,14 +114,14 @@ namespace magic.lambda.change
                     if (value is byte[] bytes2)
                         input.Value = sys.Convert.ToBase64String(bytes2);
                     else
-                        throw new ArgumentException($"I don't know how to base64 encode {value}");
+                        throw new HyperlambdaException($"I don't know how to base64 encode {value}");
                     break;
 
                 case "from-base64":
                     if (value is string strValue)
                         input.Value = sys.Convert.FromBase64String(strValue);
                     else
-                        throw new ArgumentException($"I don't know how to base64 decode {value}");
+                        throw new HyperlambdaException($"I don't know how to base64 decode {value}");
                     break;
 
                 case "node":
@@ -129,7 +129,7 @@ namespace magic.lambda.change
                     break;
 
                 default:
-                    throw new ArgumentException($"Unknown type '{type}' when invoking [convert]");
+                    throw new HyperlambdaException($"Unknown type '{type}' when invoking [convert]");
             }
         }
     }

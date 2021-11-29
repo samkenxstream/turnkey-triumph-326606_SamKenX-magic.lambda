@@ -55,7 +55,7 @@ namespace magic.lambda.change
                     var templateName = strValue.Substring(1, strValue.Length - 2);
                     var argNode = args.FirstOrDefault(x => x.Name == templateName);
                     if (argNode == null)
-                        throw new ArgumentException($"[template] file expected argument named [{templateName}] which was not given");
+                        throw new HyperlambdaException($"[template] file expected argument named [{templateName}] which was not given");
 
                     idx.Value = argNode.Value;
                     idx.AddRange(argNode.Children.Select(x => x.Clone()));
@@ -66,7 +66,7 @@ namespace magic.lambda.change
                     var templateName = idx.Name.Substring(1, idx.Name.Length - 2);
                     var argNode = args.FirstOrDefault(x => x.Name == templateName);
                     if (argNode == null)
-                        throw new ArgumentException($"[template] file expected argument named [{templateName}] which was not given");
+                        throw new HyperlambdaException($"[template] file expected argument named [{templateName}] which was not given");
 
                     idx.Name = argNode.Get<string>();
                     idx.AddRange(argNode.Children.Select(x => x.Clone()));

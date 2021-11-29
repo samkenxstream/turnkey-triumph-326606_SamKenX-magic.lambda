@@ -76,7 +76,7 @@ namespace magic.lambda.threading
         string GetKey(Node input)
         {
             return input.GetEx<string>() ??
-                throw new ArgumentException("A semaphore must have a value, used to uniquely identity your sempahore");
+                throw new HyperlambdaException("A semaphore must have a value, used to uniquely identity your sempahore");
         }
 
         #endregion

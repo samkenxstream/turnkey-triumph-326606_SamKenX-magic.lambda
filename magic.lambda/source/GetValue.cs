@@ -25,7 +25,7 @@ namespace magic.lambda.source
         {
             var src = input.Evaluate();
             if (src.Count() > 1)
-                throw new ArgumentException("Too many nodes returned from [get-value] expression");
+                throw new HyperlambdaException("Too many nodes returned from [get-value] expression");
             input.Value = src.FirstOrDefault()?.Value;
         }
     }

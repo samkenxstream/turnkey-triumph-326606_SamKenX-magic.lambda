@@ -2,10 +2,10 @@
  * Magic Cloud, copyright Aista, Ltd. See the attached LICENSE file for details.
  */
 
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using magic.node.extensions;
 
 namespace magic.lambda.tests
 {
@@ -101,7 +101,7 @@ while
         [Fact]
         public void WhileThrows()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .src
    bar1
    bar2
@@ -121,7 +121,7 @@ while
         [Fact]
         public async Task WhileThrowsAsync()
         {
-            await Assert.ThrowsAsync<ArgumentException>(async () => await Common.EvaluateAsync(@"
+            await Assert.ThrowsAsync<HyperlambdaException>(async () => await Common.EvaluateAsync(@"
 .src
    bar1
    bar2
@@ -160,7 +160,7 @@ while
         [Fact]
         public void While_InfiniteLoop()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 while
    .:bool:true
    .lambda"));
@@ -169,7 +169,7 @@ while
         [Fact]
         public async Task While_InfiniteLoopAsync()
         {
-            await Assert.ThrowsAsync<ArgumentException>(async () => await Common.EvaluateAsync(@"
+            await Assert.ThrowsAsync<HyperlambdaException>(async () => await Common.EvaluateAsync(@"
 while
    .:bool:true
    .lambda"));
@@ -178,7 +178,7 @@ while
         [Fact]
         public void WhileNoLambdaThrows()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 while
    .:bool:true"));
         }
@@ -186,7 +186,7 @@ while
         [Fact]
         public async Task WhileNoLambdaAsyncThrows()
         {
-            await Assert.ThrowsAsync<ArgumentException>(async () => await Common.EvaluateAsync(@"
+            await Assert.ThrowsAsync<HyperlambdaException>(async () => await Common.EvaluateAsync(@"
 while
    .:bool:true"));
         }
@@ -194,7 +194,7 @@ while
         [Fact]
         public void While_InfiniteLoopStopsTooLate()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .no:int:0
 while
    lt

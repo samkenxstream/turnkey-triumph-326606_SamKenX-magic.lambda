@@ -2,9 +2,9 @@
  * Magic Cloud, copyright Aista, Ltd. See the attached LICENSE file for details.
  */
 
-using System;
 using System.Linq;
 using Xunit;
+using magic.node.extensions;
 
 namespace magic.lambda.tests
 {
@@ -46,7 +46,7 @@ apply:x:-
         [Fact]
         public void ApplyThrows()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .applied
    foo1:{foo1}
    foo2:{foo2}

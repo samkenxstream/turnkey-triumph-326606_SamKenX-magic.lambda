@@ -2,10 +2,10 @@
  * Magic Cloud, copyright Aista, Ltd. See the attached LICENSE file for details.
  */
 
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using magic.node;
+using magic.node.extensions;
 using magic.signals.contracts;
 
 namespace magic.lambda.logical
@@ -45,7 +45,7 @@ namespace magic.lambda.logical
         void SanityCheck(Node input)
         {
             if (input.Children.Count() < 2)
-                throw new ArgumentException("[or] must have at least 2 argument nodes");
+                throw new HyperlambdaException("[or] must have at least 2 argument nodes");
         }
 
         #endregion

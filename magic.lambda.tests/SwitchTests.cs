@@ -2,9 +2,9 @@
  * Magic Cloud, copyright Aista, Ltd. See the attached LICENSE file for details.
  */
 
-using System;
 using System.Linq;
 using System.Threading.Tasks;
+using magic.node.extensions;
 using Xunit;
 
 namespace magic.lambda.tests
@@ -39,7 +39,7 @@ switch:x:@.foo
         [Fact]
         public void SwitchThrow_01()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@".result
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@".result
 .foo:bar
 switch:x:@.foo
    caseX:foo
@@ -51,7 +51,7 @@ switch:x:@.foo
         [Fact]
         public void SwitchThrow_02()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@".result
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@".result
 .foo:bar
 switch:x:@.foo"));
         }
@@ -59,7 +59,7 @@ switch:x:@.foo"));
         [Fact]
         public void SwitchThrow_03()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@".result
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@".result
 .foo:bar
 switch:x:@.foo
    case
@@ -70,7 +70,7 @@ switch:x:@.foo
         [Fact]
         public void SwitchThrow_04()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@".result
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@".result
 .foo:bar
 switch:x:@.foo
    case:xxx
@@ -82,7 +82,7 @@ switch:x:@.foo
         [Fact]
         public void CaseThrows()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .result
 .foo:bar
 case:bar
@@ -119,7 +119,7 @@ switch:x:@.foo
         [Fact]
         public void DefaultThrows()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 default
    set-value:x:@.result
       .:OK"));

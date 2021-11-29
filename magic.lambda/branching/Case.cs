@@ -2,9 +2,9 @@
  * Magic Cloud, copyright Aista, Ltd. See the attached LICENSE file for details.
  */
 
-using System;
 using System.Threading.Tasks;
 using magic.node;
+using magic.node.extensions;
 using magic.signals.contracts;
 
 namespace magic.lambda.branching
@@ -43,7 +43,7 @@ namespace magic.lambda.branching
         void SanityCheckInvocation(Node input)
         {
             if (input.Parent?.Name != "switch")
-                throw new ArgumentException("[case] must be a child of [switch]");
+                throw new HyperlambdaException("[case] must be a child of [switch]");
         }
 
         #endregion

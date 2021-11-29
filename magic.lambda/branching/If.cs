@@ -64,12 +64,12 @@ namespace magic.lambda.branching
         {
             // Sanity checking invocation.
             if (input.Children.Count() != 2)
-                throw new ArgumentException("Keyword [if] requires exactly two child nodes, one comparer node and one [.lambda] node, in that sequence");
+                throw new HyperlambdaException("Keyword [if] requires exactly two child nodes, one comparer node and one [.lambda] node, in that sequence");
 
             // Retrieving lambda node, and sanity checking it.
             var lambda = input.Children.Skip(1).First();
             if (lambda.Name != ".lambda")
-                throw new ArgumentException("Keyword [if] requires its second child to be [.lambda]");
+                throw new HyperlambdaException("Keyword [if] requires its second child to be [.lambda]");
 
             return lambda;
         }

@@ -67,7 +67,7 @@ namespace magic.lambda.branching
                     executionNode = executionNode.Next;
                 }
                 if (executionNode != null && !executionNode.Children.Any())
-                    throw new ArgumentException("No lambda object found for [case]");
+                    throw new HyperlambdaException("No lambda object found for [case]");
 
                 return executionNode;
             }
@@ -80,18 +80,18 @@ namespace magic.lambda.branching
         void SanityCheckInvocation(Node input)
         {
             if (!input.Children.Any(x => x.Name == "case"))
-                throw new ArgumentException("[switch] must have one at least one [case] child");
+                throw new HyperlambdaException("[switch] must have one at least one [case] child");
 
             if (input.Children.Any(x => 
                 x.Name != "case" &&
                 x.Name != "default"))
-                throw new ArgumentException("[switch] can only handle [case] and [default] children");
+                throw new HyperlambdaException("[switch] can only handle [case] and [default] children");
 
             if (input.Children.Any(x => x.Name == "case" && x.Value == null))
-                throw new ArgumentException("[case] with null value found");
+                throw new HyperlambdaException("[case] with null value found");
 
             if (input.Children.Any(x => x.Name == "default" && x.Value != null))
-                throw new ArgumentException("[default] with non-null value found");
+                throw new HyperlambdaException("[default] with non-null value found");
         }
 
         #endregion

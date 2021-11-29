@@ -2,11 +2,8 @@
  * Magic Cloud, copyright Aista, Ltd. See the attached LICENSE file for details.
  */
 
-using System;
 using System.Linq;
 using Xunit;
-using magic.node;
-using magic.node.extensions;
 
 namespace magic.lambda.tests
 {

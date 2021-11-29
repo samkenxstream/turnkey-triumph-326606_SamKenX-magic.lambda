@@ -63,7 +63,7 @@ namespace magic.lambda.loops
                 // Retrieving [.lambda] node and doing basic sanity check.
                 var lambda = input.Children.Skip(1).First();
                 if (lambda.Name != ".lambda")
-                    throw new ArgumentException("Keyword [while] requires its second child to be [.lambda]");
+                    throw new HyperlambdaException("Keyword [while] requires its second child to be [.lambda]");
 
                 // Evaluating "body" lambda of [while].
                 signaler.Signal("eval", lambda);
@@ -115,7 +115,7 @@ namespace magic.lambda.loops
                 // Retrieving [.lambda] node and doing basic sanity check.
                 var lambda = input.Children.Skip(1).First();
                 if (lambda.Name != ".lambda")
-                    throw new ArgumentException("Keyword [while] requires its second child to be [.lambda]");
+                    throw new HyperlambdaException("Keyword [while] requires its second child to be [.lambda]");
 
                 // Evaluating "body" lambda of [while].
                 await signaler.SignalAsync("eval", lambda);
@@ -137,13 +137,13 @@ namespace magic.lambda.loops
         void SanityCheck(Node input)
         {
             if (input.Children.Count() != 2)
-                throw new ArgumentException("[while] must have exactly two argument nodes, a condition and a [.lambda]");
+                throw new HyperlambdaException("[while] must have exactly two argument nodes, a condition and a [.lambda]");
         }
 
         int SanityCheckIterations(int iterations)
         {
             if (iterations++ == _maxIterations)
-                throw new ArgumentException($"Your [while] loop exceeded the maximum number of iterations, which are {_maxIterations}. Refactor your Hyperlambda, or increase your configuration setting.");
+                throw new HyperlambdaException($"Your [while] loop exceeded the maximum number of iterations, which are {_maxIterations}. Refactor your Hyperlambda, or increase your configuration setting.");
             return iterations;
         }
 

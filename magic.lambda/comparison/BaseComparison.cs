@@ -63,7 +63,7 @@ namespace magic.lambda.comparison
         static void SanityCheck(Node input)
         {
             if (input.Children.Count() != 2)
-                throw new ArgumentException($"Comparison operation [{input.Name}] requires exactly two operands");
+                throw new HyperlambdaException($"Comparison operation [{input.Name}] requires exactly two operands");
         }
 
         #endregion

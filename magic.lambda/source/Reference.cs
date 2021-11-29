@@ -24,11 +24,11 @@ namespace magic.lambda.source
         public void Signal(ISignaler signaler, Node input)
         {
             if (input.Value == null)
-                throw new ArgumentException("No value provided to [reference]");
+                throw new HyperlambdaException("No value provided to [reference]");
 
             var src = input.Evaluate();
             if (src.Count() > 1)
-                throw new ArgumentException("Expressions provided to [reference] returned more than one node");
+                throw new HyperlambdaException("Expressions provided to [reference] returned more than one node");
             input.Value = src.FirstOrDefault();
         }
     }

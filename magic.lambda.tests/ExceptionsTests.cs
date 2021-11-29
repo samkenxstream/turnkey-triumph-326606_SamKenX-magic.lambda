@@ -6,11 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using magic.node.extensions;
-using magic.lambda.exceptions;
-using System;
-using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace magic.lambda.tests
 {
@@ -297,7 +292,7 @@ try
             HyperlambdaException ex = null;
             try
             {
-                throw new HyperlambdaException("foo", new ArgumentException());
+                throw new HyperlambdaException("foo", new HyperlambdaException());
             }
             catch(HyperlambdaException ex2)
             {
@@ -306,7 +301,7 @@ try
             Assert.Equal(500, ex.Status);
             Assert.False(ex.IsPublic);
             Assert.Equal("foo", ex.Message);
-            Assert.Equal(typeof(ArgumentException), ex.InnerException.GetType());
+            Assert.Equal(typeof(HyperlambdaException), ex.InnerException.GetType());
         }
     }
 }

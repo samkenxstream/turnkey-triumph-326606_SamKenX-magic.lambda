@@ -2,7 +2,6 @@
  * Magic Cloud, copyright Aista, Ltd. See the attached LICENSE file for details.
  */
 
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -26,7 +25,7 @@ eq
         [Fact]
         public void Eq_Throws()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .foo1:OK
 eq
    get-value:x:../*/.foo1"));
@@ -122,7 +121,7 @@ not
         [Fact]
         public void NotThrows()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .foo1:OK
 not
    .throws

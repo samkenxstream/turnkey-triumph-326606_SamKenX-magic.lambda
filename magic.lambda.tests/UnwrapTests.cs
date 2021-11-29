@@ -2,9 +2,9 @@
  * Magic Cloud, copyright Aista, Ltd. See the attached LICENSE file for details.
  */
 
-using System;
 using System.Linq;
 using Xunit;
+using magic.node.extensions;
 
 namespace magic.lambda.tests
 {
@@ -41,7 +41,7 @@ unwrap:x:../*/.dest/*");
         [Fact]
         public void UnwrapValue_Throws()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@".src
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@".src
    foo1:bar1
    foo2:bar2
 .dest
