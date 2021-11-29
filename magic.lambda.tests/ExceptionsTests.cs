@@ -167,7 +167,7 @@ try
             Assert.Equal(500, lambda.Children.Skip(1).First().Value);
             Assert.Equal(false, lambda.Children.Skip(2).First().Value);
             Assert.Equal("foo", lambda.Children.Skip(3).First().Value);
-            Assert.Equal("magic.lambda.exceptions.HyperlambdaException", lambda.Children.Skip(4).First().Value);
+            Assert.Equal("magic.node.extensions.HyperlambdaException", lambda.Children.Skip(4).First().Value);
         }
 
         [Fact]
@@ -196,7 +196,7 @@ try
             Assert.Equal(500, lambda.Children.Skip(1).First().Value);
             Assert.Equal(false, lambda.Children.Skip(2).First().Value);
             Assert.Equal("foo", lambda.Children.Skip(3).First().Value);
-            Assert.Equal("magic.lambda.exceptions.HyperlambdaException", lambda.Children.Skip(4).First().Value);
+            Assert.Equal("magic.node.extensions.HyperlambdaException", lambda.Children.Skip(4).First().Value);
         }
 
         [Fact]
@@ -241,7 +241,7 @@ try
             Assert.Equal(123, lambda.Children.Skip(1).First().Value);
             Assert.Equal(true, lambda.Children.Skip(2).First().Value);
             Assert.Equal("[no-message]", lambda.Children.Skip(3).First().Value);
-            Assert.Equal("magic.lambda.exceptions.HyperlambdaException", lambda.Children.Skip(4).First().Value);
+            Assert.Equal("magic.node.extensions.HyperlambdaException", lambda.Children.Skip(4).First().Value);
         }
 
         [Fact]

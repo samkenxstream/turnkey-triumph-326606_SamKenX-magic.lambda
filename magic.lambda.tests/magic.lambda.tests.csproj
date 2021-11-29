@@ -17,8 +17,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="magic.signals.contracts" Version="9.9.3" />
-    <PackageReference Include="magic.lambda.slots" Version="9.9.3" />
+    <PackageReference Include="magic.signals.contracts" Version="9.9.9" />
+    <PackageReference Include="magic.lambda.slots" Version="9.9.9" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
   </ItemGroup>
