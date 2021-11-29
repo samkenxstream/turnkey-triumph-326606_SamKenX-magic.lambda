@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
-using magic.lambda.exceptions;
 
 namespace magic.lambda.eval
 {
