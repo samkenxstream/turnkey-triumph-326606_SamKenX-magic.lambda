@@ -22,7 +22,7 @@ namespace magic.lambda.tests
         [Fact]
         public void InvokeNonExistingSignal_Throws()
         {
-            Assert.Throws<ArgumentException>(() => Common.Evaluate(@"foo_XXX"));
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"foo_XXX"));
         }
 
         [Fact]
