@@ -12,7 +12,7 @@ using magic.node.extensions;
 using magic.signals.contracts;
 using magic.node.extensions.hyperlambda;
 
-namespace magic.lambda.change
+namespace magic.lambda.misc
 {
     /// <summary>
     /// [convert] slot allowing you to convert values of nodes from one type to some other type.

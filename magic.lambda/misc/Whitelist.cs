@@ -9,7 +9,7 @@ using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
 
-namespace magic.lambda.eval
+namespace magic.lambda.misc
 {
     /// <summary>
     /// [whitelist] slot, allowing you to create sub-vocabulary of legal slots.

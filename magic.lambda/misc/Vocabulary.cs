@@ -9,7 +9,7 @@ using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
 
-namespace magic.lambda.eval
+namespace magic.lambda.misc
 {
     /// <summary>
     /// [vocabulary] slot allowing you to dynamically retrieve the names

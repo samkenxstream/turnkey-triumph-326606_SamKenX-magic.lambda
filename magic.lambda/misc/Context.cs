@@ -8,7 +8,7 @@ using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
 
-namespace magic.lambda.eval
+namespace magic.lambda.misc
 {
     /// <summary>
     /// [context] slot allowing you to create a dynamic stack object context,

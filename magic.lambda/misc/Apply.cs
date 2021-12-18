@@ -9,7 +9,7 @@ using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
 
-namespace magic.lambda.change
+namespace magic.lambda.misc
 {
     /// <summary>
     /// [apply] slot allowing you to use a lambda as a template for braiding together

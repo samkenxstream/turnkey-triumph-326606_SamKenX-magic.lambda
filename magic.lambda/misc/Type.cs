@@ -6,7 +6,7 @@ using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
 
-namespace magic.lambda.change
+namespace magic.lambda.misc
 {
     /// <summary>
     /// [type] slot allowing you to retrieve Hyperlambda type information for some specified value.
