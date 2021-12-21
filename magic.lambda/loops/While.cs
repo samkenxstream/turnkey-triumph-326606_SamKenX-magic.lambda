@@ -4,8 +4,8 @@
 
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using magic.node;
+using magic.node.contracts;
 using magic.node.extensions;
 using magic.signals.contracts;
 
@@ -23,7 +23,7 @@ namespace magic.lambda.loops
         /// Creates an instance of your slot.
         /// </summary>
         /// <param name="configuration">Configuration for your application.</param>
-        public While(IConfiguration configuration)
+        public While(IMagicConfiguration configuration)
         {
             _maxIterations = int.Parse(configuration?["magic:lambda:while:max-iterations"] ?? "5000");
         }
