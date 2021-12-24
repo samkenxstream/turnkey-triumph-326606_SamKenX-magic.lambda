@@ -14,7 +14,7 @@ namespace magic.lambda.tests
         [Slot(Name = "foo2")]
         public class Foo2Slot : ISlot
         {
-            public static int ExecutionCount;
+            static int ExecutionCount;
             public static int GetExecutionCount() => ExecutionCount;
             public static void SetExecutionCount(int value) { ExecutionCount = value; }
 
