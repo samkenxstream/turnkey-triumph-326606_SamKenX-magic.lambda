@@ -44,12 +44,23 @@ apply:x:-
         }
 
         [Fact]
-        public void ApplyThrows()
+        public void ApplyThrows_01()
         {
             Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .applied
    foo1:{foo1}
    foo2:{foo2}
+apply:x:-
+   foo1:bar1"));
+        }
+
+        [Fact]
+        public void ApplyThrows_02()
+        {
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
+.applied
+   {foo1}:howdy
+   {foo2}:world
 apply:x:-
    foo1:bar1"));
         }

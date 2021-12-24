@@ -178,7 +178,18 @@ convert:x:-
         }
 
         [Fact]
-        public void ConvertToExpression()
+        public void ConvertToBytes()
+        {
+            var lambda = Common.Evaluate(@"
+.src:""  ""
+convert:x:-
+   type:bytes");
+            Assert.Equal(typeof(byte[]), lambda.Children.Skip(1).First().Value.GetType());
+            Assert.Equal(new byte[] {32, 32}, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertToExpression_01()
         {
             var lambda = Common.Evaluate(@"
 .src:foo/bar
@@ -186,6 +197,17 @@ convert:x:-
    type:x");
             Assert.Equal(typeof(Expression), lambda.Children.Skip(1).First().Value.GetType());
             Assert.Equal("foo/bar", lambda.Children.Skip(1).First().Get<Expression>().Value);
+        }
+
+        [Fact]
+        public void ConvertToExpression_02()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+convert:x:-
+   type:x");
+            Assert.Equal(typeof(Expression), lambda.Children.Skip(1).First().Value.GetType());
+            Assert.Equal("", lambda.Children.Skip(1).First().Get<Expression>().Value);
         }
 
         [Fact]
@@ -201,13 +223,61 @@ convert:x:-
         }
 
         [Fact]
-        public void ConvertToString()
+        public void ConvertToString_01()
         {
             var lambda = Common.Evaluate(@"
 .src:int:5
 convert:x:-
    type:string");
             Assert.Equal("5", lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertToString_02()
+        {
+            var lambda = Common.Evaluate(@"
+.src:bytes:ICA=
+convert:x:-
+   type:string");
+            Assert.Equal("  ", lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertToBase64()
+        {
+            var lambda = Common.Evaluate(@"
+.src:bytes:ICA=
+convert:x:-
+   type:base64");
+            Assert.Equal("ICA=", lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertToBase64_Throws()
+        {
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
+.src:string:howdy
+convert:x:-
+   type:base64"));
+        }
+
+        [Fact]
+        public void ConvertFromBase64()
+        {
+            var lambda = Common.Evaluate(@"
+.src:ICA=
+convert:x:-
+   type:from-base64");
+            Assert.Equal(new byte[] {32, 32}, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
+        public void ConvertFromBase64_Throws()
+        {
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
+.src:int:555
+convert:x:-
+   type:from-base64"));
         }
 
         [Fact]
