@@ -15,7 +15,11 @@ namespace magic.lambda.tests
         [Slot(Name = "fork-slot-1")]
         public class ForkSlot1 : ISlot
         {
-            public static int ExecutionCount;
+            static int ExecutionCount;
+
+            public static void SetExecutionCount(int value) { ExecutionCount = value; }
+
+            public static int GetExecutionCount() => ExecutionCount;
 
             public void Signal(ISignaler signaler, Node input)
             {
@@ -28,26 +32,27 @@ namespace magic.lambda.tests
         {
             public void Signal(ISignaler signaler, Node input)
             {
-                ForkSlot1.ExecutionCount += 1;
+                ForkSlot1.SetExecutionCount(ForkSlot1.GetExecutionCount() + 1);
             }
         }
 
         [Fact]
         public void ForkWithSleep()
         {
-            ForkSlot1.ExecutionCount = 0;
+            ForkSlot1.SetExecutionCount(0);
             var lambda = Common.Evaluate(@"
 fork
    fork-slot-1
 sleep:100
 fork-slot-2
 ");
+            Assert.Equal(1, ForkSlot1.GetExecutionCount());
         }
 
         [Fact]
         public void ForkWithJoin()
         {
-            ForkSlot1.ExecutionCount = 0;
+            ForkSlot1.SetExecutionCount(0);
             var lambda = Common.Evaluate(@"
 join
    fork
@@ -57,13 +62,13 @@ join
       sleep:100
       fork-slot-2
 ");
-            Assert.Equal(2, ForkSlot1.ExecutionCount);
+            Assert.Equal(2, ForkSlot1.GetExecutionCount());
         }
 
         [Fact]
         public void Semaphore_01()
         {
-            ForkSlot1.ExecutionCount = 0;
+            ForkSlot1.SetExecutionCount(0);
             var lambda = Common.Evaluate(@"
 fork
    semaphore:foo
@@ -71,7 +76,7 @@ fork
 semaphore:foo
    fork-slot-2
 ");
-            Assert.Equal(2, ForkSlot1.ExecutionCount);
+            Assert.Equal(2, ForkSlot1.GetExecutionCount());
         }
 
         [Fact]
@@ -85,7 +90,7 @@ semaphore
         [Fact]
         public async Task Semaphore_01Async()
         {
-            ForkSlot1.ExecutionCount = 0;
+            ForkSlot1.SetExecutionCount(0);
             var lambda = await Common.EvaluateAsync(@"
 fork
    semaphore:foo2
@@ -93,19 +98,20 @@ fork
 semaphore:foo2
    fork-slot-2
 ");
-            Assert.Equal(2, ForkSlot1.ExecutionCount);
+            Assert.Equal(2, ForkSlot1.GetExecutionCount());
         }
 
         [Fact]
         public async Task ForkWithSleepAsync()
         {
-            ForkSlot1.ExecutionCount = 0;
+            ForkSlot1.SetExecutionCount(0);
             var lambda = await Common.EvaluateAsync(@"
 fork
    fork-slot-1
 sleep:100
 fork-slot-2
 ");
+            Assert.Equal(1, ForkSlot1.GetExecutionCount());
         }
     }
 }

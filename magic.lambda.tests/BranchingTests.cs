@@ -327,6 +327,16 @@ else
         }
 
         [Fact]
+        public void ElseIfThrows_01()
+        {
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
+.result
+else-if
+   set-value:x:../*/.result
+      .:OK"));
+        }
+
+        [Fact]
         public void ElseThrows_02()
         {
             Assert.Throws<HyperlambdaException>(() => Common.Evaluate("else"));
