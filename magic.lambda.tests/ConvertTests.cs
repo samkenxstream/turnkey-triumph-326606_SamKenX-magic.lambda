@@ -189,6 +189,17 @@ convert:x:-
         }
 
         [Fact]
+        public void ConvertToBytesEmpty()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+convert:x:-
+   type:bytes");
+            Assert.Equal(typeof(byte[]), lambda.Children.Skip(1).First().Value.GetType());
+            Assert.Equal(new byte[] {}, lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
         public void ConvertToExpression_01()
         {
             var lambda = Common.Evaluate(@"

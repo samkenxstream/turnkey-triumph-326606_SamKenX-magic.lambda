@@ -48,14 +48,16 @@ namespace magic.lambda.branching
          */
         Node GetExecutionNode(Node input)
         {
+            // Sanity checking invocation.
             SanityCheckInvocation(input);
 
+            // Retrieving value to switch on.
             var result = input.GetEx<object>();
 
-            var executionNode = input.Children
-                .FirstOrDefault(x => x.Name == "case" && x.Value.Equals(result)) ??
-                input.Children
-                    .FirstOrDefault(x => x.Name == "default");
+            // Finding our execution node, defaulting to [default] if none of our [case] nodes are matching the above value.
+            var executionNode = 
+                input.Children.FirstOrDefault(x => x.Name == "case" && x.GetEx<object>().Equals(result)) ??
+                input.Children.FirstOrDefault(x => x.Name == "default");
 
             if (executionNode != null)
             {

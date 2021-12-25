@@ -2,10 +2,10 @@
  * Magic Cloud, copyright Aista, Ltd. See the attached LICENSE file for details.
  */
 
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using magic.node;
 using magic.node.extensions;
 
 namespace magic.lambda.tests
@@ -216,6 +216,20 @@ context:foo
          get-context:foo
 ");
             Assert.Equal("bar", lambda.Children.First().Get<string>());
+        }
+
+        [Fact]
+        public void EvalContextNode()
+        {
+            var lambda = Common.Evaluate(@"
+.result
+context:foo
+   value:node:bar
+   .lambda
+      set-value:x:@.result
+         get-context:foo
+");
+            Assert.Equal("bar", lambda.Children.First().Get<Node>().Children.First().Name);
         }
 
         [Fact]

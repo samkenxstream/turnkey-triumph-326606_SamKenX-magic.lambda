@@ -28,9 +28,9 @@ namespace magic.lambda.tests
             }
         }
 
-        static public Node Evaluate(string hl)
+        static public Node Evaluate(string hl, bool maxIterations = true)
         {
-            var services = Initialize();
+            var services = Initialize(maxIterations);
             var lambda = HyperlambdaParser.Parse(hl);
             var signaler = services.GetService(typeof(ISignaler)) as ISignaler;
             var evalResult = new Node();
@@ -56,11 +56,12 @@ namespace magic.lambda.tests
 
         #region [ -- Private helper methods -- ]
 
-        static IServiceProvider Initialize()
+        static IServiceProvider Initialize(bool maxIterations = true)
         {
             var services = new ServiceCollection();
             var mockConfiguration = new Mock<IMagicConfiguration>();
-            mockConfiguration.SetupGet(x => x[It.IsAny<string>()]).Returns("60");
+            if (maxIterations)
+                mockConfiguration.SetupGet(x => x[It.IsAny<string>()]).Returns("60");
             services.AddTransient((svc) => mockConfiguration.Object);
             services.AddTransient<ISignaler, Signaler>();
             services.AddSingleton(typeof(ThreadRunner));

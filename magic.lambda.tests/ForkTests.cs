@@ -66,6 +66,22 @@ join
         }
 
         [Fact]
+        public async Task ForkWithJoinAsync()
+        {
+            ForkSlot1.SetExecutionCount(0);
+            var lambda = await Common.EvaluateAsync(@"
+join
+   fork
+      sleep:100
+      fork-slot-2
+   fork
+      sleep:100
+      fork-slot-2
+");
+            Assert.Equal(2, ForkSlot1.GetExecutionCount());
+        }
+
+        [Fact]
         public void Semaphore_01()
         {
             ForkSlot1.SetExecutionCount(0);
