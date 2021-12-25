@@ -196,7 +196,7 @@ convert:x:-
 convert:x:-
    type:bytes");
             Assert.Equal(typeof(byte[]), lambda.Children.Skip(1).First().Value.GetType());
-            Assert.Equal(new byte[] {}, lambda.Children.Skip(1).First().Value);
+            Assert.Equal(Array.Empty<byte>(), lambda.Children.Skip(1).First().Value);
         }
 
         [Fact]
