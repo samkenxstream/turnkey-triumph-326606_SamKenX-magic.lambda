@@ -24,13 +24,26 @@ switch:x:@.foo
         }
 
         [Fact]
-        public void SwitchFallthrough()
+        public void SwitchFallthrough_01()
         {
             var lambda = Common.Evaluate(@".result
 .foo:bar
 switch:x:@.foo
    case:foo
    case:bar
+      set-value:x:@.result
+         .:OK");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void SwitchFallthrough_02()
+        {
+            var lambda = Common.Evaluate(@".result
+.foo:bar
+switch:x:@.foo
+   case:bar
+   case:foo
       set-value:x:@.result
          .:OK");
             Assert.Equal("OK", lambda.Children.First().Value);

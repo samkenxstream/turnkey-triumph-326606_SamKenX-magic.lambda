@@ -90,6 +90,7 @@ namespace magic.lambda.exceptions
             {
                 args.Add(new Node("status", hl.Status));
                 args.Add(new Node("public", hl.IsPublic));
+                args.Add(new Node("field", hl.FieldName));
             }
             next.Insert(0, args);
             return next;

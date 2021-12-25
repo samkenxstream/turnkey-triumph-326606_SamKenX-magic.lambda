@@ -4,8 +4,8 @@
 
 using System.Linq;
 using System.Threading.Tasks;
-using magic.node.extensions;
 using Xunit;
+using magic.node.extensions;
 
 namespace magic.lambda.tests
 {
@@ -46,6 +46,44 @@ or
    .lambda
       set-value:x:../*/.result
          .:OK"));
+        }
+
+        [Fact]
+        public void Or_Whitelist_Throws()
+        {
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
+.result
+whitelist
+   vocabulary
+      if
+      set-value
+      and
+   .lambda
+      if
+         and
+            get-value:x:@.result
+         .lambda
+            set-value:x:../*/.result
+               .:OK"));
+        }
+
+        [Fact]
+        public async Task Or_Whitelist_ThrowsAsync()
+        {
+            await Assert.ThrowsAsync<HyperlambdaException>(async () => await Common.EvaluateAsync(@"
+.result
+whitelist
+   vocabulary
+      if
+      set-value
+      and
+   .lambda
+      if
+         and
+            get-value:x:@.result
+         .lambda
+            set-value:x:../*/.result
+               .:OK"));
         }
 
         [Fact]
@@ -340,6 +378,15 @@ else-if
         public void ElseThrows_02()
         {
             Assert.Throws<HyperlambdaException>(() => Common.Evaluate("else"));
+        }
+
+        [Fact]
+        public void ElseIfThrows_03()
+        {
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
+else-if
+   set-value:x:../*/.result
+      .:OK"));
         }
 
         [Fact]

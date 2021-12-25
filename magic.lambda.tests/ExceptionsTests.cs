@@ -35,6 +35,25 @@ try
         }
 
         [Fact]
+        public void Throws_03()
+        {
+            var lambda = Common.Evaluate(@"
+.throws:bool:false
+.field
+try
+   throw:foo
+      field:foo
+.catch
+   set-value:x:@.throws
+      .:bool:true
+   set-value:x:@.field
+      get-value:x:@.arguments/*/field
+");
+            Assert.Equal(true, lambda.Children.First().Value);
+            Assert.Equal("foo", lambda.Children.Skip(1).First().Value);
+        }
+
+        [Fact]
         public void NoThrow_01()
         {
             var lambda = Common.Evaluate(@"

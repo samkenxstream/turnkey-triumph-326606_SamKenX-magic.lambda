@@ -192,7 +192,20 @@ while
         }
 
         [Fact]
-        public void While_InfiniteLoopStopsTooLate()
+        public void While_InfiniteLoopStopsTooLate_01()
+        {
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
+.no:int:0
+while
+   lt
+      get-value:x:@.no
+      .:int:70
+   .lambda
+      math.increment:x:@.no"));
+        }
+
+        [Fact]
+        public void While_InfiniteLoopStopsTooLate_02()
         {
             Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .no:int:0
@@ -201,7 +214,7 @@ while
       get-value:x:@.no
       .:int:5000
    .lambda
-      math.increment:x:@.no"));
+      math.increment:x:@.no", false));
         }
     }
 }

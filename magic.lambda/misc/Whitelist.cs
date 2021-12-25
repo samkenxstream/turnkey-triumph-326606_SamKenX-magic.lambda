@@ -66,9 +66,10 @@ namespace magic.lambda.misc
          */
         (List<Node> Vocabulary, Node Lambda) GetWhitelist(Node input)
         {
-            var vocabulary = input.Children
+            var vocabulary = input
+                .Children
                 .FirstOrDefault(x => x.Name == "vocabulary")?
-                .Children?
+                .Children
                 .ToList() ??
                     throw new HyperlambdaException("No [vocabulary] provided to [whitelist]");
 
