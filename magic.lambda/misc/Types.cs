@@ -23,7 +23,7 @@ namespace magic.lambda.misc
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            input.AddRange(Converter.ListTypes().Select(x => new Node("", x)));
+            input.AddRange(Converter.GetTypes().Select(x => new Node("", x)));
         }
     }
 }
