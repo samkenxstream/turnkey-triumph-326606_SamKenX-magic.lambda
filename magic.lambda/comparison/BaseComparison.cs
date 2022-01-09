@@ -72,7 +72,7 @@ namespace magic.lambda.comparison
         static void SanityCheck(Node input)
         {
             var count = input.Children.Count();
-            if (count < 1 || count > 2 || (count == 1 && !(input.Value is Expression)))
+            if (count < 1 || count > 2 || (count == 1 && input.Value == null) || (count == 2 && input.Value != null))
                 throw new HyperlambdaException($"Comparison operation [{input.Name}] requires exactly two operands");
         }
 
