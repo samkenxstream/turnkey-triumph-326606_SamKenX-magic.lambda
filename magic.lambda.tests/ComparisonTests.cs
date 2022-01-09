@@ -19,7 +19,38 @@ namespace magic.lambda.tests
 eq
    get-value:x:../*/.foo1
    .:OK");
-            Assert.Equal(true, lambda.Children.Skip(1).First().Value);
+            Assert.True(lambda.Children.Skip(1).First().Get<bool>());
+        }
+
+        [Fact]
+        public void EqExpression_01()
+        {
+            var lambda = Common.Evaluate(@"
+.foo1:OK
+eq:x:../*/.foo1
+   .:OK");
+            Assert.True(lambda.Children.Skip(1).First().Get<bool>());
+        }
+
+        [Fact]
+        public void Neq_01()
+        {
+            var lambda = Common.Evaluate(@"
+.foo1:OK
+neq
+   get-value:x:../*/.foo1
+   .:OK");
+            Assert.False(lambda.Children.Skip(1).First().Get<bool>());
+        }
+
+        [Fact]
+        public void NeqExpression_01()
+        {
+            var lambda = Common.Evaluate(@"
+.foo1:OK
+neq:x:../*/.foo1
+   .:OK");
+            Assert.False(lambda.Children.Skip(1).First().Get<bool>());
         }
 
         [Fact]
@@ -32,6 +63,15 @@ eq
         }
 
         [Fact]
+        public void Neq_Throws()
+        {
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
+.foo1:OK
+neq
+   get-value:x:../*/.foo1"));
+        }
+
+        [Fact]
         public async Task Eq_01Async()
         {
             var lambda = await Common.EvaluateAsync(@"
@@ -40,6 +80,37 @@ eq
    get-value:x:../*/.foo1
    .:OK");
             Assert.True(lambda.Children.Skip(1).First().Get<bool>());
+        }
+
+        [Fact]
+        public async Task EqExpression_01Async()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.foo1:OK
+eq:x:../*/.foo1
+   .:OK");
+            Assert.True(lambda.Children.Skip(1).First().Get<bool>());
+        }
+
+        [Fact]
+        public async Task Neq_01Async()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.foo1:OK
+neq
+   get-value:x:../*/.foo1
+   .:OK");
+            Assert.False(lambda.Children.Skip(1).First().Get<bool>());
+        }
+
+        [Fact]
+        public async Task NeqExpression_01Async()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.foo1:OK
+neq:x:../*/.foo1
+   .:OK");
+            Assert.False(lambda.Children.Skip(1).First().Get<bool>());
         }
 
         [Fact]
