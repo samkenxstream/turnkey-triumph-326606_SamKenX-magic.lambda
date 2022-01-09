@@ -217,13 +217,17 @@ What the above code basically translates into, is.
 
 ## Branching and conditional execution
 
-Magic Lambda contains the following slots. Most of these slots have async overloads, which will be
-automatically used by Magic if possible.
+Branching is the ability to conditionally execute a lambda object based upon the result of some condition. The three
+primary slots that facilitates for this is **[if]**, **[else-if]**, and **[else]** - However, the **[while]** slots also
+semantically functions the same way. The **[if]** and **[else-if]** slots can either take two arguments, where its first
+argument is assumed to be the condition parts, and the seconds argument its **[.lambda]** object, to be executed if and
+only if the condition evaluates to true - Or these slots can be given an expression as their value, which only if
+evaluates to true, will treat the children of the invocation as a lambda object and execute it.
 
 ### [if]
 
 This is the Hyperlambda equivalent of `if` from other programming languages. It allows you to test for some condition,
-and evaluate a lambda object, only if the condition evaluates to true. **[if]** must be given exactly two arguments.
+and evaluate a lambda object, only if the condition evaluates to true. **[if]** accepts two arguments.
 The first argument can be anything, including a slot invocation - But its second argument must be its **[.lambda]**
 argument. The **[.lambda]** node will be evaluated as a lambda object, only if the first argument to **[if]** evaluates
 to boolean true. Below is an example.
@@ -238,7 +242,7 @@ if
 ```
 
 All conditional slots, including **[if]**, optionally accepts slots as their first condition argument.
-This allows you to invoke slots, treating the return value of the slot as the condition deciding
+This allows you to invoke slots, treat the return value of the slot as the condition deciding
 whether or not the **[.lambda]** object should be executed or not. Below is an example.
 
 ```
@@ -253,12 +257,25 @@ if
          .:yup!
 ```
 
+Optionally you can also point the **[if]** invocation directly to the value of some other node with an expression.
+If you do, the result of the expression is assumed to evaluate to either boolean `false` or `true`. If you choose
+this path, the entirety of the **[if]** invocation's children nodes will be assumed to be the lambda object to
+execute if the expression evaluates to true. Below is an example.
+
+```
+.result
+.condition:bool:true
+if:x:@.condition
+   set-value:x:@.result
+      .:Yup!
+```
+
 ### [else-if]
 
 **[else-if]** is the younger sibling of **[if]**, and must be preceeded by its older sibling, or other **[else-if]** nodes,
 and will only be evaluated if all of its previous conditional slots evaluates to false - At which point **[else-if]** is
 allowed to test its condition - And only if it evaluates to true, evaluate its lambda object. Semantically **[else-if]**
-is similar to **[if]**, in that it requires exactly two arguments with the same structure as **[if]**.
+is similar to **[if]**, in that it requires two arguments with the same structure as **[if]**.
 
 ```
 .dest
@@ -272,6 +289,30 @@ else-if
    .lambda
       set-value:x:@.dest
          .:yup2.0!
+```
+
+The same way you can point an **[if]** invocation to an expression, you can also point the **[else-if]** directly
+to an expression. Below is an example.
+
+Optionally you can also point the **[else-if]** invocation directly to the value of some other node with an expression.
+If you do, the result of the expression is assumed to evaluate to either boolean `false` or `true`. If you choose
+this path, the entirety of the **[else-if]** invocation's children nodes will be assumed to be the lambda object to
+execute if the expression evaluates to true. Below is an example.
+
+```
+.result
+.condition1:bool:false
+.condition2:bool:true
+
+if:x:@.condition1
+
+   set-value:x:@.result
+      .:If is true
+
+else-if:x:@.condition2
+
+   set-value:x:@.result
+      .:Else-if is true
 ```
 
 ### [else]
