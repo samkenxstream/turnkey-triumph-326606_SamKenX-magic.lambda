@@ -35,15 +35,80 @@ and
         }
 
         [Fact]
+        public void AndWhitelist()
+        {
+            var lambda = Common.Evaluate(@"
+whitelist
+   vocabulary
+      get-value
+      and
+      return
+   .lambda
+      .foo1:bool:true
+      and
+         get-value:x:../*/.foo1
+         .:bool:true
+      return:x:-");
+            Assert.True(lambda.Children.First().Get<bool>());
+        }
+
+        [Fact]
         public void AndWhitelist_Throws()
+        {
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
+whitelist
+   vocabulary
+      and
+   .lambda
+      .foo1:bool:true
+      and
+         get-value:x:../*/.foo1
+         .:bool:true"));
+        }
+
+        [Fact]
+        public void OrWhitelist()
+        {
+            var lambda = Common.Evaluate(@"
+whitelist
+   vocabulary
+      get-value
+      or
+      return
+   .lambda
+      .foo1:bool:false
+      or
+         get-value:x:../*/.foo1
+         .:bool:true
+      return:x:-");
+            Assert.True(lambda.Children.First().Get<bool>());
+        }
+
+        [Fact]
+        public async Task OrWhitelistAsync_Throws()
+        {
+            await Assert.ThrowsAsync<HyperlambdaException>(async () => await Common.EvaluateAsync(@"
+whitelist
+   vocabulary
+      or
+   .lambda
+      .foo1:bool:true
+      or
+         get-value:x:../*/.foo1
+         .:bool:true"));
+        }
+
+        [Fact]
+        public void OrWhitelist_Throws()
         {
             Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .foo1:bool:true
 whitelist
    vocabulary
       set-value
+      or
    .lambda
-      and
+      or
          get-value:x:../*/.foo1
          .:bool:true"));
         }
@@ -56,6 +121,7 @@ whitelist
 whitelist
    vocabulary
       set-value
+      and
    .lambda
       and
          get-value:x:../*/.foo1
