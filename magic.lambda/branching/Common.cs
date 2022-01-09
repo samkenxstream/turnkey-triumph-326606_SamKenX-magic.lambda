@@ -64,10 +64,6 @@ namespace magic.lambda.branching
             if (input.Value != null)
                 return input;
 
-            // Sanity checking invocation, making sure there's exactly two nodes.
-            if (input.Children.Count() != 2)
-                throw new HyperlambdaException($"Provide only a condition and a [.lambda] object to your [{input.Name}] invocations");
-
             // Returning [.lambda] node to caller, sanity checking invocation at the same time.
             return input.Children.FirstOrDefault(x => x.Name == ".lambda") ?? 
                 throw new HyperlambdaException($"No [.lambda] object associated with [{input.Name}] invocation");
