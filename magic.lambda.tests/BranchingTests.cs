@@ -37,6 +37,18 @@ if:x:-
         }
 
         [Fact]
+        public async Task IfExpressionAsync_01()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.result
+.condition:bool:true
+if:x:-
+   set-value:x:../*/.result
+      .:OK");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
         public void IfExpression_02()
         {
             var lambda = Common.Evaluate(@"
