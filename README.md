@@ -363,8 +363,9 @@ cs
 ```
 
 In the above example the **[some-slot]** will be evaluated, and the resulting value of the slot invocation
-will be compared towards the _"some static value"_ using the **[cs]** slot. You can also provide expressions
-for both the LHS and the RHS such as follows, at which point the values of both expressions will be compared.
+will become the LHS value compared towards the _"some static value"_ as RHS using the **[cs]** slot. You can
+also provide expressions for both the LHS and the RHS such as follows, at which point the values of both
+expressions will be compared.
 
 ```
 cs
@@ -372,12 +373,19 @@ cs
    .:x:foo2/bar2
 ```
 
-And finally you can provide an expression as the value of your **[cs]** slot, resulting in that this becomes
-the LHS argument, at which point it is expected your **[cs]** slot invocation having only _one_ child, being
-its RHS argument. Below is an example.
+In the above example the value of the `foo1/bar1` expression becomes the LHS value, and the value of
+the `foo2/bar2` expression becomes the RHS value. You can also provide an expression or a constant as
+the value of your **[cs]** slot, resulting in that this becomes the LHS argument, at which point it
+is expected that your **[cs]** slot invocation having only _one_ child, being its RHS argument. Below
+is an example for both a constant value and an expression.
 
 ```
+// Expression LHS argument
 cs:x:foo/bar
+   .:whatever RHS value here
+
+// Constant LHS argument
+cs:some value here
    .:whatever RHS value here
 ```
 
