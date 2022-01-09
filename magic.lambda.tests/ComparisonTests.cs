@@ -72,12 +72,19 @@ neq:x:../*/.foo1
         }
 
         [Fact]
-        public void Eq_Throws()
+        public void Eq_Throws_01()
         {
             Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .foo1:OK
 eq
    get-value:x:../*/.foo1"));
+        }
+
+        [Fact]
+        public void Eq_Throws_02()
+        {
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
+eq:x:../*/.foo1"));
         }
 
         [Fact]
