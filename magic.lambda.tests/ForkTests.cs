@@ -87,9 +87,9 @@ join
             ForkSlot1.SetExecutionCount(0);
             var lambda = Common.Evaluate(@"
 fork
-   semaphore:foo
+   semaphore:foo-qwerty
       fork-slot-2
-semaphore:foo
+semaphore:foo-qwerty
    fork-slot-2
 ");
             Assert.Equal(2, ForkSlot1.GetExecutionCount());

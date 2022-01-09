@@ -4,8 +4,8 @@
 
 using System.Linq;
 using System.Threading.Tasks;
-using magic.node.extensions;
 using Xunit;
+using magic.node.extensions;
 
 namespace magic.lambda.tests
 {
@@ -90,6 +90,16 @@ switch:x:@.foo
    default:howdy
       set-value:x:@.result
          .:OK"));
+        }
+
+        [Fact]
+        public void SwitchThrow_05()
+        {
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@".result
+.foo:bar
+switch:x:@.foo
+   case:foo
+   default"));
         }
 
         [Fact]
