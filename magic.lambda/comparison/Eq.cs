@@ -19,14 +19,14 @@ namespace magic.lambda.comparison
         protected override bool Compare(object lhs, object rhs)
         {
             if (lhs == null && rhs == null)
-                return true;
+                return true; // Both are null
             else if (lhs != null && rhs == null)
-                return false;
+                return false; // Only rhs == null
             else if (lhs == null)
-                return false;
+                return false; // Only lhs == null
             else if (lhs.GetType() != rhs.GetType())
-                return false;
-            return ((IComparable)lhs).CompareTo(rhs) == 0;
+                return false; // Different types
+            return ((IComparable)lhs).CompareTo(rhs) == 0; // Doing object comparison.
         }
 
         #endregion
