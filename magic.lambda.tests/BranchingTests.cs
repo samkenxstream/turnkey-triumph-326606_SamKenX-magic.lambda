@@ -25,9 +25,46 @@ if
         }
 
         [Fact]
+        public void IfExpression_01()
+        {
+            var lambda = Common.Evaluate(@"
+.result
+.condition:bool:true
+if:x:-
+   set-value:x:../*/.result
+      .:OK");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void IfExpression_02()
+        {
+            var lambda = Common.Evaluate(@"
+.result
+.condition:bool:false
+if:x:-
+   set-value:x:../*/.result
+      .:ERROR");
+            Assert.Null(lambda.Children.First().Value);
+        }
+
+        [Fact]
         public void If_Throws()
         {
             Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
+.result
+if
+   .:bool:true
+   .:bool:true
+   .lambda
+      set-value:x:../*/.result
+         .:OK"));
+        }
+
+        [Fact]
+        public async Task IfAsync_Throws()
+        {
+            await Assert.ThrowsAsync<HyperlambdaException>(async () => await Common.EvaluateAsync(@"
 .result
 if
    .:bool:true
@@ -368,7 +405,6 @@ else
         public void ElseIfThrows_01()
         {
             Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
-.result
 else-if
    .:bool:true
    .lambda
@@ -424,6 +460,40 @@ else-if
    .lambda
       set-value:x:../*/.result
          .:OK");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void ElseIfExpression_01()
+        {
+            var lambda = Common.Evaluate(@"
+.result
+.condition:bool:true
+if
+   .:bool:false
+   .lambda
+      set-value:x:../*/.result
+         .:failure
+else-if:x:@.condition
+   set-value:x:../*/.result
+      .:OK");
+            Assert.Equal("OK", lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void ElseIfExpression_02()
+        {
+            var lambda = Common.Evaluate(@"
+.result:OK
+.condition:bool:false
+if
+   .:bool:false
+   .lambda
+      set-value:x:../*/.result
+         .:failure
+else-if:x:@.condition
+   set-value:x:../*/.result
+      .:ERROR");
             Assert.Equal("OK", lambda.Children.First().Value);
         }
 
