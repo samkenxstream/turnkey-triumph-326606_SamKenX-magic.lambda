@@ -23,16 +23,28 @@ namespace magic.lambda.branching
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            // Checking to see if we should evaluate at all.
-            if (ShouldEvaluate(input, out Node lambda))
-            {
-                // Evaluating condition.
-                signaler.Signal("eval", input);
+            // Sanity checking invocation.
+            Common.SanityCheckElse(input);
 
-                // Checking if evaluation of condition evaluated to true.
-                if (input.Children.First().GetEx<bool>())
-                    signaler.Signal("eval", lambda);
+            // Checking if we should short circuit invocation.
+            if (!Common.ShouldEvaluateElse(input))
+            {
+                // Previous conditional invocation yielded true.
+                input.Value = false;
+                return;
             }
+
+            // Checking if we should evaluate lambda object.
+            if (!Common.ConditionIsTrue(signaler, input))
+            {
+                // Result of condition yields false.
+                input.Value = false;
+                return;
+            }
+
+            // Result of condition yields true. ORDER COUNTS!
+            signaler.Signal("eval", Common.GetLambda(input));
+            input.Value = true;
         }
 
         /// <summary>
@@ -43,58 +55,27 @@ namespace magic.lambda.branching
         /// <returns>An awaitable task.</returns>
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
-            // Checking to see if we should evaluate at all.
-            if (ShouldEvaluate(input, out Node lambda))
+            // Sanity checking invocation.
+            Common.SanityCheckElse(input);
+
+            // Checking if we should short circuit invocation.
+            if (!Common.ShouldEvaluateElse(input))
             {
-                // Evaluating condition.
-                await signaler.SignalAsync("eval", input);
-
-                // Checking if evaluation of condition evaluated to true.
-                if (input.Children.First().GetEx<bool>())
-                    await signaler.SignalAsync("eval", lambda);
+                input.Value = false;
+                return;
             }
-        }
 
-        #region [ -- Private helper methods -- ]
-
-        /*
-         * Helper method for the above, to check if we should evaluate [else-if] at all.
-         */
-        bool ShouldEvaluate(Node input, out Node lambda)
-        {
-            if (input.Children.Count() != 2)
-                throw new HyperlambdaException("Keyword [else-if] requires exactly two children nodes");
-
-            lambda = input.Children.Skip(1).First();
-            if (lambda.Name != ".lambda")
-                throw new HyperlambdaException("Keyword [else-if] requires its second child node to be [.lambda]");
-
-            var previous = input.Previous;
-            if (previous == null ||
-                (previous.Name != "if" && previous.Name != "else-if"))
-                throw new HyperlambdaException("[else-if] must have an [if] or [else-if] before it");
-
-            return PreviousIsFalse(previous);
-        }
-
-        #endregion
-
-        #region [ -- Internal helper methods -- ]
-
-        static internal bool PreviousIsFalse(Node input)
-        {
-            while (input != null && (input.Name == "if" || input.Name == "else-if"))
+            // Checking if we should evaluate lambda object.
+            if (!await Common.ConditionIsTrueAsync(signaler, input))
             {
-                var current = input.Children.First();
-                if (current.Value != null && current.GetEx<bool>())
-                    return false;
-                if (input.Name == "if")
-                    break;
-                input = input.Previous;
+                // Result of condition yields false.
+                input.Value = false;
+                return;
             }
-            return true;
-        }
 
-        #endregion
+            // Result of condition yields true. ORDER COUNTS!
+            await signaler.SignalAsync("eval", Common.GetLambda(input));
+            input.Value = true;
+        }
     }
 }

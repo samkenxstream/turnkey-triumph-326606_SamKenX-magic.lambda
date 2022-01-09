@@ -22,8 +22,20 @@ namespace magic.lambda.branching
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            if (ShouldEvaluate(input))
-                signaler.Signal("eval", input);
+            // Sanity checking invocation.
+            Common.SanityCheckElse(input);
+
+            // Checking if previous condition was true, and if so we don't evaluate else.
+            if (!Common.ShouldEvaluateElse(input))
+            {
+                // Previous [if] or [else-if] yielded true.
+                input.Value = false;
+                return;
+            }
+
+            // Results of all previous conditions yielded false, hence evaluating.
+            input.Value = true;
+            signaler.Signal("eval", input);
         }
 
         /// <summary>
@@ -34,29 +46,20 @@ namespace magic.lambda.branching
         /// <returns>An awaitable task.</returns>
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
-            if (ShouldEvaluate(input))
-                await signaler.SignalAsync("eval", input);
+            // Sanity checking invocation.
+            Common.SanityCheckElse(input);
+
+            // Checking if previous condition was true, and if so we don't evaluate else.
+            if (!Common.ShouldEvaluateElse(input))
+            {
+                // Previous [if] or [else-if] yielded true.
+                input.Value = false;
+                return;
+            }
+
+            // Results of all previous conditions yielded false, hence evaluating.
+            input.Value = true;
+            await signaler.SignalAsync("eval", input);
         }
-
-        #region [ -- Private helper methods -- ]
-
-        /*
-         * Helper method for the above, to check if we should evaluate [else] at all.
-         */
-        bool ShouldEvaluate(Node input)
-        {
-            /*
-             * Traversing backwards in graph, finding our if we should evaluate
-             * or not, and sanity checking invocation at the same time.
-             */
-            var previous = input.Previous;
-            if (previous == null ||
-                (previous.Name != "if" && previous.Name != "else-if"))
-                throw new HyperlambdaException("[else] must have an [if] or [else-if] before it");
-
-            return ElseIf.PreviousIsFalse(previous);
-        }
-
-        #endregion
     }
 }

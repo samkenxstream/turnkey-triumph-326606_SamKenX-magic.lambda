@@ -2,16 +2,14 @@
  * Magic Cloud, copyright Aista, Ltd. See the attached LICENSE file for details.
  */
 
-using System.Linq;
 using System.Threading.Tasks;
 using magic.node;
-using magic.node.extensions;
 using magic.signals.contracts;
 
 namespace magic.lambda.branching
 {
     /// <summary>
-    /// [if] slot, allowing you to do branching in your code.
+    /// [if] slot, allowing you to branch in your code execution according to some condition.
     /// </summary>
     [Slot(Name = "if")]
     public class If : ISlot, ISlotAsync
@@ -23,15 +21,17 @@ namespace magic.lambda.branching
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            // Evaluating condition.
-            signaler.Signal("eval", input);
-
-            // Checking if condition evaluated to true.
-            if (input.Children.First().GetEx<bool>())
+            // Checking if we should evaluate lambda object.
+            if (!Common.ConditionIsTrue(signaler, input))
             {
-                // Retrieving and evaluating lambda node.
-                signaler.Signal("eval", GetLambdaNode(input));
+                // Result of condition yields false.
+                input.Value = false;
+                return;
             }
+
+            // Result of condition yields true. ORDER COUNTS!
+            signaler.Signal("eval", Common.GetLambda(input));
+            input.Value = true;
         }
 
         /// <summary>
@@ -42,37 +42,17 @@ namespace magic.lambda.branching
         /// <returns>An awaitable task.</returns>
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
-            // Evaluating condition.
-            await signaler.SignalAsync("eval", input);
-
-            // Checking if condition evaluated to true.
-            if (input.Children.First().GetEx<bool>())
+            // Checking if we should evaluate lambda object.
+            if (!await Common.ConditionIsTrueAsync(signaler, input))
             {
-                // Retrieving and evaluating lambda node.
-                await signaler.SignalAsync("eval", GetLambdaNode(input));
+                // Result of condition yields false.
+                input.Value = false;
+                return;
             }
+
+            // Result of condition yields true. ORDER COUNTS!
+            await signaler.SignalAsync("eval", Common.GetLambda(input));
+            input.Value = true;
         }
-
-        #region [ -- Private helper methods -- ]
-
-        /*
-         * Returns the lambda execution node for the above two methods,
-         * and does some basic sanity checking of invocation.
-         */
-        Node GetLambdaNode(Node input)
-        {
-            // Sanity checking invocation.
-            if (input.Children.Count() != 2)
-                throw new HyperlambdaException("Keyword [if] requires exactly two child nodes, one comparer node and one [.lambda] node, in that sequence");
-
-            // Retrieving lambda node, and sanity checking it.
-            var lambda = input.Children.Skip(1).First();
-            if (lambda.Name != ".lambda")
-                throw new HyperlambdaException("Keyword [if] requires its second child to be [.lambda]");
-
-            return lambda;
-        }
-
-        #endregion
     }
 }
