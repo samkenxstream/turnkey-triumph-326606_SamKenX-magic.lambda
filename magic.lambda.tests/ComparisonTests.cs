@@ -33,6 +33,24 @@ eq:x:../*/.foo1
         }
 
         [Fact]
+        public void EqStatic_01()
+        {
+            var lambda = Common.Evaluate(@"
+eq:OK
+   .:OK");
+            Assert.True(lambda.Children.First().Get<bool>());
+        }
+
+        [Fact]
+        public void EqStatic_02()
+        {
+            var lambda = Common.Evaluate(@"
+eq:NOT-OK
+   .:OK");
+            Assert.False(lambda.Children.First().Get<bool>());
+        }
+
+        [Fact]
         public void Neq_01()
         {
             var lambda = Common.Evaluate(@"
