@@ -24,9 +24,7 @@ namespace magic.lambda.comparison
         {
             SanityCheck(input);
             signaler.Signal("eval", input);
-            input.Value = Compare(
-                input.Children.First().GetEx<object>(),
-                input.Children.Skip(1).First().GetEx<object>());
+            input.Value = Compare(input);
         }
 
         /// <summary>
@@ -39,9 +37,7 @@ namespace magic.lambda.comparison
         {
             SanityCheck(input);
             await signaler.SignalAsync("eval", input);
-            input.Value = Compare(
-                input.Children.First().GetEx<object>(),
-                input.Children.Skip(1).First().GetEx<object>());
+            input.Value = Compare(input);
         }
 
         #region [ -- Protected abstract methods -- ]
@@ -59,9 +55,24 @@ namespace magic.lambda.comparison
 
         #region [ -- Private helper methods -- ]
 
+        /*
+         * Implementation of comparison.
+         */
+        bool Compare(Node input)
+        {
+            var count = input.Children.Count();
+            var lhs = count == 1 ? input.GetEx<object>() : input.Children.First().GetEx<object>();
+            var rhs = count == 1 ? input.Children.First().GetEx<object>() : input.Children.Skip(1).First().GetEx<object>();
+            return Compare(lhs, rhs);
+        }
+
+        /*
+         * Sanity chrecks input arguments verifying there's exactly two arguments somehow.
+         */
         static void SanityCheck(Node input)
         {
-            if (input.Children.Count() != 2)
+            var count = input.Children.Count();
+            if (count < 1 || count > 2 || (count == 1 && !(input.Value is Expression)))
                 throw new HyperlambdaException($"Comparison operation [{input.Name}] requires exactly two operands");
         }
 
