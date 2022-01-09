@@ -213,6 +213,16 @@ eq
         }
 
         [Fact]
+        public void Eq_08()
+        {
+            var lambda = Common.Evaluate(@"
+eq
+   .:OK
+   .:OK");
+            Assert.True(lambda.Children.First().Get<bool>());
+        }
+
+        [Fact]
         public void Not_01()
         {
             var lambda = Common.Evaluate(@"
