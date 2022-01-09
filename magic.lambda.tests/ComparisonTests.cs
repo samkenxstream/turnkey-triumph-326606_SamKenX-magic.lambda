@@ -88,6 +88,16 @@ eq:x:../*/.foo1"));
         }
 
         [Fact]
+        public void Eq_Throws_03()
+        {
+            Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
+eq
+   .:foo1
+   .:foo2
+   .:foo3"));
+        }
+
+        [Fact]
         public void Neq_Throws()
         {
             Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
