@@ -370,8 +370,10 @@ else
             Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
 .result
 else-if
-   set-value:x:../*/.result
-      .:OK"));
+   .:bool:true
+   .lambda
+      set-value:x:../*/.result
+         .:OK"));
         }
 
         [Fact]
