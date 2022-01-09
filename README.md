@@ -265,9 +265,11 @@ execute if the expression evaluates to true. Below is an example.
 ```
 .result
 .condition:bool:true
+
 if:x:@.condition
+
    set-value:x:@.result
-      .:Yup!
+      .:Yup, condition is true!
 ```
 
 ### [else-if]
@@ -354,9 +356,11 @@ first **[case]** node with a value matching the evaluated value of the **[switch
 .val:foo
 .result
 switch:x:@.val
+
    case:bar
       set-value:x:@.result
          .:Oops
+
    case:foo
       set-value:x:@.result
          .:Success!
