@@ -350,6 +350,37 @@ must at the very least have minimum one **[case]** node. The **[default]** node 
 
 ## Comparisons
 
+All of these comparison slots have the same semantics, requiring _exactly two arguments_, being the LHS and
+the RHS of your comparison, where LHS implies _"Left Hand Side"_ and RHS implying _"Right Hand Side"_. You
+can provide the LHS and RHS arguments as two children nodes to your invocation, at which point these will
+be evaluated and the value of these nodes after evaluation will become what is compared as LHS and RHS.
+Below is an example where **[cs]** is any of the _"comparison slots"_.
+
+```
+cs
+   some-slot
+   .:some static value
+```
+
+In the above example the **[some-slot]** will be evaluated, and the resulting value of the slot invocation
+will be compared towards the _"some static value"_ using the **[cs]** slot. You can also provide expressions
+for both the LHS and the RHS such as follows, at which point the values of both expressions will be compared.
+
+```
+cs
+   .:x:foo1/bar1
+   .:x:foo2/bar2
+```
+
+And finally you can provide an expression as the value of your **[cs]** slot, resulting in that this becomes
+the LHS argument, at which point it is expected your **[cs]** slot invocation having only _one_ child, being
+its RHS argument. Below is an example.
+
+```
+cs:x:foo/bar
+   .:whatever RHS value here
+```
+
 ### [eq]
 
 **[eq]** is the equality _"operator"_ in Magic, and it requires two arguments, both of which will be evaluated as potential
@@ -362,6 +393,18 @@ value of _"true"_, etc.
 eq
    get-value:x:@.src
    .:int:5
+```
+
+### [neq]
+
+**[neq]** does the exact opposite of **[eq]** implying returning true only if its two arguments are _not_ equal
+to each other.
+
+```
+.src:int:5
+neq
+   get-value:x:@.src
+   .:int:6
 ```
 
 ### [lt]
