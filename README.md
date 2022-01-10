@@ -284,6 +284,9 @@ else-if
          .:yup2.0!
 ```
 
+**[else-if]** can also be given an expression directly the same way **[if]** can. See the example for **[if]**
+to understand the semantics of this.
+
 ### [else]
 
 **[else]** is the last of the _"conditional siblings"_ that will only be evaluated as a last resort, only if none of its
@@ -299,16 +302,21 @@ if
       get-value:x:@.src
       .:int:1
    .lambda
+
       set-value:x:@.dest
          .:yup!
+
 else-if
    eq
       get-value:x:@.src
       .:int:2
    .lambda
+
       set-value:x:@.dest
          .:yup2.0!
+
 else
+
    set-value:x:@.dest
       .:nope
 ```
@@ -323,9 +331,11 @@ first **[case]** node with a value matching the evaluated value of the **[switch
 .val:foo
 .result
 switch:x:@.val
+
    case:bar
       set-value:x:@.result
          .:Oops
+
    case:foo
       set-value:x:@.result
          .:Success!
@@ -339,12 +349,15 @@ Try evaluating the following in your _"Eval"_ to understand what I mean.
 .val:fooXX
 .result
 switch:x:@.val
+
    case:bar
       set-value:x:@.result
          .:Oops
+
    case:foo
       set-value:x:@.result
          .:Oops2.0
+
    default
       set-value:x:@.result
          .:Success!
@@ -354,7 +367,7 @@ In the above, the expression evaluated in the switch, which is `@.val` will beco
 None of its children **[case]** nodes contains this as an option, hence the **[default]** node will be evaluated,
 and this results in setting the **[.result]** node's value to _"Success!"_.
 
-**[default]** _cannot_ have a value, and all your **[case]** nodes must have a _constant_ value, meaning not
+**[default]** _cannot_ have a value, and all your **[case]** nodes must have a value, either a constant or
 an expression. However, any types can be used as values for your **[case]** nodes. And your **[switch]** node
 must at the very least have minimum one **[case]** node. The **[default]** node is optional though.
 
@@ -370,6 +383,20 @@ value of _"true"_, etc.
 ```
 .src:int:5
 eq
+   get-value:x:@.src
+   .:int:5
+```
+
+### [neq]
+
+**[neq]** is the _not_ equal _"operator"_ in Magic, and it requires two arguments, both of which will be evaluated as potential
+signals - And the result of evaluating **[neq]** will only be true if the values of these two arguments are _not the same_.
+Notice, the comparison operator will consider types, which implies that boolean true will _not_ be considered equal to the string
+value of _"true"_, etc.
+
+```
+.src:int:5
+neq
    get-value:x:@.src
    .:int:5
 ```
@@ -422,6 +449,25 @@ mte
    .:int:5
 ```
 
+### Commonalities for all comparison slots
+
+All comparison slots can optionally be given an expression that will be assumed is their LHS or _"Left Hand Side"_ argument
+which replaces the first child argument if specified. Below is an example for the **[mte]** slot, but all comparison slots
+works the same way.
+
+```
+.src1:int:7
+mte:x:@.src1
+   .:int:5
+```
+
+In the above example the expression `:x:@.src1` becomes the left hand side, while the child argument becomes the right hand
+side of the comparison, implying as follows using pseudo code.
+
+```csharp
+src1 >= 5
+```
+
 ## Boolean logical conditions
 
 ### [exists]
@@ -451,8 +497,10 @@ and
    .:bool:true
 ```
 
-And will (of course) evaluate its arguments before checking if they evaluate to true, allowing you to use it as a part
-of richer comparison trees, such as the following illustrates.
+Notice, **[and]** will short circuit itself if it reaches a condition that does _not_ evaluate to true, implying
+none of its conditions afterwards will be considered, since the **[and]** as a while evaluates to false.
+**[and]** will also (of course) evaluate its arguments before checking if they evaluate to true, allowing you
+to use it as a part of richer comparison trees, such as the following illustrates.
 
 ```
 .s1:bool:true
@@ -481,6 +529,9 @@ or
    .:bool:false
    .:bool:true
 ```
+
+Also **[or]** will short circuit itself if it reaches a condition that evaluates to true, implying
+none of its conditions afterwards will be considered, since the **[or]** as a while evaluates to true.
 
 ### [not]
 
