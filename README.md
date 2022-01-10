@@ -989,7 +989,9 @@ invocation creates its own result stack object, allowing the **[whitelist]** inv
 and nodes to the caller using for instance the **[return]** slot. If you execute the above Hyperlambda
 you can see how this semantically works by realizing how the above **[.result]** node never has its
 value actually changed, because our invocation to **[set-value]** inside our whitelist invocation yields
-a _"null node-set result"_.
+a _"null node-set result"_. Hence semantically the **[whitelist]** slot works the same way signaling
+a dynamic slot works in Hyperlambda, in that the invocation treats its **[.lambda]** object as if
+it was a dynamic slot.
 
 ### [context]
 
