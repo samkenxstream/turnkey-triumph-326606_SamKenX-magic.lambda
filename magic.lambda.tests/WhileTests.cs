@@ -14,7 +14,8 @@ namespace magic.lambda.tests
         [Fact]
         public void While_01()
         {
-            var lambda = Common.Evaluate(@".src
+            var lambda = Common.Evaluate(@"
+.src
    bar1
    bar2
 .dest
@@ -27,6 +28,56 @@ while
          get-nodes:x:../*/.src/0
       remove-nodes:x:../*/.src/0");
             Assert.Equal(2, lambda.Children.Skip(1).First().Children.Count());
+        }
+
+        [Fact]
+        public void WhileExpression_01()
+        {
+            var lambda = Common.Evaluate(@"
+.src
+   bar1
+   bar2
+.dest
+.continue:bool:true
+while:x:@.continue
+   add:x:../*/.dest
+      get-nodes:x:../*/.src/0
+   remove-nodes:x:../*/.src/0
+   if
+      eq
+         get-count:x:@.src/*
+         .:int:0
+      .lambda
+         set-value:x:@.continue
+            .:bool:false");
+            Assert.Equal(2, lambda.Children.Skip(1).First().Children.Count());
+            Assert.False(lambda.Children.Skip(2).First().Get<bool>());
+            Assert.False(lambda.Children.Skip(3).First().Get<bool>());
+        }
+
+        [Fact]
+        public async Task WhileExpressionAsync_01()
+        {
+            var lambda = await Common.EvaluateAsync(@"
+.src
+   bar1
+   bar2
+.dest
+.continue:bool:true
+while:x:@.continue
+   add:x:../*/.dest
+      get-nodes:x:../*/.src/0
+   remove-nodes:x:../*/.src/0
+   if
+      eq
+         get-count:x:@.src/*
+         .:int:0
+      .lambda
+         set-value:x:@.continue
+            .:bool:false");
+            Assert.Equal(2, lambda.Children.Skip(1).First().Children.Count());
+            Assert.False(lambda.Children.Skip(2).First().Get<bool>());
+            Assert.False(lambda.Children.Skip(3).First().Get<bool>());
         }
 
         [Fact]
@@ -212,7 +263,7 @@ while
 while
    lt
       get-value:x:@.no
-      .:int:5000
+      .:int:5001
    .lambda
       math.increment:x:@.no", false));
         }

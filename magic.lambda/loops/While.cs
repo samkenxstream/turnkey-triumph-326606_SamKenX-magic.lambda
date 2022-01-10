@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using magic.node;
 using magic.node.contracts;
 using magic.node.extensions;
+using magic.lambda.branching;
 using magic.signals.contracts;
 
 namespace magic.lambda.loops
@@ -35,48 +36,36 @@ namespace magic.lambda.loops
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            SanityCheck(input);
-
             // Storing termination node, to check if we should terminate early for some reasons.
             var terminate = signaler.Peek<Node>("slots.result");
 
             // Making sure we don't enter an infinite loop.
             int iterations = 0;
 
-            // Evaluating lambda while condition is true.
-            while (true)
+            // Cloning entire node such that we can reset it after execution.
+            var clone = input.Clone();
+
+            // Looping while condition is true.
+            while (Common.ConditionIsTrue(signaler, input))
             {
-                // Checking if we've passed our maximum number of iterations.
-                iterations = SanityCheckIterations(iterations);
+                // Making sure we don't exceed maximum number of iterations.
+                if (iterations++ >= _maxIterations)
+                    throw new HyperlambdaException($"Your [while] loop exceeded the maximum number of iterations, which is {_maxIterations}. Refactor your Hyperlambda, or increase your configuration setting.");
 
-                // Making sure we can reset back to original nodes after every single iteration.
-                var old = input.Children.Select(x => x.Clone()).ToList();
-
-                // This will evaluate the condition.
-                signaler.Signal("eval", input);
-
-                // Verifying we're supposed to proceed into body of [while].
-                if (!input.Children.First().GetEx<bool>())
-                    break;
-
-                // Retrieving [.lambda] node and doing basic sanity check.
-                var lambda = input.Children.Skip(1).First();
-                if (lambda.Name != ".lambda")
-                    throw new HyperlambdaException("Keyword [while] requires its second child to be [.lambda]");
-
-                // Evaluating "body" lambda of [while].
-                signaler.Signal("eval", lambda);
-
-                // Resetting back to original nodes.
-                input.Clear();
-
-                // Notice, cloning in case we've got another iteration, to avoid changing original nodes' values.
-                input.AddRange(old.Select(x => x.Clone()));
+                // Executing lambda object associated with [while].
+                signaler.Signal("eval", Common.GetLambda(input));
 
                 // Checking if execution for some reasons was terminated.
                 if (terminate != null && (terminate.Value != null || terminate.Children.Any()))
                     return;
+
+                // Resetting lambda object back to its original state for our next iteration.
+                input.Clear();
+                input.AddRange(clone.Children.Select(x => x.Clone()));
             }
+
+            // To make sure we're compatible with [if] and [else-if] as much as possible.
+            input.Value = false;
         }
 
         /// <summary>
@@ -87,65 +76,36 @@ namespace magic.lambda.loops
         /// <returns>An awaitable task.</returns>
         public async Task SignalAsync(ISignaler signaler, Node input)
         {
-            SanityCheck(input);
-
             // Storing termination node, to check if we should terminate early for some reasons.
             var terminate = signaler.Peek<Node>("slots.result");
 
             // Making sure we don't enter an infinite loop.
             int iterations = 0;
 
-            // Evaluating lambda while condition is true.
-            while (true)
+            // Cloning entire node such that we can reset it after execution.
+            var clone = input.Clone();
+
+            // Looping while condition is true.
+            while (await Common.ConditionIsTrueAsync(signaler, input))
             {
-                // Checking if we've passed our maximum number of iterations.
-                iterations = SanityCheckIterations(iterations);
+                // Making sure we don't exceed maximum number of iterations.
+                if (iterations++ >= _maxIterations)
+                    throw new HyperlambdaException($"Your [while] loop exceeded the maximum number of iterations, which is {_maxIterations}. Refactor your Hyperlambda, or increase your configuration setting.");
 
-                // Making sure we can reset back to original nodes after every single iteration.
-                var old = input.Children.Select(x => x.Clone()).ToList();
-
-                // This will evaluate the condition.
-                await signaler.SignalAsync("eval", input);
-
-                // Verifying we're supposed to proceed into body of [while].
-                if (!input.Children.First().GetEx<bool>())
-                    break;
-
-                // Retrieving [.lambda] node and doing basic sanity check.
-                var lambda = input.Children.Skip(1).First();
-                if (lambda.Name != ".lambda")
-                    throw new HyperlambdaException("Keyword [while] requires its second child to be [.lambda]");
-
-                // Evaluating "body" lambda of [while].
-                await signaler.SignalAsync("eval", lambda);
-
-                // Resetting back to original nodes.
-                input.Clear();
-
-                // Notice, cloning in case we've got another iteration, to avoid changing original nodes' values.
-                input.AddRange(old.Select(x => x.Clone()));
+                // Executing lambda object associated with [while].
+                await signaler.SignalAsync("eval", Common.GetLambda(input));
 
                 // Checking if execution for some reasons was terminated.
                 if (terminate != null && (terminate.Value != null || terminate.Children.Any()))
                     return;
+
+                // Resetting lambda object back to its original state for our next iteration.
+                input.Clear();
+                input.AddRange(clone.Children.Select(x => x.Clone()));
             }
+
+            // To make sure we're compatible with [if] and [else-if] as much as possible.
+            input.Value = false;
         }
-
-        #region [ -- Private helper methods -- ]
-
-        void SanityCheck(Node input)
-        {
-            if (input.Children.Count() != 2)
-                throw new HyperlambdaException("[while] must have exactly two argument nodes, a condition and a [.lambda]");
-        }
-
-        int SanityCheckIterations(int iterations)
-        {
-            if (iterations++ == _maxIterations)
-                throw new HyperlambdaException($"Your [while] loop exceeded the maximum number of iterations, which are {_maxIterations}. Refactor your Hyperlambda, or increase your configuration setting.");
-            return iterations;
-        }
-
-        #endregion
     }
 }
