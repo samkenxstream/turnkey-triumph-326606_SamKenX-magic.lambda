@@ -799,7 +799,9 @@ iterated by reference.
 .data
    foo1
    foo2
+
 for-each:x:-/*
+
    set-value:x:@.dp/#
       .:hello
 ```
@@ -814,11 +816,13 @@ as long as the condition evaluates to true. Requires _exactly_ two arguments, th
 ```
 .no:int:0
 .res
+
 while
    lt
       get-value:x:@.no
       .:int:5
    .lambda
+
       add:x:@.res
          .
             foo
@@ -834,11 +838,17 @@ expression found in its value.
 
 ```
 .res
+
 .lambda
    set-value:x:@.res
       .:OK
+
 eval:x:@.lambda
 ```
+
+Notice, the **[eval]** slot is _not_ immutable, as in it has access to the outer graph object such as
+illustrated above, where we set the value of a node existing _outside_ of the **[.lambda]** itself.
+Implying **[eval]** cannot return values or nodes the same way for instance **[signal]** can.
 
 ## Threading
 
@@ -944,7 +954,7 @@ vocabulary:io.file
 ### [whitelist]
 
 This slot temporarily within the given scope changes the available slots, allowing you to declare a block
-of lambda, where only a sub set of your vocabulary is available for some piece of code to signal. This allows
+of lambda, where only a sub-set of your vocabulary is available for some piece of code to signal. This allows
 you to relatively securely allow some partially untrusted source to pass in a piece of Hyperlambda, for then
 to allow it to evaluate its own Hyperlambda. The slot takes two arguments.
 
@@ -968,6 +978,12 @@ whitelist
          .
             foo:bar
 ```
+
+For security reasons the **[whitelist]** invocation's **[.lambda]** object is immutable, and the
+caller _cannot_ access nodes outside of the **[.lambda]** object itself, which prohibits the caller
+to modify, and/or read nodes from outside of its **[whitelist]** invocation. In addition a **[whitelist]**
+invocation creates its own result stack object, allowing the **[whitelist]** invocation to return values
+and nodes to the caller using for instance the **[return]** slot.
 
 ### [context]
 
