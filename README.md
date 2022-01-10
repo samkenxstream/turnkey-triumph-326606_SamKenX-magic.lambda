@@ -833,7 +833,8 @@ See the documentation for the **[reference]** slot to understand how reference n
 ### [while]
 
 Semantically similar to **[if]**, but instead of evaluating its lambda object once, will iterate it for
-as long as the condition evaluates to true. Requires _exactly_ two arguments, the same way **[if]** does.
+as long as the condition evaluates to true. Requires two arguments, the same way **[if]** does, but can
+also optionally be given an expression leading to a boolean value.
 
 ```
 .no:int:0
@@ -849,11 +850,11 @@ while
       math.increment:x:@.no
 ```
 
-## Evaluating slots
+## Executing lambda objects
 
 ### [eval]
 
-Evaluates each lambda object found by either inspecting its children collection, or evaluating the
+Executes each lambda object found by either inspecting its children collection, or evaluating the
 expression found in its value.
 
 ```
