@@ -758,7 +758,7 @@ This slot returns a context stack object, which is an object added to the stack 
 ### [try]
 
 This slot allows you to create a try/catch/finally block of lambda, from where exceptions are caught,
-and optionally hadled in a **[.catch]** lambda, and/or a **[.finally]** lambda.
+and optionally handled in a **[.catch]** lambda, and/or a **[.finally]** lambda.
 
 ```
 try
@@ -768,6 +768,12 @@ try
 .finally
    log.info:Yup, we are finally there!
 ```
+
+Semantically this works the exact same way as try/catch/finally in other programming languages, such as
+C# for instance, in that an exception thrown inside of a try/catch block will always end up inside of
+its **[.catch]** block - And regardless of whether or not an exception is thrown, the **[.finally]**
+block will _always_ execute, allowing you to some extend create deterministic execution of Hyperlambda
+code, which has a guarantee of executing, regardless of whether or not an exception is thrown or not.
 
 ### [throw]
 
