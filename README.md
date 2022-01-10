@@ -732,7 +732,9 @@ result - Implying it allows you to deeply traverse nodes passed in as references
 useful in combination with referenced nodes, passed in as values of other nodes. You should as a general
 rule of thumb be careful with the **[reference]** slot since it results in side effects for the caller if
 it passes nodes by reference into some slot. Such side effects are in genral terms considered a bad thing,
-since they result in unpredictable code.
+since they result in unpredictable code. In theory passing in a node by reference to some slot, might change
+the logic of the calling function, resulting in changing the code that is being executed, which obviously
+makes the code literally impossible to understand.
 
 ### [format]
 
