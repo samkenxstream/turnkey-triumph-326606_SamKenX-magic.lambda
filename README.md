@@ -1025,6 +1025,11 @@ context:foo
       signal:bar
 ```
 
+If you execute the above Hyperlambda you will notice how the slot called **[bar]** actually has access to
+the context value called _"foo"_, and can retrieve this. This feature allows you to declare and create
+_"long lasting arguments"_ that are accessible from within the entirety of a piece of Hyperlambda, including
+each slot it invokes, and/or Hyperlambda files it executes.
+
 ### [apply]
 
 This slot takes an expression in addition to a list of arguments, and _"applies"_ the arguments unto the expression's
