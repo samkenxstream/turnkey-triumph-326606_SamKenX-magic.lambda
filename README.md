@@ -991,7 +991,7 @@ you can see how this semantically works by realizing how the above **[.result]**
 value actually changed, because our invocation to **[set-value]** inside our whitelist invocation yields
 a _"null node-set result"_. Hence semantically the **[whitelist]** slot works the same way signaling
 a dynamic slot works in Hyperlambda, in that the invocation treats its **[.lambda]** object as if
-it was a dynamic slot.
+it was a dynamic slot, isolating it from the rest of our code.
 
 ### [context]
 
@@ -1009,7 +1009,21 @@ context:foo
 
 The slot requires a name as the value of its slot invocation node, a **[value]** as the value
 you want to put onto the stack, and a **[.lambda]** object being the lambda where the stack object
-exists, and can be retrieved using **[get-context]**.
+exists, and can be retrieved using **[get-context]**. This is quite useful if you have some piece
+of data that needs to be accessible through the entirety of the execution of some Hyperlambda snippet,
+implying also for slots you invoke, where you don't want to pass in the data as an argument to the
+slot itself. Imagine the following to understand how this works.
+
+```
+slots.create:bar
+   get-context:foo
+   return:x:-
+
+context:foo
+   value:Context value
+   .lambda
+      signal:bar
+```
 
 ### [apply]
 
