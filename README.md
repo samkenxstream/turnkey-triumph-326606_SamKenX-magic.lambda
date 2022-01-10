@@ -729,7 +729,10 @@ it returns the actual node by reference.
 
 **Notice** - The `#` iterator above, will enter into the node referenced as a value of its current
 result - Implying it allows you to deeply traverse nodes passed in as references. This is sometimes
-useful in combination with referenced nodes, passed in as values of other nodes.
+useful in combination with referenced nodes, passed in as values of other nodes. You should as a general
+rule of thumb be careful with the **[reference]** slot since it results in side effects for the caller if
+it passes nodes by reference into some slot. Such side effects are in genral terms considered a bad thing,
+since they result in unpredictable code.
 
 ### [format]
 
