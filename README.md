@@ -1040,6 +1040,7 @@ result node set, allowing you to perform dynamic substitutions on lambda hierarc
    foo
       arg1:{some_arg}
       some-static-node:static-value
+
 apply:x:-
    some_arg:value of argument
 ```
@@ -1056,7 +1057,7 @@ apply
 Notice how the nodes from your template lambda object have been copied as children into your **[apply]**
 node, while during this _"copying process"_, the arguments you supplied to **[apply]** have been used
 to perform substitutions on all nodes in your template lambda having a value of `{xxx}`, where xxx is
-your argument name. In the above example for instance the `{arg1:some_arg}` template node had its value
+your argument name. In the above example for instance the `arg1:{some_arg}` template node had its value
 replaced by the value of the **[some_arg]** node passed in as a parameter to **[apply]**. If the name of
 the argument to **[apply]**, matches the value of your template node wrapped inside curly braces - Then
 the value of your argument to apply becomes the _new value_ of your template node after substitution has
@@ -1082,6 +1083,7 @@ are lambda objects instead of simple values. Below is an example of both of thes
       foo1:{arg1}
       foo2:{arg1}
       foo3:{arg2}
+
 apply:x:-
    arg1:int:5
    arg2
@@ -1115,6 +1117,7 @@ illustrates.
 .lambda
    foo
       {arg1}:value-is-preserved
+
 apply:x:-
    arg1:foo1
 ```
