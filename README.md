@@ -966,24 +966,30 @@ to allow it to evaluate its own Hyperlambda. The slot takes two arguments.
 whitelist
    vocabulary
       set-value
+      return
    .lambda
 
       // Inside of this [.lambda] object, we can only invoke [set-value], and no other slots!
       set-value:x:@.result
          .:foo
 
-      // Notice, the next line will throw an exception,
+      // Notice, the next line will throw an exception if you remove its "." character,
       // because [add] is not whitelisted in our above [vocabulary] declaration!
-      add:x:@.result
+      .add:x:@.result
          .
             foo:bar
+      return
+         result:success
 ```
 
 For security reasons the **[whitelist]** invocation's **[.lambda]** object is immutable, and the
 caller _cannot_ access nodes outside of the **[.lambda]** object itself, which prohibits the caller
 to modify, and/or read nodes from outside of its **[whitelist]** invocation. In addition a **[whitelist]**
 invocation creates its own result stack object, allowing the **[whitelist]** invocation to return values
-and nodes to the caller using for instance the **[return]** slot.
+and nodes to the caller using for instance the **[return]** slot. If you execute the above Hyperlambda
+you can see how this semantically works by realizing how the above **[.result]** node never has its
+value actually changed, because our invocation to **[set-value]** inside our whitelist invocation yields
+a _"null node-set result"_.
 
 ### [context]
 
