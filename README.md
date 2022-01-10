@@ -2,8 +2,8 @@
 # The main programming language parts for Magic
 
 Magic lambda is where you will find the _"keywords"_ of Hyperlambda.
-It is what makes Hyperlambda Turing complete, and contains slots such as **[for-each]**
-and **[if]**.
+It is what makes Hyperlambda Turing complete, and contains slots such as **[for-each]**,
+**[if]** and **[while]**.
 
 ## Structure
 
@@ -19,7 +19,7 @@ arguments, allowing you to think about it as a _function_. To compare this to th
 have implemented this, imagine the equal operator as a function, such as the following pseudo code illustrates.
 
 ```
-=(arg1, arg1)
+equals(arg1, arg1)
 ```
 
 The actual Hyperlambda code that would be the equivalent of the above pseudo code, can be found below.
@@ -30,13 +30,13 @@ eq
    .:arg2
 ```
 
-As you study Hyperlambda it might be beneficial to use the _"Evaluator"_ component that you can find in its
+As you study Hyperlambda it might be beneficial to use the _"Eval"_ component that you can find in its
 frontend Angular dashboard website. This component allows you to play with Hyperlambda in _"immediate mode"_,
 allowing you to experiment with it, execute it immediately from your browser, using a rich code editor,
 providing syntax highlighting, autocomplete on slots, and allows you to save your snippets for later on your
 server. Below is a screenshot of the _"Evaluator"_ component to give you an idea of what you might expect.
 
-![Hyperlambda Evaluator](https://servergardens.files.wordpress.com/2020/05/evaluator.png)
+![Hyperlambda evaluator](https://raw.githubusercontent.com/polterguy/polterguy.github.io/master/images/eval-component.jpg)
 
 Logically the Hyperlambda evaluator will signal each nodes in your Hyperlambda code sequentially, assuming
 all of your nodes are referencing an `ISlot` class, unless the node's name starts with a _"."_ or has an empty name.
@@ -217,17 +217,13 @@ What the above code basically translates into, is.
 
 ## Branching and conditional execution
 
-Branching is the ability to conditionally execute a lambda object based upon the result of some condition. The three
-primary slots that facilitates for this is **[if]**, **[else-if]**, and **[else]** - However, the **[while]** slots also
-semantically functions the same way. The **[if]** and **[else-if]** slots can either take two arguments, where its first
-argument is assumed to be the condition parts, and the seconds argument its **[.lambda]** object, to be executed if and
-only if the condition evaluates to true - Or these slots can be given an expression as their value, which only if
-evaluates to true, will treat the children of the invocation as a lambda object and execute it.
+Magic Lambda contains the following slots. Most of these slots have async overloads, which will be
+automatically used by Magic if possible.
 
 ### [if]
 
 This is the Hyperlambda equivalent of `if` from other programming languages. It allows you to test for some condition,
-and evaluate a lambda object, only if the condition evaluates to true. **[if]** accepts two arguments.
+and evaluate a lambda object, only if the condition evaluates to true. **[if]** must be given exactly two arguments.
 The first argument can be anything, including a slot invocation - But its second argument must be its **[.lambda]**
 argument. The **[.lambda]** node will be evaluated as a lambda object, only if the first argument to **[if]** evaluates
 to boolean true. Below is an example.
@@ -242,7 +238,7 @@ if
 ```
 
 All conditional slots, including **[if]**, optionally accepts slots as their first condition argument.
-This allows you to invoke slots, treat the return value of the slot as the condition deciding
+This allows you to invoke slots, treating the return value of the slot as the condition deciding
 whether or not the **[.lambda]** object should be executed or not. Below is an example.
 
 ```
@@ -257,27 +253,12 @@ if
          .:yup!
 ```
 
-Optionally you can also point the **[if]** invocation directly to the value of some other node with an expression.
-If you do, the result of the expression is assumed to evaluate to either boolean `false` or `true`. If you choose
-this path, the entirety of the **[if]** invocation's children nodes will be assumed to be the lambda object to
-execute if the expression evaluates to true. Below is an example.
-
-```
-.result
-.condition:bool:true
-
-if:x:@.condition
-
-   set-value:x:@.result
-      .:Yup, condition is true!
-```
-
 ### [else-if]
 
 **[else-if]** is the younger sibling of **[if]**, and must be preceeded by its older sibling, or other **[else-if]** nodes,
 and will only be evaluated if all of its previous conditional slots evaluates to false - At which point **[else-if]** is
 allowed to test its condition - And only if it evaluates to true, evaluate its lambda object. Semantically **[else-if]**
-is similar to **[if]**, in that it requires two arguments with the same structure as **[if]**.
+is similar to **[if]**, in that it requires exactly two arguments with the same structure as **[if]**.
 
 ```
 .dest
@@ -291,30 +272,6 @@ else-if
    .lambda
       set-value:x:@.dest
          .:yup2.0!
-```
-
-The same way you can point an **[if]** invocation to an expression, you can also point the **[else-if]** directly
-to an expression. Below is an example.
-
-Optionally you can also point the **[else-if]** invocation directly to the value of some other node with an expression.
-If you do, the result of the expression is assumed to evaluate to either boolean `false` or `true`. If you choose
-this path, the entirety of the **[else-if]** invocation's children nodes will be assumed to be the lambda object to
-execute if the expression evaluates to true. Below is an example.
-
-```
-.result
-.condition1:bool:false
-.condition2:bool:true
-
-if:x:@.condition1
-
-   set-value:x:@.result
-      .:If is true
-
-else-if:x:@.condition2
-
-   set-value:x:@.result
-      .:Else-if is true
 ```
 
 ### [else]
@@ -356,11 +313,9 @@ first **[case]** node with a value matching the evaluated value of the **[switch
 .val:foo
 .result
 switch:x:@.val
-
    case:bar
       set-value:x:@.result
          .:Oops
-
    case:foo
       set-value:x:@.result
          .:Success!
@@ -395,45 +350,6 @@ must at the very least have minimum one **[case]** node. The **[default]** node 
 
 ## Comparisons
 
-All of these comparison slots have the same semantics, requiring _exactly two arguments_, being the LHS and
-the RHS of your comparison, where LHS implies _"Left Hand Side"_ and RHS implying _"Right Hand Side"_. You
-can provide the LHS and RHS arguments as two children nodes to your invocation, at which point these will
-be evaluated and the value of these nodes after evaluation will become what is compared as LHS and RHS.
-Below is an example where **[cs]** is any of the _"comparison slots"_.
-
-```
-cs
-   some-slot
-   .:some static value
-```
-
-In the above example the **[some-slot]** will be evaluated, and the resulting value of the slot invocation
-will become the LHS value compared towards the _"some static value"_ as RHS using the **[cs]** slot. You can
-also provide expressions for both the LHS and the RHS such as follows, at which point the values of both
-expressions will be compared.
-
-```
-cs
-   .:x:foo1/bar1
-   .:x:foo2/bar2
-```
-
-In the above example the value of the `foo1/bar1` expression becomes the LHS value, and the value of
-the `foo2/bar2` expression becomes the RHS value. You can also provide an expression or a constant as
-the value of your **[cs]** slot, resulting in that this becomes the LHS argument, at which point it
-is expected that your **[cs]** slot invocation having only _one_ child, being its RHS argument. Below
-is an example for both a constant value and an expression.
-
-```
-// Expression LHS argument
-cs:x:foo/bar
-   .:whatever RHS value here
-
-// Constant LHS argument
-cs:some value here
-   .:whatever RHS value here
-```
-
 ### [eq]
 
 **[eq]** is the equality _"operator"_ in Magic, and it requires two arguments, both of which will be evaluated as potential
@@ -446,18 +362,6 @@ value of _"true"_, etc.
 eq
    get-value:x:@.src
    .:int:5
-```
-
-### [neq]
-
-**[neq]** does the exact opposite of **[eq]** implying returning true only if its two arguments are _not_ equal
-to each other.
-
-```
-.src:int:5
-neq
-   get-value:x:@.src
-   .:int:6
 ```
 
 ### [lt]
@@ -833,8 +737,7 @@ See the documentation for the **[reference]** slot to understand how reference n
 ### [while]
 
 Semantically similar to **[if]**, but instead of evaluating its lambda object once, will iterate it for
-as long as the condition evaluates to true. Requires two arguments, the same way **[if]** does, but can
-also optionally be given an expression leading to a boolean value.
+as long as the condition evaluates to true. Requires _exactly_ two arguments, the same way **[if]** does.
 
 ```
 .no:int:0
@@ -850,11 +753,11 @@ while
       math.increment:x:@.no
 ```
 
-## Executing lambda objects
+## Evaluating slots
 
 ### [eval]
 
-Executes each lambda object found by either inspecting its children collection, or evaluating the
+Evaluates each lambda object found by either inspecting its children collection, or evaluating the
 expression found in its value.
 
 ```
