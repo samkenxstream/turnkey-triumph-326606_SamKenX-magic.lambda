@@ -146,9 +146,6 @@ while
       math.increment:x:@.no
 ```
 
-The `ISlot` called **[mail.pop3.fetch]** will invoke the above **[.lambda]** object once for each email
-it finds on the POP3 server it connects to. It will use the **[eval]** slot to do this.
-
 ## Tokens
 
 The separating of a node's name and its value is done by using a ":" character. To the left is the node's
@@ -180,7 +177,8 @@ or single line comments, like the following example illustrates.
 // Single line comment.
 ```
 
-You _cannot_ put comments on lines containing nodes however.
+You _cannot_ put comments on lines containing nodes however, and comments must be indented the same
+amount of indentations as the nodes they are commenting, implying the nodes below them.
 
 ## Lambda expressions
 
@@ -213,8 +211,7 @@ What the above code basically translates into, is.
 
 ## Branching and conditional execution
 
-Magic Lambda contains the following slots. Most of these slots have async overloads, which will be
-automatically used by Magic if possible.
+Magic Lambda contains the following branching slots.
 
 ### [if]
 
@@ -249,11 +246,28 @@ if
          .:yup!
 ```
 
+Notice, both the **[if]** slot and the **[else-if]** slot can optionally be directly pointed to an expression,
+that is assumed to evaluate to either boolean `true` or boolean `false`, such as the following illustrates.
+
+```
+.arguments
+   foo:bool:true
+.dest
+
+if:x:@.arguments/*/foo
+   set-value:x:@.dest
+      .:yup!
+```
+
+If you use this shorthand version for the slot(s), its lambda object is assumed to be the entirety of the content
+of the **[if]** or **[else-if]** slot itself, and there are no needs to explicitly declare your lambda objects as
+a **[.lambda]** argument.
+
 ### [else-if]
 
 **[else-if]** is the younger sibling of **[if]**, and must be preceeded by its older sibling, or other **[else-if]** nodes,
 and will only be evaluated if all of its previous conditional slots evaluates to false - At which point **[else-if]** is
-allowed to test its condition - And only if it evaluates to true, evaluate its lambda object. Semantically **[else-if]**
+allowed to test its condition - And only if its condition evaluates to true, it evaluate its lambda object. Semantically **[else-if]**
 is similar to **[if]**, in that it requires exactly two arguments with the same structure as **[if]**.
 
 ```
