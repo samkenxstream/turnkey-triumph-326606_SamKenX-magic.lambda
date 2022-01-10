@@ -1,17 +1,17 @@
 
-# The main programming language parts for Magic
+# Hyperlambda as a Turing complete programming language
 
-Magic lambda is where you will find the _"keywords"_ of Hyperlambda.
+magic.lambda is where you will find the _"keywords"_ of Hyperlambda.
 It is what makes Hyperlambda Turing complete, and contains slots such as **[for-each]**,
-**[if]** and **[while]**.
+**[if]**, and **[while]**.
 
 ## Structure
 
-Since _everything_ is a slot in Hyperlambda, this allows you to evaluate its conditional operators and logical operators,
-the same way you would evaluate a function in a traditional programming language. This might at first seem a bit unintuitive
+_Everything_ is a slot in Hyperlambda. This allows you to evaluate and extend its conditional operators and logical operators
+the same way you would evaluate or create a function in a traditional programming language. This might at first seem a bit unintuitive
 if you come from a traditional programming language, but has a lot of advantages, such as allowing the computer to look
-at the entirety of your function objects as hierarchical tree structures, parsing them as such, and imagining these as
-_"execution trees"_.
+at the entirety of your function object as a hierarchical tree structure, parsing it as such, and executing your lambda
+object as an _"execution tree"_.
 
 For instance, in a normal programming language, the equal operator must have a left hand side (lhs), and a right hand
 side (rhs). In Hyperlambda this is not true, since the equal slot is the main invocation of a function, requiring two
@@ -19,10 +19,11 @@ arguments, allowing you to think about it as a _function_. To compare this to th
 have implemented this, imagine the equal operator as a function, such as the following pseudo code illustrates.
 
 ```
-equals(lhs, rhs)
+equals(object lhs, object rhs)
 ```
 
-The actual Hyperlambda code that would be the equivalent of the above pseudo code, can be found below.
+The actual Hyperlambda code that would be the equivalent of the above pseudo code, can be found below, and this code
+actually executes successfully if you execute it as Hyperlambda.
 
 ```
 eq
@@ -31,13 +32,16 @@ eq
 ```
 
 As you study Hyperlambda it might be beneficial to use the _"Eval"_ component that you can find in its
-frontend Angular dashboard website. This component allows you to play with Hyperlambda in _"immediate mode"_,
-allowing you to experiment with it, execute it immediately from your browser, using a rich code editor,
-providing syntax highlighting, autocomplete on slots, and allows you to save your snippets for later on your
-server. Below is a screenshot of the _"Eval"_ component to give you an idea of what you might expect.
+frontend dashboard. This component allows you to play with Hyperlambda in _"immediate mode"_,
+experiment with Hyperlambda, execute it immediately from your browser, in a rich code editor,
+providing syntax highlighting for you, autocomplete on slots, etc. The _"Eval"_ component also allows
+you to save your snippets for later on your server. Below is a screenshot of the _"Eval"_ component to
+give you an idea of what you might expect.
 
 ![Hyperlambda evaluator](https://raw.githubusercontent.com/polterguy/polterguy.github.io/master/images/eval-component.jpg)
 
+If you put your cursor on an empty line and click CTRL+SPACE or FN+CONTROL+SPACE on a Mac, you will be given
+autocomplete, allowing you to easily see which slots are available for you.
 Logically the Hyperlambda evaluator will signal each nodes in your Hyperlambda code sequentially, assuming
 all of your nodes are referencing an `ISlot` class, unless the node's name starts with a _"."_ or has an empty name.
 
@@ -51,22 +55,24 @@ name:value
    child1
 ```
 
-In the above Hyperlambda, there is one root node. Its name is _"name"_, its value is _"value"_, and this node
+In the above Hyperlambda there is one root node. Its name is _"name"_, its value is _"value"_, and this node
 has one child node, with the name of _"child1"_. Its child node does _not_ however have a value, which results
 in its value being _"null"_. The reason why the Hyperlambda parser understands _"child1"_ as the child of 
-the _"name"_ node, is because it is prefixed by 3 spaces (SP) relatively to the _"name"_ node. This allows you
+the _"name"_ node, is because it is prefixed by 3 spaces (SP) relative to the _"name"_ node. This allows you
 to create graph objects (tree structures) with any depth you wish, by simply starting out with the number of
-spaces the node above has, add 3 additional spaces, and you can declare children nodes of the above node.
+spaces the node above has, add 3 additional spaces, and you have declares children nodes of the node above.
 
 If you think of these nodes as a sequence of function invocations, from the top to bottom, where all of the
-nodes are assumed to be referencing slots - You can imagine how the tree structure resulting from parsing
-Hyperlambda into a graph object can easily be evaluated, due to its recursive nature, making it easy to
-express idioms such as _"if"_, _"while"_, _"for-each"_, etc.
+nodes are assumed to be referencing slots, and all children nodes arguments to your slots - You can imagine
+how the tree structure resulting from parsing Hyperlambda into a graph object can easily be evaluated, due
+to its recursive nature, making it easy to express idioms such as _"if"_, _"while"_, _"for-each"_, etc. In
+fact logically this is similar to the way XSLT works, except there's no XML, only Hyperlambda, lambda objects,
+and nodes.
 
 Since each slot will be invoked with the node referencing the slot itself as the _"input"_ `Node`,
 this makes the Hyperlambda evaluator recursive in nature, allowing a slot to evaluate all of its children,
 after executing its custom logic, etc. And yes, before you ask, Hyperlambda has been heavily influenced by
-LISP. In some ways Hyperlambda _is_ Lisp for C#.
+LISP. In some ways Hyperlambda _is_ Lisp for C#, only with a completely different syntax, and without S-Expressions.
 
 ## Extending Hyperlambda
 
@@ -110,15 +116,17 @@ acme.foo:int:12
 
 Notice the relationship between the `[Slot(Name = "acme.foo")]` C# code and the way we invoke the **[acme.foo]**
 slot from Hyperlambda afterwards. It might help to imagine Hyperlambda as a simple string/type Dictionary,
-which resolves an object from your IoC container, using the name of the node as the key.
-
-To create your own slots, follow the recipe below.
+resolving an object from your IoC container using the name of the node as the key. And in fact, this
+is exactly how Hyperlambda _is_ implemented - As a string/type dictionary, creating instances of your slot
+classes using your IoC container, for then to invoke its `Signal` method, passing in the identity node to your slot,
+where the identity node is the node invoking your signal from Hyperlambda.
+To create your own C# or F# slots, you can follow the following recipe.
 
 1. Reference the NuGet package `magic.signals.contracts` in your project.
 2. Create your class, and implement the `ISlot` interface.
 3. Mark your class with the `Slot` attribute, giving it an adequate `Name` property value.
 
-**Notice** - You can also implement `ISlotAsync` if you want to create an `async` slot.
+**Notice** - You can also implement `ISlotAsync` if you want to support `async` invocations.
 
 ## The gory details
 
@@ -135,6 +143,7 @@ as a **[.lambda]** node, that will be invoked once for every iteration of your w
 
 ```
 .no:int:0
+
 while
    lt
       get-value:x:@.no
@@ -148,10 +157,10 @@ while
 
 ## Tokens
 
-The separating of a node's name and its value is done by using a ":" character. To the left is the node's
+The separating of a node's name and its value is done by using a `:` character. To the left is the node's
 name, and to the right is its value. The value of a node can also be a C# type of string, using double
-quotes, and even single quotes or prefix your opening double quote with an "@" character, allowing you
-to use carriage returns in your strings the same way you would do in for instance C#. Below is an example
+quotes, and even single quotes, or prefix your opening double quote with an "@" character, allowing you
+to use carriage returns in your strings the same way you can in for instance C#. Below are some examples.
 
 ```
 .str1:"   This is a \r\n  string"
@@ -162,11 +171,14 @@ to use carriage returns in your strings the same way you would do in for instanc
       string"
 ```
 
-Strings in Hyperlambda can be escaped with the exact same semantics as you would escape your C# strings.
+Strings in Hyperlambda can be escaped with the exact same semantics as you would escape your C# strings,
+including referencing UNICODE characters in your strings. Hyperlambda is _always_ serialized using UTF8,
+so you can add any UNICODE characters in your Hyperlambda you wish. Just make sure you save your files
+as UTF8 if you are using an external code editor to edit your Hyperlambda files.
 
 ## Comments
 
-Hyperlambda accepts comments the exacts same way C# does, and you can use either multiline comments,
+Hyperlambda accepts comments the exacts same way C# does, and you can use either multiline comments
 or single line comments, like the following example illustrates.
 
 ```
@@ -177,26 +189,37 @@ or single line comments, like the following example illustrates.
 // Single line comment.
 ```
 
-You _cannot_ put comments on lines containing nodes however, and comments must be indented the same
-amount of indentations as the nodes they are commenting, implying the nodes below them.
+You _cannot_ put comments on lines containing nodes, and comments must be indented the same
+amount of indentations as the nodes they are commenting, implying the nodes below them. Below is
+an example.
 
-## Lambda expressions
+```
+.data
+   foo1:bar1
+   foo2:bar2
 
-To understand Hyperlambda, and how to efficiently create your own Hyperlambda, you'll have to understand
-_"lambda expressions"_. These are kind of like XPath expressions. However, instead of referencing XML
-nodes, lambda expressions are referencing lambda nodes. This allows you to retrieve node names, values,
-and their children collection - For either to manipulate these, or read their values and react accordingly.
+for-each:x:@.data/*
 
-**Notice** - Hyperlambda does not separate between a _"variable"_ and a _"function invocation"_. Hence, a node
+   // This is correct indentation.
+   set-value:x:@.dp/#
+      .:Loop was here ...
+```
+
+Since Hyperlambda is using spaces (SP characters) to denote scope, indentation _is important_,
+also for comments. If you de-indent the above comment, you might get unpredictable results, in particular
+if you're serializing and de-serializing your Hyperlambda preserving comments. Comments should as a general
+rule of thumb be applied with the same amount of indentation as the node below them.
+
+## Data segments
+
+Hyperlambda does not separate between a _"variable"_ and a _"function invocation"_. Hence, a node
 might serve as both at the same time. This allows you to dynamically modify your lambda structure, as you
 traverse it and execute it. But this creates another problem for you, which is that you will need
-a mechanism to store data. This is accomplished by prefixing a node's name with a "." character, at which point
+a mechanism to store data. This is accomplished by prefixing a node's name with a `.` character, at which point
 the Hyperlambda evaluator will ignore it, as it is traversing your tree, and _not_ attempt to signal
-that particular node as a slot. Think of all nodes starting with a `.` character as _"data segments"_
-or variables for that matter.
-
-Combining _"data nodes"_ with expressions, allows you to use, modify, and reference these as _"variables"_.
-Below is an example.
+that particular node as a slot. Think of all nodes starting with a `.` character as _"data segments"_,
+or variables for that matter. Below is an example where **[eval]** will simply ignore the **[.src]** node
+and the **[.dest]** node, not attempting to invoke these as slots, but treat these as _"data nodes"_.
 
 ```
 .src:foo
@@ -205,18 +228,77 @@ set-value:x:@.dest
    get-value:x:@.src
 ```
 
-What the above code basically translates into, is.
+If you change name of the above **[.src]** node to simply **[src]**, your code will raise an exception,
+with an error such as follows _"No slot exists for [src]"_ since this slot doesn't exist in your Hyperlambda
+vocabulary - Unless you for some reasons have an installation where this slot has been explicitly added to
+your vocabulary.
 
-> Set the value of the [.dest] node to the value of [.src]
+## [eval]
+
+This is the by far most important slot in Hyperlambda, since it's arguably _"the heart"_ of Hyperlambda,
+allowing Hyperlambda to execute Hyperlambda. This slot executes the specified lambda object(s) assumed
+to exist either as a lambda in its children collection, or as an expression leading to one or more nodes,
+where each of these nodes will be executed. The example below illustrates how to use **[eval]** with
+an expression.
+
+```
+.res
+
+.lambda
+   set-value:x:@.res
+      .:OK
+
+eval:x:@.lambda
+```
+
+Notice, you could have multiple **[.lambda]** nodes in the above Hyperlambda, at which point _all_
+of these would be executed consecutively. Below is an example.
+
+```
+.res:
+
+.lambda
+   set-value:x:@.res
+      strings.concat
+         get-value:x:@.res
+         .:" OK 1 "
+
+.lambda
+   set-value:x:@.res
+      strings.concat
+         get-value:x:@.res
+         .:" OK 2 "
+
+eval:x:../*/.lambda
+```
+
+You can also provide the lambda object as children of the **[eval]** node itself, such as the following
+illustrates.
+
+```
+.res
+
+eval
+   set-value:x:@.res
+      .:Yup!
+```
+
+Notice, the **[eval]** slot is _not_ immutable, as in it has access to the outer graph object such as
+illustrated above, where we set the value of a node existing _outside_ of the **[.lambda]** itself.
+Implying **[eval]** cannot return values or nodes the same way for instance **[signal]** can.
 
 ## Branching and conditional execution
 
-Magic Lambda contains the following branching slots.
+Branching implies to change the execution path of your code, and examples includes function invocations, and
+other similar mechanisms that changes the position of your computer's _"execution pointer"_. Conditional
+branching implies to changing the position of the execution pointer, according to some condition. Typically
+this implies constructs such as `if`, `else`, `goto` etc in traditional programming languages.
+Hyperlambda contains the following branching slots by default.
 
 ### [if]
 
 This is the Hyperlambda equivalent of `if` from other programming languages. It allows you to test for some condition,
-and evaluate a lambda object, only if the condition evaluates to true. **[if]** must be given exactly two arguments.
+and evaluate a lambda object, only if the condition evaluates to true. **[if]** must be given two arguments.
 The first argument can be anything, including a slot invocation - But its second argument must be its **[.lambda]**
 argument. The **[.lambda]** node will be evaluated as a lambda object, only if the first argument to **[if]** evaluates
 to boolean true. Below is an example.
@@ -246,7 +328,7 @@ if
          .:yup!
 ```
 
-Notice, both the **[if]** slot and the **[else-if]** slot can optionally be directly pointed to an expression,
+Notice, both the **[if]** slot and the **[else-if]** slot can optionally be directly pointing to an expression,
 that is assumed to evaluate to either boolean `true` or boolean `false`, such as the following illustrates.
 
 ```
@@ -261,14 +343,14 @@ if:x:@.arguments/*/foo
 
 If you use this shorthand version for the slot(s), its lambda object is assumed to be the entirety of the content
 of the **[if]** or **[else-if]** slot itself, and there are no needs to explicitly declare your lambda objects as
-a **[.lambda]** argument.
+a **[.lambda]** argument. This only works if the expression leads to a boolean value.
 
 ### [else-if]
 
 **[else-if]** is the younger sibling of **[if]**, and must be preceeded by its older sibling, or other **[else-if]** nodes,
 and will only be evaluated if all of its previous conditional slots evaluates to false - At which point **[else-if]** is
 allowed to test its condition - And only if its condition evaluates to true, it evaluate its lambda object. Semantically **[else-if]**
-is similar to **[if]**, in that it requires exactly two arguments with the same structure as **[if]**.
+is similar to **[if]**, in that it requires two arguments with the same structure as **[if]**.
 
 ```
 .dest
@@ -285,7 +367,7 @@ else-if
 ```
 
 **[else-if]** can also be given an expression directly the same way **[if]** can. See the example for **[if]**
-to understand the semantics of this.
+to understand how this works.
 
 ### [else]
 
@@ -323,7 +405,7 @@ else
 
 ### [switch]
 
-**[switch]** works similarly as a switch/case block in a traditional programming language, and will find the
+**[switch]** works similarly to a switch/case block in a traditional programming language, and will find the
 first **[case]** node with a value matching the evaluated value of the **[switch]** node, and execute that
 **[case]** node as a lambda object.
 
@@ -341,9 +423,9 @@ switch:x:@.val
          .:Success!
 ```
 
-The **[switch]** slot can only contain two children nodes, **[case]** and **[default]**. The **[default]** node
+**[switch]** can only contain two types of children nodes; **[case]** and **[default]**. The **[default]** node
 will be evaluated if _none_ of the **[case]** node's values are matching the evaluated value of your **[switch]**.
-Try evaluating the following in your _"Eval"_ to understand what I mean.
+Try evaluating the following in your _"Eval"_ component to understand this.
 
 ```
 .val:fooXX
@@ -369,16 +451,27 @@ and this results in setting the **[.result]** node's value to _"Success!"_.
 
 **[default]** _cannot_ have a value, and all your **[case]** nodes must have a value, either a constant or
 an expression. However, any types can be used as values for your **[case]** nodes. And your **[switch]** node
-must at the very least have minimum one **[case]** node. The **[default]** node is optional though.
+must at the very least have minimum one **[case]** node. The **[default]** node is optional though. You can mix
+and match different types as you see fit in your **[case]** nodes.
 
 ## Comparisons
+
+All comparison _"operators"_ works the same way in Hyperlambda, in that they have an LHS and a RHS, implying
+respectively _"Left Hand Side"_ and _"Right Hand Side"_. However, since the _"comparison operators"_ in Hyperlambda
+are slots themselves, this implies there is no _"left"_ or _"right"_ side in your comparison, implying the _"left"_
+parts of your comparison is the first argument, and the _"right"_ side is the second argument. All comparison
+slots will consider types, which implies that boolean true will _not_ be considered equal to the string value
+of _"true"_, and the integer value of 5 is _not_ the same as the decimal value of 5.0, etc.
+
+You can provide the two arguments to these slots either as children nodes, where the first child node becomes
+the LHS part, and the second its RHS part - Or you can alternatively supply the LHS part as an expression
+leading to a value, at which point the only child argument assumed for your comparison becomes the RHS argument.
+Magic contains the following comparison slots out of the box.
 
 ### [eq]
 
 **[eq]** is the equality _"operator"_ in Magic, and it requires two arguments, both of which will be evaluated as potential
 signals - And the result of evaluating **[eq]** will only be true if the values of these two arguments are _exactly the same_.
-Notice, the comparison operator will consider types, which implies that boolean true will _not_ be considered equal to the string
-value of _"true"_, etc.
 
 ```
 .src:int:5
@@ -391,8 +484,6 @@ eq
 
 **[neq]** is the _not_ equal _"operator"_ in Magic, and it requires two arguments, both of which will be evaluated as potential
 signals - And the result of evaluating **[neq]** will only be true if the values of these two arguments are _not the same_.
-Notice, the comparison operator will consider types, which implies that boolean true will _not_ be considered equal to the string
-value of _"true"_, etc.
 
 ```
 .src:int:5
@@ -451,9 +542,9 @@ mte
 
 ### Commonalities for all comparison slots
 
-All comparison slots can optionally be given an expression that will be assumed is their LHS or _"Left Hand Side"_ argument
-which replaces the first child argument if specified. Below is an example for the **[mte]** slot, but all comparison slots
-works the same way.
+All comparison slots can optionally be given an expression that will be assumed to be their LHS argument,
+or _"Left Hand Side"_ argument, that if given will replace the first child argument. Below is an example for
+the **[mte]** slot, but all comparison slots works similarly.
 
 ```
 .src1:int:7
@@ -462,26 +553,43 @@ mte:x:@.src1
 ```
 
 In the above example the expression `:x:@.src1` becomes the left hand side, while the child argument becomes the right hand
-side of the comparison, implying as follows using pseudo code.
+side of the comparison. To translate the above into how it might look like in a traditional programming language to
+give you an idea of its structure please consider the following.
 
 ```csharp
 src1 >= 5
 ```
 
+Due to that the **[if]** slot, the **[else-if]** slot, and the **[while]** slot can optionally be given slot
+invocations themselves as their conditions, and all comparison slots are slots - You can inject comparison slot
+invocations inside of for instance your **[if]** invocations, serving as the slot invocation declaring the condition
+for your **[if]**. Consider the following to understand this.
+
+```
+.result
+.arg1:foo
+
+if
+   eq:x:@.arg1
+      .:foo
+   .lambda
+      set-value:x:@.result
+         .:Yup!
+```
+
+The above is the equivalent of the following in a more traditional programming language.
+
+```csharp
+string result;
+var arg1 = "foo";
+
+if (arg1 == "foo")
+{
+   result = "Yup!";
+}
+```
+
 ## Boolean logical conditions
-
-### [exists]
-
-**[exists]** will evaluate to true if its specified expression yields one or more results. If not, it will
-return false.
-
-```
-.src1
-   foo
-.src2
-exists:x:@.src1/*
-exists:x:@.src2/*
-```
 
 ### [and]
 
@@ -489,28 +597,33 @@ exists:x:@.src2/*
 the following.
 
 ```
+// Evaluates to false.
 and
    .:bool:true
    .:bool:false
+
+// Evaluates to true.
 and
    .:bool:true
    .:bool:true
 ```
 
 Notice, **[and]** will short circuit itself if it reaches a condition that does _not_ evaluate to true, implying
-none of its conditions afterwards will be considered, since the **[and]** as a while evaluates to false.
-**[and]** will also (of course) evaluate its arguments before checking if they evaluate to true, allowing you
+none of its conditions afterwards will be considered, since the **[and]** as a whole evaluates to false.
+**[and]** will also evaluate its arguments before checking if they evaluate to true, allowing you
 to use it as a part of richer comparison trees, such as the following illustrates.
 
 ```
 .s1:bool:true
 .s2:bool:true
 .res
+
 if
    and
       get-value:x:@.s1
       get-value:x:@.s2
    .lambda
+
       set-value:x:@.res
          .:OK
 ```
@@ -522,16 +635,20 @@ as the following illustrates. **[or]** will also evaluate its arguments, allowin
 trees, the same way **[and]** allows you to. Below is a simple example.
 
 ```
+// Evaluates to false.
 or
    .:bool:false
    .:bool:false
+
+// Evaluates to true.
 or
    .:bool:false
    .:bool:true
 ```
 
-Also **[or]** will short circuit itself if it reaches a condition that evaluates to true, implying
-none of its conditions afterwards will be considered, since the **[or]** as a while evaluates to true.
+**[or]** will also short circuit itself if it reaches a condition that evaluates to true, implying
+none of its conditions afterwards will be considered, since the **[or]** as a whole evaluates to true
+if _any_ of its arguments evaluates to true.
 
 ### [not]
 
@@ -540,14 +657,66 @@ none of its conditions afterwards will be considered, since the **[or]** as a wh
 ```
 not
    .:bool:true
+
 not
    .:bool:false
 ```
 
 **[not]** will also evaluate its argument, allowing you to use it in richer comparison trees, the same you could do
-with both **[or]** and **[and]**.
+with both **[or]** and **[and]**. Below is an example combining these slots together to create more complex types
+of logical comparisons.
+
+```
+.foo1:bar
+.foo2:bool:false
+.foo3:bool:true
+.result
+
+if
+   and
+      eq:x:@.foo1
+         .:bar
+      or
+         get-value:x:@.foo2
+         get-value:x:@.foo3
+   .lambda
+
+      set-value:x:@.result
+         .:Yup!
+```
+
+Notice you can actually follow the path the Hyperlambda executor took during execution of your code if you use the
+_"Eval"_ menu item, since the result it produces for the above code will resemble the following.
+
+```
+.foo1:bar
+.foo2:bool:false
+.foo3:bool:true
+.result:Yup!
+if:bool:true
+   and:bool:true
+      eq:bool:true
+         .:bar
+      or:bool:true
+         get-value:bool:false
+         get-value:bool:true
+   .lambda
+      set-value:x:@.result
+         .:Yup!
+```
+
+In the above code we can see that the first child of our above **[or]** node evaluates to `false`, but since the
+second child of our **[or]** node evaluates to true, the **[or]** as a whole evaluates to `true`. If you change
+its **[.foo2]** data node to boolean `true`, you will see that your second child of **[or]** never even is
+considered, since your **[or]** invocation is _"short circuiting"_. You can nest as many **[or]** and **[and]**
+invocations as you wish, creating any amount of complexity in your Hyperlambda.
 
 ## Modifying your graph
+
+Since there are no explicit variables in Hyperlambda, yet all nodes potentially might change, this requires
+the ability to change your nodes as you execute your Hyperlambda. Magic provides many slots to achieve this,
+both to change the names, values, and types of your nodes - In addition to adding a range of nodes into some
+other node, and/or remove nodes from the children collection of your nodes.
 
 ### [add]
 
@@ -569,7 +738,7 @@ add:x:@.dest
 ```
 
 Notice how all the 4 nodes above (foo1, foo2, bar1, bar2) are appended into the **[.dest]** node's children
-collection. This allows you to evaluate slots and add the result of your slot invocation into the destination,
+collection. This construct allows you to evaluate slots and add the result of your slot invocations into the destination,
 such as the following illustrates.
 
 ```
@@ -582,12 +751,29 @@ add:x:@.dest
 ```
 
 **[add]** can also take an expression leading to multiple destinations as its main argument, allowing you to
-add a copy of your source nodes into multiple node collections at the same time, with one invocation.
+add a copy of your source nodes into multiple destination node collections simultaneously with one invocation. **[add]**
+can also be given multiple _"source"_ node invocations. In the following example we illustrate both of these
+constructs at the same time.
+
+```
+.dest
+.dest
+.src1
+   foo1:bar1
+.src2
+   foo2:bar2
+add:x:../*/.dest
+   get-nodes:x:@.src1/*
+   get-nodes:x:@.src2/*
+```
+
+Notice how _both_ of our **[.dest]** nodes above ends up having _both_ the **[foo1]** and the **[foo2]** nodes in
+its children collection after executing the above Hyperlambda.
 
 ### [insert-before]
 
-This slot functions exactly the same as the **[add]** node, except it will insert the nodes _before_ the
-node(s) referenced in its main argument.
+This slot works the exact same way as the **[add]** node, except it will insert the nodes _before_ the
+node(s) referenced in its main/destination argument.
 
 ```
 .foo
@@ -600,8 +786,8 @@ insert-before:x:@.foo/*/foo1
 
 ### [insert-after]
 
-This slot functions exactly the same as the **[add]** node, except it will insert the nodes _after_ the
-node(s) referenced in its main argument.
+This slot works the exact same way as the **[add]** and **[insert-before]** slots, except it will insert the
+nodes _after_ the node(s) referenced in its main/destination argument.
 
 ```
 .foo
@@ -626,21 +812,22 @@ remove-nodes:x:@.data/*/foo2
 
 ### [set-value]
 
-Changes the value of a node referenced as its main expression to whatever its single source happens to be.
+Changes the value of all nodes referenced as its main expression to whatever its single source happens to be.
 Notice, when you invoke a slot that tries to change the value, name, or the node itself of some expression,
 and you supply a source expression to your invocation - Then the result of the source expression
 _cannot_ return more than one result. The destination expression however can modify multiple nodes
-at the same time.
+simultaneously.
 
 ```
 .foo
-set-value:x:@.foo
+.foo
+set-value:x:../*/.foo
    .:SUCCESS
 ```
 
 ### [set-name]
 
-Changes the name of a node referenced as its main expression to whatever its single source happens to be.
+Changes the name of all nodes referenced as its main expression to whatever its single source happens to be.
 
 ```
 .foo
@@ -648,6 +835,8 @@ Changes the name of a node referenced as its main expression to whatever its sin
 set-name:x:@.foo/*
    .:new-name
 ```
+
+The **[set-name]** invocation can also be given multiple destinations, but only _one_ source.
 
 ### [unwrap]
 
@@ -662,12 +851,15 @@ unwrap:x:+
 
 In the above example, before the **[.dest]** node is reached by the Hyperlambda instruction pointer, the value
 of the **[.dest]** node will have been _"unwrapped"_ (evaluated), and its value will be _"Hello World"_.
-When you invoke lambda objects that are cloned for some reasons, this slot becomes very handy, since
-it allows you to _"forward evaluate"_ expressions inside your lambda object. It's also useful when
-you have expressions inside for instance a **[return]** slot, and you want to return the _value_
-the expression evaluates to, and not the expression itself.
+This slot becomes very handy when you invoke lambda objects with expressions, since
+it allows you to _"forward evaluate"_ said expressions inside your lambda object, _before_ the lambda object
+is actually executed. It's also useful when you have expressions inside for instance a **[return]** slot,
+and you want to return the _value_ the expression evaluates to, and not the expression itself.
 
 ## Source slots
+
+In addition to the above slots allowing you to _change_ your graph objects as they are executed, Hyperlambda also
+contains a whole range of slots that allows you to _retrieve_ parts of your lambda objects during execution.
 
 ### [get-value]
 
@@ -709,6 +901,19 @@ Returns the nodes its expression is referencing.
 get-nodes:x:-/*
 ```
 
+### [exists]
+
+**[exists]** will evaluate to true if its specified expression yields one or more results. If not, it will
+return false.
+
+```
+.src1
+   foo
+.src2
+exists:x:@.src1/*
+exists:x:@.src2/*
+```
+
 ### [reference]
 
 This slot will evaluate its expression, and add the entire node the expression is pointing to, as a referenced node into
@@ -727,44 +932,53 @@ You can think of this slot as the singular version of **[get-nodes]**, except in
 nodes, it assumes its expression only points to a single node, and instead of returning a copy of the node,
 it returns the actual node by reference.
 
-**Notice** - The `#` iterator above, will enter into the node referenced as a value of its current
+**Notice** - The `/#` iterator above, will enter into the node referenced as a value of its current
 result - Implying it allows you to deeply traverse nodes passed in as references. This is sometimes
 useful in combination with referenced nodes, passed in as values of other nodes. You should as a general
-rule of thumb be careful with the **[reference]** slot since it results in side effects for the caller if
-it passes nodes by reference into some slot. Such side effects are in genral terms considered a bad thing,
-since they result in unpredictable code. In theory passing in a node by reference to some slot, might change
+rule of thumb be careful with the **[reference]** slot, since it results in side effects for the caller if
+it passes nodes by reference into some slot. Such side effects are as a general rule of thumb considered a _bad thing_,
+since they result in unpredictable results. In theory passing in a node by reference to some slot, might change
 the logic of the calling function, resulting in changing the code that is being executed, which obviously
-makes the code literally impossible to understand.
-
-### [format]
-
-This slot converts the format some expression or value according to some specified `String.Format` expression.
-The following code will string format the number 57 making sure it's prefixed with leading zeros always ending
-up having at least 5 digits. See .Net String.Format for which patterns you can use. The culture used will always
-be the invariant one.
-
-```
-.foo:int:57
-format:x:-
-   pattern:"{0:00000}"
-```
+makes the code literally impossible to understand. Hence, be careful with the **[reference]** slot!
 
 ### [get-context]
 
 This slot returns a context stack object, which is an object added to the stack using **[context]**.
+Below is an example of usage.
+
+```
+.result
+context:foo
+   value:bar
+   .lambda
+
+      set-value:x:@.result
+         get-context:foo
+```
+
+Notice how **[get-context]** inside your above **[.lambda]** invocation is able to retrieve the context object
+named _"foo"_, having the value of _"bar"_. See the **[context]** slot further down in this document for
+details about how this works.
 
 ## Exceptions
 
+Exceptions in Hyperlambda are similar to exceptions in traditional programming languages, and are basically a
+mechanism to raise errors in such a way that the stack is completely rewinded, to the point in your code
+where you want to handle error conditions. This allows you to _"ignore"_ errors occurring in all places,
+except a single point in your code, from where you want to handle said exceptions.
+
 ### [try]
 
-This slot allows you to create a try/catch/finally block of lambda, from where exceptions are caught,
+This slot allows you to create a try/catch/finally block in Hyperlambda, from where exceptions are caught,
 and optionally handled in a **[.catch]** lambda, and/or a **[.finally]** lambda.
 
 ```
 try
    throw:Whatever
+
 .catch
    log.info:ERROR HAPPENED!! 42, 42, 42!
+
 .finally
    log.info:Yup, we are finally there!
 ```
@@ -778,22 +992,39 @@ code, which has a guarantee of executing, regardless of whether or not an except
 ### [throw]
 
 This slot simply throws an exception, with the exception message taken from its value.
-See the **[try]** slot for an example. Notice, you can make the exception propagate to the client
-by adding a **[public]** parameter, and set its value to boolean _"true"_. At which point
-the exception will be returned to the client, even in release builds. Otherwise, the exception
+See the **[try]** slot above for an example. Notice, you can make the exception propagate to the client
+by adding a **[public]** parameter, and set its value to boolean _"true"_ - At which point
+the exception will be returned to the client, even in release builds, if no **[.catch]** block
+handles it before it propagates to the client - Otherwise the exception
 will only be visible in debug builds, and never returned to the client. You can also modify
 the **[status]** HTTP return value that's returned to the client, to become e.g. 404,
 indicating _"not found"_, etc. In addition you can pass in a **[field]** which will be serialised
 back to the client if specified to help the client to semantically figure out which field
-name that triggered the exception.
+that triggered the exception. Below is an example of all of the above.
+
+```
+throw:Whatever error message here
+   status:398
+   public:true
+   field:whatever-field
+```
+
+If you create an endpoint using for instance _"Hyper IDE"_, and throw the above exception, you can see
+how this propagates to the client without the exception handler. Below is a screenshot of how this will
+end up looking from the client's point of view.
+
+![Unhandled publicly visible exception](https://raw.githubusercontent.com/polterguy/polterguy.github.io/master/images/throw.jpg)
 
 ## Loops
 
+Loops in programming languages implies doing something x number of times, where x is any number. Hyperlambda
+provides two basic slots for looping; **[for-each]** and **[while]**.
+
 ### [for-each]
 
-Iterates through each node as a result of an expression, and evaluates its lambda object,
-passing in the currently iterated node as a **[.dp]** argument, containing the actual node
-iterated by reference.
+**[for-each]** iterates through each node being the result of an expression, and evaluates its lambda object,
+passing in the currently iterated node as a **[.dp]** argument, containing the node currently
+iterated by _reference_.
 
 ```
 .data
@@ -829,28 +1060,15 @@ while
       math.increment:x:@.no
 ```
 
-## Evaluating slots
-
-### [eval]
-
-Evaluates each lambda object found by either inspecting its children collection, or evaluating the
-expression found in its value.
-
-```
-.res
-
-.lambda
-   set-value:x:@.res
-      .:OK
-
-eval:x:@.lambda
-```
-
-Notice, the **[eval]** slot is _not_ immutable, as in it has access to the outer graph object such as
-illustrated above, where we set the value of a node existing _outside_ of the **[.lambda]** itself.
-Implying **[eval]** cannot return values or nodes the same way for instance **[signal]** can.
+The above Hyperlambda snippet basically implies the following if we are to translate it into plain English;
+_"Set .no to 0, then loop while .no is less than 5, where the loop adds a node into .res, before it increments .no by 1"_.
 
 ## Threading
+
+Threading in software development implies doing multiple things concurrently, scheduling CPU time for each
+of your threads, according to how the operating system schedules your threads. This concept is often referred
+to as _"multi tasking"_ and is crucial for any modern operating system, and/or programming language. Hyperlambda
+contains several multi tasking related slots.
 
 ### [fork]
 
@@ -863,9 +1081,18 @@ fork
    info.log:I was invoked from another thread
 ```
 
+To understand how **[fork]** works, you can imagine your computer's CPU as a single river,
+running down hill, and at some point the river divides into two equally large rivers. This is
+referred to as _"a fork"_. The analogy of the river becomes important for another reason, which
+is the understanding of that the total amount of water is still the same, it's only parted
+into two smaller rivers - Implying you cannot _"do more"_ with multi tasking, you can only
+equally share the same amount of resources as you had before between two different tasks.
+Multi threading does not make your CPU faster, it only schedules your CPU's time on multiple
+things, doing these things concurrently.
+
 ### [join]
 
-Joins all child **[fork]** invocations, implying slot will wait until all forks directly below it
+Joins all child **[fork]** invocations, implying the slot will wait until all forks directly below it
 has finished executing, and automatically copy the result of the **[fork]** into the original node.
 
 ```
@@ -875,6 +1102,10 @@ join
    fork
       http.get:"https://gaiasoul.com"
 ```
+
+As an analogy for what occurs above, imagine the two rivers from our above **[fork]** analogy,
+that forked from one larger river into two smaller rivers, for then again to join up and becoming one
+large river again.
 
 ### [semaphore]
 
@@ -886,11 +1117,18 @@ semaphore multiple places, by using the same value of your **[semaphore]** invoc
 semaphore:foo-bar
    /*
     * Only one thread will be allowed entrance into this piece of
-    * code at the same time, ensuring synchronised access, for cases
+    * code at the same time, ensuring synchronized access, for cases
     * where you cannot allow more than one thread to enter at the
     * same time.
     */
 ```
+
+In the above semaphore _"foo-bar_" becomes the name of your semaphore. If you invoke **[semaphore]** in
+any other parts of your Hyperlambda code, with _"foo-bar"_ as the value, only _one_ of your
+lambda objects will be allowed to execute at the same time. This allows you to _"synchronize access"_
+to shared resources, where only _one_ thread should be allowed to access the shared resource at the same
+time. Such shared resources might be for instance files, or other things shared between multiuple threads,
+where it's crucial that only one thread is allowed to access the shared resource at the same time.
 
 ### [sleep]
 
@@ -902,7 +1140,14 @@ to be passed in as its main value.
 sleep:1000
 ```
 
+**Notice** - This slot is typically releasing the thread back to the operating system, implying as
+the current thread is _"sleeping"_, it will not be a blocking call, and require ZERO physical operating
+system threads while it is sleeping. This is true because of Hyperlambda's 100% perfectly `async` nature.
+
 ## Miscellaneous slots
+
+These are slots that doesn't belong to one specific group of slots, but are still useful enough in general
+to have implementations in Hyperlambda.
 
 ### [types]
 
@@ -935,12 +1180,27 @@ convert:x:-
 ```
 
 **Notice** - You can also base64 encode and decode `byte[]` with this slot, by passing in _"base64"_ or
-_"from-base64"_ as your **[type]** argument.
+_"from-base64"_ as your **[type]** argument. The value of the object you want to convert must obviously support
+conversion to the specified type, and will throw an exception if no conversion is possible, such as if you
+for instance try to convert the string of _"foo-bar"_ to an integer.
+
+### [format]
+
+This slot converts the format some expression or value according to some specified `String.Format` expression.
+The following code will string format the number 57 making sure it's prefixed with leading zeros always ending
+up having at least 5 digits. See .Net String.Format for which patterns you can use. The culture used will always
+be the invariant one.
+
+```
+.foo:int:57
+format:x:-
+   pattern:"{0:00000}"
+```
 
 ### [vocabulary]
 
-Returns the name of every static slot in your system, optional passing in a string, or an expression leading to
-a string, which is a filtering condition where the slot must _start_ with the filter in its name, to be considered
+Returns the name of every static slot in your system, optionally passing in a string, or an expression leading to
+a string, which is a filtering condition, where the slot must _start_ with the filter specified to be considered
 a part of the end result.
 
 ```
@@ -954,7 +1214,7 @@ vocabulary:io.file
 ### [whitelist]
 
 This slot temporarily within the given scope changes the available slots, allowing you to declare a block
-of lambda, where only a sub-set of your vocabulary is available for some piece of code to signal. This allows
+of lambda, where only a sub-set of your vocabulary is available for some piece of code to invoke. This allows
 you to relatively securely allow some partially untrusted source to pass in a piece of Hyperlambda, for then
 to allow it to evaluate its own Hyperlambda. The slot takes two arguments.
 
@@ -964,9 +1224,11 @@ to allow it to evaluate its own Hyperlambda. The slot takes two arguments.
 ```
 .result
 whitelist
+
    vocabulary
       set-value
       return
+
    .lambda
 
       // Inside of this [.lambda] object, we can only invoke [set-value], and no other slots!
@@ -989,9 +1251,10 @@ invocation creates its own result stack object, allowing the **[whitelist]** inv
 and nodes to the caller using for instance the **[return]** slot. If you execute the above Hyperlambda
 you can see how this semantically works by realizing how the above **[.result]** node never has its
 value actually changed, because our invocation to **[set-value]** inside our whitelist invocation yields
-a _"null node-set result"_. Hence semantically the **[whitelist]** slot works the same way signaling
+a _"null node-set result"_. Hence, semantically the **[whitelist]** slot works the same way signaling
 a dynamic slot works in Hyperlambda, in that the invocation treats its **[.lambda]** object as if
-it was a dynamic slot, isolating it from the rest of our code.
+it was a dynamic slot, isolating it from the rest of our code, allowing the lambda object to return
+values and nodes to the caller.
 
 ### [context]
 
@@ -1000,9 +1263,11 @@ the **[get-context]** slot. Below is an example.
 
 ```
 .result
+
 context:foo
    value:bar
    .lambda
+
       set-value:x:@.result
          get-context:foo
 ```
