@@ -34,7 +34,7 @@ As you study Hyperlambda it might be beneficial to use the _"Eval"_ component th
 frontend Angular dashboard website. This component allows you to play with Hyperlambda in _"immediate mode"_,
 allowing you to experiment with it, execute it immediately from your browser, using a rich code editor,
 providing syntax highlighting, autocomplete on slots, and allows you to save your snippets for later on your
-server. Below is a screenshot of the _"Evaluator"_ component to give you an idea of what you might expect.
+server. Below is a screenshot of the _"Eval"_ component to give you an idea of what you might expect.
 
 ![Hyperlambda evaluator](https://raw.githubusercontent.com/polterguy/polterguy.github.io/master/images/eval-component.jpg)
 
@@ -130,24 +130,20 @@ try to raise these nodes as signals. This has two benefits.
 2. You can use nodes starting with _"."_ as data nodes, separating function invocations from data.
 
 **[eval]** makes Hyperlambda _"super functional"_ in nature. Below is an example of a Hyperlambda
-piece of code, that illustrates this, by adding a _"callback"_ lambda object to its POP3 fetch emails
-slot that will be invoked once for each available email on your POP3 server.
+piece of code, that illustrates this, by adding a _"callback"_ lambda object to its **[while]** invocation
+as a **[.lambda]** node, that will be invoked once for every iteration of your while loop.
 
 ```
-/*
- * Example of how to retrieve emails form a POP3 server.
- */
-mail.pop3.fetch
-   max:int:50
-   raw:bool:false
+.no:int:0
+while
+   lt
+      get-value:x:@.no
+      .:int:20
    .lambda
 
-      /*
-       * Some lambda object invoked once for every email fetched.
-       * Given message as [.message] node structured as lambda.
-       */
-      lambda2hyper:x:..
-      log.info:x:-
+      // Your lambda goes here.
+      log.info:Howdy from while
+      math.increment:x:@.no
 ```
 
 The `ISlot` called **[mail.pop3.fetch]** will invoke the above **[.lambda]** object once for each email
@@ -323,7 +319,7 @@ switch:x:@.val
 
 The **[switch]** slot can only contain two children nodes, **[case]** and **[default]**. The **[default]** node
 will be evaluated if _none_ of the **[case]** node's values are matching the evaluated value of your **[switch]**.
-Try evaluating the following in your _"Evaluator"_ to understand what I mean.
+Try evaluating the following in your _"Eval"_ to understand what I mean.
 
 ```
 .val:fooXX
