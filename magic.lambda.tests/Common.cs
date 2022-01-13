@@ -11,7 +11,6 @@ using Moq;
 using magic.node;
 using magic.node.contracts;
 using magic.signals.services;
-using magic.lambda.threading;
 using magic.signals.contracts;
 using magic.node.extensions.hyperlambda;
 
@@ -64,7 +63,6 @@ namespace magic.lambda.tests
                 mockConfiguration.SetupGet(x => x[It.IsAny<string>()]).Returns("60");
             services.AddTransient((svc) => mockConfiguration.Object);
             services.AddTransient<ISignaler, Signaler>();
-            services.AddSingleton(typeof(ThreadRunner));
             var types = new SignalsProvider(InstantiateAllTypes<ISlot>(services));
             services.AddTransient<ISignalsProvider>((svc) => types);
             var provider = services.BuildServiceProvider();
