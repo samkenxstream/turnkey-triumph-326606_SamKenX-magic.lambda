@@ -24,9 +24,13 @@ namespace magic.lambda.change
         public void Signal(ISignaler signaler, Node input)
         {
             var value = input.GetEx<object>();
-            var pattern = input.Children.First().GetEx<string>();
+            var pattern = input.Children.First(x => x.Name == "pattern").GetEx<string>();
+            var culture = CultureInfo.InvariantCulture;
+            var cultureNode = input.Children.FirstOrDefault(x => x.Name == "culture");
+            if (cultureNode != null)
+                culture = new CultureInfo(cultureNode.GetEx<string>());
             input.Clear();
-            input.Value = string.Format(CultureInfo.InvariantCulture, pattern, value);
+            input.Value = string.Format(culture, pattern, value);
         }
     }
 }
