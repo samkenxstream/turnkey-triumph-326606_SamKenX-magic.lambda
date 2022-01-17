@@ -6,6 +6,7 @@ using System.Linq;
 using magic.node;
 using magic.node.extensions;
 using magic.signals.contracts;
+using magic.node.extensions.hyperlambda;
 
 namespace magic.lambda.exceptions
 {
@@ -34,7 +35,20 @@ namespace magic.lambda.exceptions
                 .FirstOrDefault(x => x.Name == "field")?
                 .GetEx<string>();
 
-            throw new HyperlambdaException(input.GetEx<string>() ?? "[no-message]", isPublic, status, field);
+            var root = input;
+            while (root.Parent != null)
+            {
+                root = root.Parent;
+            }
+            var stackTrace = HyperlambdaGenerator.GetHyperlambda(root.Children);
+
+            // Throwing exception.
+            throw new HyperlambdaException(
+                input.GetEx<string>() ?? "[no-message]",
+                isPublic,
+                status,
+                field,
+                stackTrace);
         }
     }
 }
