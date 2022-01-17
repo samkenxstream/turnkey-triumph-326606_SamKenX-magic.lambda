@@ -46,7 +46,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="magic.node.extensions" Version="10.0.15" />
-    <PackageReference Include="magic.signals" Version="10.0.15" />
+    <PackageReference Include="magic.node.extensions" Version="10.0.18" />
+    <PackageReference Include="magic.signals" Version="10.0.18" />
   </ItemGroup>
 </Project>
