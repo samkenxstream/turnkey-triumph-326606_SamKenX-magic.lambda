@@ -80,6 +80,9 @@ namespace magic.lambda.loops
                 // Checking if execution for some reasons was terminated.
                 if (terminate != null && (terminate.Value != null || terminate.Children.Any()))
                     return;
+
+                // Ensuring current method is de-prioritised to allow other threads to execute CPU slice.
+                await Task.Yield();
             }
         }
     }
