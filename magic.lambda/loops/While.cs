@@ -102,6 +102,9 @@ namespace magic.lambda.loops
                 // Resetting lambda object back to its original state for our next iteration.
                 input.Clear();
                 input.AddRange(clone.Children.Select(x => x.Clone()));
+
+                // Ensuring current method is de-prioritised to allow other threads to execute CPU slice.
+                await Task.Yield();
             }
 
             // To make sure we're compatible with [if] and [else-if] as much as possible.
