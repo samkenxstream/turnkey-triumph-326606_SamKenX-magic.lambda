@@ -941,7 +941,7 @@ since they result in unpredictable results. In theory passing in a node by refer
 the logic of the calling function, resulting in changing the code that is being executed, which obviously
 makes the code literally impossible to understand. Hence, be careful with the **[reference]** slot!
 
-### [first]
+### [get-first-value]
 
 Returns the _first_ non-null value resulting from evaluating its expression, and/or its children nodes.
 
@@ -950,7 +950,7 @@ Returns the _first_ non-null value resulting from evaluating its expression, and
    foo1:bar1
    foo2:bar2
 .data2:bar3
-first:x:@.data1/*
+get-first-value:x:@.data1/*
    get-value:x:@.data2
 ```
 

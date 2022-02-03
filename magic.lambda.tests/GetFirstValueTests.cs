@@ -8,14 +8,14 @@ using Xunit;
 
 namespace magic.lambda.tests
 {
-    public class FirstTests
+    public class GetFirstValueTests
     {
         [Fact]
         public void SingleExpression_01()
         {
             var lambda = Common.Evaluate(@"
 .src:foo1
-first:x:../*/.src
+get-first-value:x:../*/.src
 ");
             Assert.Equal("foo1", lambda.Children.Skip(1).First().Value);
         }
@@ -28,7 +28,7 @@ first:x:../*/.src
    foo1
    foo2:bar2
    foo3:bar3
-first:x:@.data/*
+get-first-value:x:@.data/*
 ");
             Assert.Equal("bar2", lambda.Children.Skip(1).First().Value);
         }
@@ -41,7 +41,7 @@ first:x:@.data/*
    foo1:bar1
    foo2:bar2
    foo3:bar3
-first
+get-first-value
    get-value:x:@.data/1
    get-value:x:@.data/0
    get-value:x:@.data/2
@@ -57,7 +57,7 @@ first
 .data
    foo1:error
    foo2:error
-first
+get-first-value
    .:success
    get-value:x:@.data/0
    get-value:x:@.data/1
@@ -70,7 +70,7 @@ first
         public void Static_01()
         {
             var lambda = Common.Evaluate(@"
-first:success
+get-first-value:success
 ");
             Assert.Equal("success", lambda.Children.First().Value);
         }

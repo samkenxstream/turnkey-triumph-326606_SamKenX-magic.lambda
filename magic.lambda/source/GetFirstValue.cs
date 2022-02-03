@@ -12,11 +12,11 @@ using magic.signals.contracts;
 namespace magic.lambda.source
 {
     /// <summary>
-    /// [first] slot that will return the first value found by evaluating its expression, and/or
+    /// [get-first-value] slot that will return the first value found by evaluating its expression, and/or
     /// its children nodes.
     /// </summary>
-    [Slot(Name = "first")]
-    public class First : ISlot, ISlotAsync
+    [Slot(Name = "get-first-value")]
+    public class GetFirstValue : ISlot, ISlotAsync
     {
         /// <summary>
         /// Implementation of signal
