@@ -42,21 +42,47 @@ namespace magic.lambda.misc
             var whitelist = signaler.Peek<List<Node>>("whitelist");
             if (filter == null)
             {
-                input.AddRange(_signalProvider.Keys
+                var keys = _signalProvider.Keys
                     .Where(x => 
                         !x.StartsWith(".", StringComparison.InvariantCulture) &&
                         (whitelist == null || whitelist.Any(x2 => x2.Name == x)))
-                    .Select(x => new Node("", x)));
+                    .ToList();
+                SortKeys(keys);
+                input.AddRange(keys.Select(x => new Node("", x)));
             }
             else
             {
-                input.AddRange(_signalProvider.Keys
+                var keys = _signalProvider.Keys
                     .Where(x => 
                         !x.StartsWith(".", StringComparison.InvariantCulture) &&
                         x.StartsWith(filter, StringComparison.InvariantCulture) &&
                         (whitelist == null || whitelist.Any(x2 => x2.Name == x)))
-                    .Select(x => new Node("", x)));
+                    .ToList();
+                SortKeys(keys);
+                input.AddRange(keys.Select(x => new Node("", x)));
             }
         }
+
+        #region [ -- Private helper methods -- ]
+
+        /*
+         * Sorts the specified list such that it becomes alphabetical, making
+         * sure slots without a "." comes before slots with a ".".
+         */
+        static void SortKeys(List<string> keys)
+        {
+            keys.Sort((lhs, rhs) =>
+            {
+                var lhsIsDot = lhs.Contains('.');
+                var rhsIsDot = rhs.Contains('.');
+                if (lhsIsDot && !rhsIsDot)
+                    return 1;
+                if (!lhsIsDot && rhsIsDot)
+                    return -1;
+                return lhs.CompareTo(rhs);
+            });
+        }
+
+        #endregion
     }
 }
