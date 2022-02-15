@@ -101,16 +101,10 @@ namespace magic.lambda.source
          */
         object TryValue(Node input)
         {
-            if (input.Value is Expression exp)
-            {
-                var expResult = exp.Evaluate(input);
-                foreach (var idxRes in expResult)
-                {
-                    if (idxRes.Value != null)
-                        return idxRes.Value;
-                }
-            }
-            return input.Value;
+            return (input.Value as Expression)?
+                .Evaluate(input)
+                .FirstOrDefault(x => x.Value != null)?
+                .Value ?? input.Value;
         }
 
         #endregion
