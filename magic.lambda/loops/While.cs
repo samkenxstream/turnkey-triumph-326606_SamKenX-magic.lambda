@@ -4,10 +4,11 @@
 
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using magic.node;
-using magic.node.contracts;
 using magic.node.extensions;
 using magic.lambda.branching;
+using magic.lambda.contracts;
 using magic.signals.contracts;
 
 namespace magic.lambda.loops
@@ -18,15 +19,15 @@ namespace magic.lambda.loops
     [Slot(Name = "while")]
     public class While : ISlot, ISlotAsync
     {
-        readonly int _maxIterations;
+        readonly IOptions<Settings> _settings;
 
         /// <summary>
         /// Creates an instance of your slot.
         /// </summary>
-        /// <param name="configuration">Configuration for your application.</param>
-        public While(IMagicConfiguration configuration)
+        /// <param name="settings">Configuration settings.</param>
+        public While(IOptions<Settings> settings)
         {
-            _maxIterations = int.Parse(configuration?["magic:lambda:while:max-iterations"] ?? "5000");
+            _settings = settings;
         }
 
         /// <summary>
@@ -41,6 +42,7 @@ namespace magic.lambda.loops
 
             // Making sure we don't enter an infinite loop.
             int iterations = 0;
+            int maxIterations = _settings.Value.MaxWhileIterations;
 
             // Cloning entire node such that we can reset it after execution.
             var clone = input.Clone();
@@ -49,8 +51,8 @@ namespace magic.lambda.loops
             while (Common.ConditionIsTrue(signaler, input))
             {
                 // Making sure we don't exceed maximum number of iterations.
-                if (iterations++ >= _maxIterations)
-                    throw new HyperlambdaException($"Your [while] loop exceeded the maximum number of iterations, which is {_maxIterations}. Refactor your Hyperlambda, or increase your configuration setting.");
+                if (iterations++ >= maxIterations)
+                    throw new HyperlambdaException($"Your [while] loop exceeded the maximum number of iterations, which is {maxIterations}. Refactor your Hyperlambda, or increase your configuration setting.");
 
                 // Executing lambda object associated with [while].
                 signaler.Signal("eval", Common.GetLambda(input));
@@ -81,6 +83,7 @@ namespace magic.lambda.loops
 
             // Making sure we don't enter an infinite loop.
             int iterations = 0;
+            int maxIterations = _settings.Value.MaxWhileIterations;
 
             // Cloning entire node such that we can reset it after execution.
             var clone = input.Clone();
@@ -89,8 +92,8 @@ namespace magic.lambda.loops
             while (await Common.ConditionIsTrueAsync(signaler, input))
             {
                 // Making sure we don't exceed maximum number of iterations.
-                if (iterations++ >= _maxIterations)
-                    throw new HyperlambdaException($"Your [while] loop exceeded the maximum number of iterations, which is {_maxIterations}. Refactor your Hyperlambda, or increase your configuration setting.");
+                if (iterations++ >= maxIterations)
+                    throw new HyperlambdaException($"Your [while] loop exceeded the maximum number of iterations, which is {maxIterations}. Refactor your Hyperlambda, or increase your configuration setting.");
 
                 // Executing lambda object associated with [while].
                 await signaler.SignalAsync("eval", Common.GetLambda(input));
