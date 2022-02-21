@@ -4,7 +4,6 @@
 
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using magic.node;
 using magic.node.extensions;
 using magic.lambda.branching;
@@ -19,13 +18,13 @@ namespace magic.lambda.loops
     [Slot(Name = "while")]
     public class While : ISlot, ISlotAsync
     {
-        readonly IOptions<Settings> _settings;
+        readonly LambdaSettings _settings;
 
         /// <summary>
         /// Creates an instance of your slot.
         /// </summary>
         /// <param name="settings">Configuration settings.</param>
-        public While(IOptions<Settings> settings)
+        public While(LambdaSettings settings)
         {
             _settings = settings;
         }
@@ -42,7 +41,7 @@ namespace magic.lambda.loops
 
             // Making sure we don't enter an infinite loop.
             int iterations = 0;
-            int maxIterations = _settings.Value.MaxWhileIterations;
+            int maxIterations = _settings.MaxWhileIterations;
 
             // Cloning entire node such that we can reset it after execution.
             var clone = input.Clone();
@@ -83,7 +82,7 @@ namespace magic.lambda.loops
 
             // Making sure we don't enter an infinite loop.
             int iterations = 0;
-            int maxIterations = _settings.Value.MaxWhileIterations;
+            int maxIterations = _settings.MaxWhileIterations;
 
             // Cloning entire node such that we can reset it after execution.
             var clone = input.Clone();
