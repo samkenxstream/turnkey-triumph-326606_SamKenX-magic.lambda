@@ -6,11 +6,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using magic.node;
-using magic.node.contracts;
 using magic.lambda.contracts;
 using magic.signals.services;
 using magic.signals.contracts;
@@ -63,12 +60,10 @@ namespace magic.lambda.tests
             services.AddTransient<ISignaler, Signaler>();
             var types = new SignalsProvider(InstantiateAllTypes<ISlot>(services));
             services.AddTransient<ISignalsProvider>((svc) => types);
-            var settingsMock = new Mock<IOptions<Settings>>();
-            settingsMock.SetupGet(x => x.Value).Returns(new Settings
+            services.AddTransient<LambdaSettings>((svc) => new LambdaSettings
             {
                 MaxWhileIterations = maxIterations ? 60 : 5000,
             });
-            services.AddTransient<IOptions<Settings>>((svc) => settingsMock.Object);
             var provider = services.BuildServiceProvider();
             return provider;
         }
