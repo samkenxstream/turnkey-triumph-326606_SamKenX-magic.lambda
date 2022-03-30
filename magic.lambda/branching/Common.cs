@@ -94,6 +94,10 @@ namespace magic.lambda.branching
                 if (idx.Get<bool>())
                     return false; // Previous node's condition evaluated to true.
 
+                // Checking if this is first condition
+                if (idx.Name == "if")
+                    return true;
+
                 // Moving to previous node.
                 idx = idx.Previous;
             }
