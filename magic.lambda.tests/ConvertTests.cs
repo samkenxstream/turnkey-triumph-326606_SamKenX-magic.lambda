@@ -137,11 +137,11 @@ convert:x:-
         public void ConvertToDate()
         {
             var lambda = Common.Evaluate(@"
-.src:""2020-12-30T23:59:11+02:00""
+.src:""2020-12-30T23:59:11Z""
 convert:x:-
    type:date");
             Assert.Equal(typeof(DateTime), lambda.Children.Skip(1).First().Value.GetType());
-            Assert.Equal(new DateTime(2020, 12, 30, 23, 59, 11, DateTimeKind.Local), lambda.Children.Skip(1).First().Value);
+            Assert.Equal(new DateTime(2020, 12, 30, 23, 59, 11, DateTimeKind.Utc), lambda.Children.Skip(1).First().Value);
         }
 
         [Fact]
