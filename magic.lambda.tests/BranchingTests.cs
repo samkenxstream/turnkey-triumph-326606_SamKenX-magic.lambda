@@ -97,6 +97,18 @@ if:x:-
         }
 
         [Fact]
+        public void IfExpression_06()
+        {
+            var lambda = Common.Evaluate(@"
+.result
+.condition:false
+if:x:-
+   set-value:x:../*/.result
+      .:ERROR");
+            Assert.Null(lambda.Children.First().Value);
+        }
+
+        [Fact]
         public void If_Throws()
         {
             Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
