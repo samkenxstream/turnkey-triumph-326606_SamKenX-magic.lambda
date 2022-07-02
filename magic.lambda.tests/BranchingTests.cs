@@ -61,6 +61,42 @@ if:x:-
         }
 
         [Fact]
+        public void IfExpression_03()
+        {
+            var lambda = Common.Evaluate(@"
+.result
+.condition
+if:x:-
+   set-value:x:../*/.result
+      .:ERROR");
+            Assert.Null(lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void IfExpression_04()
+        {
+            var lambda = Common.Evaluate(@"
+.result:ERROR
+.condition:
+if:x:-
+   set-value:x:../*/.result
+      .");
+            Assert.Null(lambda.Children.First().Value);
+        }
+
+        [Fact]
+        public void IfExpression_05()
+        {
+            var lambda = Common.Evaluate(@"
+.result:ERROR
+.condition:int:5
+if:x:-
+   set-value:x:../*/.result
+      .");
+            Assert.Null(lambda.Children.First().Value);
+        }
+
+        [Fact]
         public void If_Throws()
         {
             Assert.Throws<HyperlambdaException>(() => Common.Evaluate(@"
