@@ -10,11 +10,11 @@ using magic.signals.contracts;
 namespace magic.lambda.source
 {
     /// <summary>
-    /// [exists] slot returning true if whatever expression it's given actually yields a result.
+    /// [null] slot returning true if whatever expression it's given actually yields a result.
     /// </summary>
-    [Slot(Name = "exists")]
-    [Slot(Name = "not-exists")]
-    public class Exists : ISlot
+    [Slot(Name = "null")]
+    [Slot(Name = "not-null")]
+    public class IsNull : ISlot
     {
         /// <summary>
         /// Implementation of signal
@@ -23,8 +23,8 @@ namespace magic.lambda.source
         /// <param name="input">Parameters passed from signaler</param>
         public void Signal(ISignaler signaler, Node input)
         {
-            var hasAny = input.Evaluate().Any();
-            input.Value = input.Name == "exists" ? hasAny : !hasAny;
+            var result = input.Evaluate().FirstOrDefault(x => x.Value != null);
+            input.Value = input.Name == "null" ? result == null : result != null;
         }
     }
 }

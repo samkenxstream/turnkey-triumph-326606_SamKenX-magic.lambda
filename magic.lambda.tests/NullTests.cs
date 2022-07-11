@@ -8,40 +8,50 @@ using magic.node.extensions;
 
 namespace magic.lambda.tests
 {
-    public class ExistsTests
+    public class NullTests
     {
         [Fact]
-        public void ExistsTrue()
+        public void NullTrue()
         {
             var lambda = Common.Evaluate(@".dest
    foo
-exists:x:-/*");
+null:x:-/*");
             Assert.True(lambda.Children.Skip(1).First().GetEx<bool>());
         }
 
         [Fact]
-        public void ExistsFalse()
+        public void NullTrueNoExisting()
         {
             var lambda = Common.Evaluate(@".dest
-exists:x:-/*");
+null:x:-/*");
+            Assert.True(lambda.Children.Skip(1).First().GetEx<bool>());
+        }
+
+        [Fact]
+        public void NullFalse()
+        {
+            var lambda = Common.Evaluate(@".dest
+   foo:foo
+null:x:-/*");
             Assert.False(lambda.Children.Skip(1).First().GetEx<bool>());
         }
 
         [Fact]
-        public void NotExistsTrue()
+        public void NotNullTrue()
+        {
+            var lambda = Common.Evaluate(@".dest
+   foo:foo
+not-null:x:-/*");
+            Assert.True(lambda.Children.Skip(1).First().GetEx<bool>());
+        }
+
+        [Fact]
+        public void NotNullFalse()
         {
             var lambda = Common.Evaluate(@".dest
    foo
-not-exists:x:-/*");
+not-null:x:-/*");
             Assert.False(lambda.Children.Skip(1).First().GetEx<bool>());
-        }
-
-        [Fact]
-        public void NotExistsFalse()
-        {
-            var lambda = Common.Evaluate(@".dest
-not-exists:x:-/*");
-            Assert.True(lambda.Children.Skip(1).First().GetEx<bool>());
         }
     }
 }
