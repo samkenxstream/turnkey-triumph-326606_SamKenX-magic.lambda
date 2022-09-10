@@ -17,9 +17,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="magic.signals.contracts" Version="14.1.3" />
-    <PackageReference Include="magic.lambda.slots" Version="14.1.3" />
-    <PackageReference Include="magic.lambda.math" Version="14.1.3" />
+    <PackageReference Include="magic.signals.contracts" Version="14.3.0" />
+    <PackageReference Include="magic.lambda.slots" Version="14.3.0" />
+    <PackageReference Include="magic.lambda.math" Version="14.3.0" />
   </ItemGroup>
 
   <ItemGroup>
