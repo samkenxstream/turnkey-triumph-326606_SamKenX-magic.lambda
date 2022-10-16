@@ -11,10 +11,10 @@ using magic.signals.contracts;
 namespace magic.lambda.change
 {
     /// <summary>
-    /// [merge] slot combining [invoke] and [add] to dynamically inject nodes into result of executing expression.
+    /// [include] slot combining [eval], [for-each], and [add] to dynamically include nodes into each node resulting from expression.
     /// </summary>
-    [Slot(Name = "merge")]
-    public class Merge : ISlot, ISlotAsync
+    [Slot(Name = "include")]
+    public class Include : ISlot, ISlotAsync
     {
         /// <summary>
         /// Implementation of signal
