@@ -862,6 +862,28 @@ This slot will remove all nodes its expression is pointing to.
 remove-nodes:x:@.data/*/foo2
 ```
 
+### [merge]
+
+This slot is logically the combination of a **[for-each]**, **[add]** and **[eval/invoke]**. The slot takes a lambda
+object, that will be executed with a **[.dp]** node, for each node resulting from evaluating its expression passed
+in by reference. The returned nodes will then be appended into the currently iterated node, allowing you to _"merge"_
+sub trees into a destination tree using a declarative syntax. It is useful for adding nodes dynamically to an existing
+graph object, declaratively, according to the state of its destination nodes.
+
+```
+.data
+   foo1:bar1
+   foo2:bar2
+   foo3:bar3
+merge:x:@.data/*
+   strings.concat
+      get-value:x:@.dp/#
+      .:" howdy"
+   unwrap:x:+/*
+   return
+      howdy:x:@strings.concat
+```
+
 ### [set-value]
 
 Changes the value of all nodes referenced as its main expression to whatever its single source happens to be.
