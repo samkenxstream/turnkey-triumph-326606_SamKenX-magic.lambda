@@ -339,42 +339,6 @@ Notice, the **[eval]** slot is _not_ immutable, as in it has access to the outer
 illustrated above, where we set the value of a node existing _outside_ of the **[.lambda]** itself.
 Implying **[eval]** cannot return values or nodes the same way for instance **[signal]** can.
 
-## [mixin]
-
-This slot takes a filename as its primary argument, with an extension, assuming a Hyperlambda exists
-as a _"codebehind"_ page associated with your primary file. It allows for dynamically substituting
-`{{xyz}}` segments in your original source file, by invoking lambda objects it can find in the
-Hyperlambda file. To test it you need to create and save 2 files in your Magic backend.
-
-**/foo.html**
-
-```
-<html>
-    <head>
-        <title>Hell world</title>
-    </head>
-    <body>
-        <h1>Hello world</h1>
-        <p>
-           Hello world from {{who}}
-        </p>
-    </body>
-</html>
-```
-
-**/foo.hl**
-
-```
-who
-   return:The Machine!
-```
-
-If you create the two above files and you invoke mixin as follows.
-
-```
-mixin:/foo.html
-```
-
 You will see that it invokes your **[who]** lambda object, and substitutes the value of `{{foo}}`
 with the return value from the invocation.
 
