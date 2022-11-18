@@ -10,7 +10,7 @@
     <Description>A microscopic and super dynamic scripting language and DSL for .Net Core, based upon Hyperlambda syntax, and Super Signals. This project is the Hyperlambda core implementation (keywords) for Magic. To use package go to https://polterguy.github.io</Description>
     <PackageProjectUrl>https://aista.com</PackageProjectUrl>
     <PackOnBuild>true</PackOnBuild>
-    <PackageVersion>14.4.5</PackageVersion>
+    <PackageVersion>14.5.0</PackageVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/polterguy/magic.lambda</RepositoryUrl>
@@ -46,7 +46,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="magic.node.extensions" Version="14.4.5" />
-    <PackageReference Include="magic.signals" Version="14.4.5" />
+    <PackageReference Include="magic.node.extensions" Version="14.5.0" />
+    <PackageReference Include="magic.signals" Version="14.5.0" />
   </ItemGroup>
 </Project>
