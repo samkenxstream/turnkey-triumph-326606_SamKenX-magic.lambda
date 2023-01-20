@@ -3,22 +3,23 @@
 
 magic.lambda is where you will find the _"programming language keywords"_ of Hyperlambda.
 It is what makes Hyperlambda Turing complete, and contains slots such as **[for-each]**,
-**[if]**, and **[while]**.
+**[if]**, and **[while]**. If you've watched the [Hyperlambda 101 YouTube video playlist](https://www.youtube.com/watch?v=v1D3DtrmhS8&list=PLgyI389Eb9HNlhKpF9EHXO7D1EE7_dklg),
+and you want to learn more, this is probably where you should start.
 
-## Structure
+## Hyperlambda internals
 
 _Everything_ is a slot in Hyperlambda. This allows you to evaluate and extend its conditional operators and logical operators
-the same way you would evaluate or create a function in a traditional programming language. This might at first seem a bit unintuitive
+the same way you would evaluate or create a function in a traditional programming language. This might at first seem a bit weird
 if you come from a traditional programming language, but has a lot of advantages, such as allowing the computer to look
 at the entirety of your function object as a hierarchical tree structure, parsing it as such, and executing your lambda
 object as an _"execution tree"_.
 
-For instance, in a normal programming language, the equal operator must have a left hand side (lhs), and a right hand
-side (rhs). In Hyperlambda this is not true, since the equal slot is the main invocation of a function, requiring two
+In a normal programming language, the equal operator must have a left hand side (lhs), and a right hand
+side (rhs). In Hyperlambda this is different, since the equal slot is the main invocation of a function, requiring two
 arguments, allowing you to think about it as a _function_. To compare this to the way a traditional programming might
 have implemented this, imagine the equal operator as a function, such as the following pseudo code illustrates.
 
-```
+```csharp
 equals(object lhs, object rhs)
 ```
 
@@ -31,19 +32,21 @@ eq
    .:rhs
 ```
 
-As you study Hyperlambda it might be beneficial to use the _"Eval"_ component that you can find in its
+As you study Hyperlambda it might be beneficial to use the _"Hyperlambda Playground"_ component that you can find in its
 frontend dashboard. This component allows you to play with Hyperlambda in _"immediate mode"_,
 experiment with Hyperlambda, execute it immediately from your browser, in a rich code editor,
-providing syntax highlighting for you, autocomplete on slots, etc. The _"Eval"_ component also allows
-you to save your snippets for later on your server. Below is a screenshot of the _"Eval"_ component to
+providing syntax highlighting for you, autocomplete on slots, etc. The _"Hyperlambda Playground"_ component also allows
+you to save your snippets for later on your server. Below is a screenshot of the component to
 give you an idea of what you might expect.
 
 ![Hyperlambda evaluator](https://raw.githubusercontent.com/polterguy/polterguy.github.io/master/images/eval-component.jpg)
 
 If you put your cursor on an empty line and click CTRL+SPACE or FN+CONTROL+SPACE on a Mac, you will be given
 autocomplete, allowing you to easily see which slots are available for you.
+
 Logically the Hyperlambda evaluator will signal each nodes in your Hyperlambda code sequentially, assuming
 all of your nodes are referencing an `ISlot` class, unless the node's name starts with a _"."_ or has an empty name.
+Most slots again are recursively executing their children slots, resulting in a recursively executed _"execution tree"_.
 
 ## Hyperlambda structure
 
@@ -74,7 +77,7 @@ this makes the Hyperlambda evaluator recursive in nature, allowing a slot to eva
 after executing its custom logic, etc. And yes, before you ask, Hyperlambda has been heavily influenced by
 LISP. In some ways Hyperlambda _is_ Lisp for C#, only with a completely different syntax, and without S-Expressions.
 
-## Extending Hyperlambda
+## Extending Hyperlambda with C#
 
 To understand the relationship between C# and Hyperlambda, it might be beneficial for you to analyze the
 following code. The following code creates a new `ISlot` for you, implementing the interface found in
@@ -128,7 +131,7 @@ To create your own C# or F# slots, you can follow the following recipe.
 
 **Notice** - You can also implement `ISlotAsync` if you want to support `async` invocations.
 
-## The gory details
+## How Hyperlambda invokes slots
 
 At the heart of Hyperlambda is the **[eval]** slot. This slot is responsible for executing your lambda object
 and follows a couple of simple rules. All nodes starting with a _"."_ will be ignored, and **[eval]** will not
@@ -155,7 +158,7 @@ while
       math.increment:x:@.no
 ```
 
-## Tokens
+## Hyperlambda tokens
 
 The separating of a node's name and its value is done by using a `:` character. To the left is the node's
 name, and to the right is its value. The value of a node can also be a C# type of string, using double
@@ -176,7 +179,7 @@ including referencing UNICODE characters in your strings. Hyperlambda is _always
 so you can add any UNICODE characters in your Hyperlambda you wish. Just make sure you save your files
 as UTF8 if you are using an external code editor to edit your Hyperlambda files.
 
-## How to comment your code
+## How to comment your Hyperlambda code
 
 Hyperlambda accepts comments the exacts same way C# does, and you can use either multiline comments
 or single line comments, like the following example illustrates.
@@ -210,7 +213,7 @@ also for comments. If you de-indent the above comment, you might get unpredictab
 if you're serializing and de-serializing your Hyperlambda preserving comments. Comments should as a general
 rule of thumb be applied with the same amount of indentation as the node below them.
 
-## Data segments
+## Hyperlambda data segments
 
 Hyperlambda does not separate between a _"variable"_ and a _"function invocation"_. Hence, a node
 might serve as both at the same time. This allows you to dynamically modify your lambda structure, as you
@@ -233,10 +236,23 @@ with an error such as follows _"No slot exists for [src]"_ since this slot doesn
 vocabulary - Unless you for some reasons have an installation where this slot has been explicitly added to
 your vocabulary.
 
+## Hyperlambda documentation conventions
+
+When we document Hyperlambda slots, and nodes, which are almost the same, we will document the node's
+name with square brackets surrounding it, such as **[this]** illustrates, where _"this"_ is referencing
+a node, and is the name of a node. We will also make such node references **bold**, to make them
+more easy to see.
+
+## Lambda expressions
+
+Hyperlambda is heavily using _"lambda expressions"_. Think of these like XPath, except instead
+of referencing XML nodes they're referencing Hyperlambda nodes. You can find the documentation
+for expressions in the [magic.node](https://docs.aista.com/documentation/magic.node/) project.
+
 ## How to use [eval]
 
 This is the by far most important slot in Hyperlambda, since it's arguably _"the heart"_ of Hyperlambda,
-allowing Hyperlambda to execute Hyperlambda. This slot executes the specified lambda object(s) assumed
+allowing Hyperlambda to execute. This slot executes the specified lambda object(s) assumed
 to exist either as a lambda in its children collection, or as an expression leading to one or more nodes,
 where each of these nodes will be executed. The example below illustrates how to use **[eval]** with
 an expression.
@@ -342,13 +358,12 @@ Implying **[eval]** cannot return values or nodes the same way for instance **[s
 You will see that it invokes your **[who]** lambda object, and substitutes the value of `{{foo}}`
 with the return value from the invocation.
 
-## Branching and conditional execution
+## Hyperlambda branching and conditional execution
 
 Branching implies to change the execution path of your code, and examples includes function invocations, and
 other similar mechanisms that changes the position of your computer's _"execution pointer"_. Conditional
 branching implies to changing the position of the execution pointer, according to some condition. Typically
 this implies constructs such as `if`, `else`, `goto` etc in traditional programming languages.
-Hyperlambda contains the following branching slots by default.
 
 ### How to use [if]
 
@@ -509,7 +524,7 @@ an expression. However, any types can be used as values for your **[case]** node
 must at the very least have minimum one **[case]** node. The **[default]** node is optional though. You can mix
 and match different types as you see fit in your **[case]** nodes.
 
-## Comparisons
+## Hyperlambda comparison
 
 All comparison _"operators"_ works the same way in Hyperlambda, in that they have an LHS and a RHS, implying
 respectively _"Left Hand Side"_ and _"Right Hand Side"_. However, since the _"comparison operators"_ in Hyperlambda
@@ -521,7 +536,6 @@ of _"true"_, and the integer value of 5 is _not_ the same as the decimal value o
 You can provide the two arguments to these slots either as children nodes, where the first child node becomes
 the LHS part, and the second its RHS part - Or you can alternatively supply the LHS part as an expression
 leading to a value, at which point the only child argument assumed for your comparison becomes the RHS argument.
-Magic contains the following comparison slots out of the box.
 
 ### How to use [eq]
 
@@ -766,7 +780,7 @@ its **[.foo2]** data node to boolean `true`, you will see that your second child
 considered, since your **[or]** invocation is _"short circuiting"_. You can nest as many **[or]** and **[and]**
 invocations as you wish, creating any amount of complexity in your Hyperlambda.
 
-## Modifying your graph
+## Modifying your lambda graph object
 
 Since there are no explicit variables in Hyperlambda, yet all nodes potentially might change, this requires
 the ability to change your nodes as you execute your Hyperlambda. Magic provides many slots to achieve this,
@@ -1097,7 +1111,7 @@ Notice how **[get-context]** inside your above **[.lambda]** invocation is able 
 named _"foo"_, having the value of _"bar"_. See the **[context]** slot further down in this document for
 details about how this works.
 
-## Exceptions
+## Hyperlambda exceptions
 
 Exceptions in Hyperlambda are similar to exceptions in traditional programming languages, and are basically a
 mechanism to raise errors in such a way that the stack is completely rewinded, to the point in your code
@@ -1147,10 +1161,7 @@ throw:Whatever error message here
 ```
 
 If you create an endpoint using for instance _"Hyper IDE"_, and throw the above exception, you can see
-how this propagates to the client without the exception handler. Below is a screenshot of how this will
-end up looking from the client's point of view.
-
-![Unhandled publicly visible exception](https://raw.githubusercontent.com/polterguy/polterguy.github.io/master/images/throw.jpg)
+how this propagates to the client without the exception handler.
 
 ## Loops
 
@@ -1474,11 +1485,9 @@ the crudification process. You can also combine transformations of names, values
 same template nodes. The process is also recursive in nature, performing substitutions through the entire
 hierarchy of your template lambda.
 
-## Project website
+## Project website for magic.lambda
 
 The source code for this repository can be found at [github.com/polterguy/magic.lambda](https://github.com/polterguy/magic.lambda), and you can provide feedback, provide bug reports, etc at the same place.
-
-## Quality gates
 
 - ![Build status](https://github.com/polterguy/magic.lambda/actions/workflows/build.yaml/badge.svg)
 - [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=polterguy_magic.lambda&metric=alert_status)](https://sonarcloud.io/dashboard?id=polterguy_magic.lambda)
